@@ -1,0 +1,28 @@
+﻿<section layout="row" style="height: calc(100vh - 60px);">
+    <ng-include ng-repeat="panel in controlPanels | filter : {side: 'left'} : true | orderBy: '-lock'" src="panel.templateUrl" layout="column"></ng-include>
+
+    <div flex class="map-gray-3">
+        <div layout="column" layout-fill>
+
+            <ng-include src="'core-components/metric-dashboard/templates/menuBar.html'"></ng-include>
+
+            <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+                <!--MAIN CONTENT AREA HERE - GRIDSTER-->
+                <div gridster="gridsterOpts">
+                    <ul>
+                        <li gridster-item="item" ng-repeat="item in standardItems" style="background-color: white;">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="map-gray-2">
+                <md-tabs md-align-tabs="bottom" class="ink-bar-top">
+                    <md-tab ng-repeat="canvas in canvases">{{canvas.name}}</md-tab>
+                </md-tabs>
+            </div>
+        </div>
+    </div>
+
+    <ng-include ng-repeat="panel in controlPanels | filter : {side: 'right'} : true | orderBy: '-lock'" src="panel.templateUrl" layout="column"></ng-include>
+</section>

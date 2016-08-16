@@ -1,0 +1,101 @@
+﻿<ng-include src="'core-components/metric-dashboard/templates/menuBar.html'"></ng-include>
+<section layout="row" style="height: calc(100vh - 100px); background-color: white">
+
+    <div layout="column" flex="20">
+        <md-subheader class="md-no-sticky">Dashboard Components</md-subheader>
+        <md-content>
+            <md-list flex>
+                <md-list-item ng-repeat="component in components" ng-click="component.action()">
+                    <md-icon md-svg-src="{{component.icon}}" aria-label="component"></md-icon>
+                    <p>{{component.text}}</p>
+                </md-list-item>
+            </md-list>
+            <md-divider flex="75"></md-divider>
+            <md-subheader class="md-primary" style="background-color: transparent">Component Actions</md-subheader>
+            <md-list>
+                <md-list-item ng-repeat="componentAction in componentActions | filter: {component: componentMenuSelection}" ng-click="componentAction.action()">
+                    <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
+                    <p>{{componentAction.text}}</p>
+                </md-list-item>
+            </md-list>
+
+        </md-content>
+    </div>
+    <div layout="column" flex="35">
+        <md-subheader class="md-no-sticky">Component List</md-subheader>
+
+        <md-content>
+            <md-list flex class="mdo-listitem-padding">
+                <md-list-item ng-repeat="canvas in canvases track by $index" class="md-3-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{canvas.name}}</h3>
+                        <h4>Data Groups...</h4>
+                        <p class="md-primary">{{canvas.GUID}}</p>
+                    </div>
+                    <!--<md-button class="md-secondary md-icon-button" ng-click="showConfirm()">
+                        <md-tooltip md-direction="bottom">
+                            Save to Database
+                        </md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-cloud-upload.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>-->
+                    <md-button class="md-secondary md-icon-button" ng-click="$parent.canvasToEdit = SF.state.canvases({ returns: 'index' }, $index)">
+                        <md-tooltip md-direction="bottom">
+                            Edit
+                        </md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                    <md-button class="md-secondary md-icon-button">
+                        <md-tooltip md-direction="bottom">
+                            Duplicate
+                        </md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-copy.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                    <md-button class="md-secondary md-icon-button" ng-click="SF.state.canvases({ method: 'delete' }, $index)">
+                        <md-tooltip md-direction="bottom">
+                            Delete
+                        </md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                    <md-divider></md-divider>
+                </md-list-item>
+
+            </md-list>
+        </md-content>
+
+    </div>
+    <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
+        <md-subheader class="md-no-sticky">Component Properties</md-subheader>
+        <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
+            <div>
+                <form name="userForm">
+
+                    <div layout="row">
+                        <md-input-container class="md-block md-accent" flex="75">
+                            <label>Canvas Name</label>
+                            <input ng-model="canvasToEdit.name" required>
+                        </md-input-container>
+                        <md-input-container class="md-block md-accent" flex>
+                            <label>User Role</label>
+                            <md-select ng-model="canvasToEdit.roleType" class="md-accent">
+                                <md-option value="user">
+                                    User
+                                </md-option>
+                                <md-option value="admin">
+                                    Admin
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block md-accent" flex>
+                            <label>GUID</label>
+                            <input ng-model="canvasToEdit.GUID" disabled>
+                        </md-input-container>
+                    </div>
+                </form>
+
+            </div>
+        </md-content>
+    </div>
+
+</section>

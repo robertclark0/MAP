@@ -1,0 +1,31 @@
+﻿<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="124 148 243 133" enable-background="new 124 148 243 133" xml:space="preserve">
+<g id="Layer_1_1_">
+<path fill="#FF792D" d="M153.5,270.8H153c-6.9,0-12.5-5.6-12.5-12.5v-46c0-7,5.7-12.8,12.8-12.8l0,0c7,0,12.8,5.7,12.8,12.8v46
+		C166,265.2,160.4,270.8,153.5,270.8z" />
+<path fill="#1EB6FF" d="M185.8,270.8h-0.5c-6.9,0-12.5-5.6-12.5-12.5v-68c0-7,5.7-12.8,12.8-12.8l0,0c7,0,12.8,5.7,12.8,12.8v68
+		C198.3,265.2,192.7,270.8,185.8,270.8z" />
+<path fill="#2AE500" d="M218.1,270.8h-0.5c-6.9,0-12.5-5.6-12.5-12.5v-56.5c0-7,5.7-12.8,12.8-12.8l0,0c7,0,12.8,5.7,12.8,12.8
+		v56.5C230.6,265.2,225,270.8,218.1,270.8z" />
+<g>
+<path fill="#C10000" d="M289.9,209l-3.4-7.5c-3.1-6.9-12.5-8-17.1-2l0,0c-2.3,2.9-2.8,6.9-1.2,10.3c1.8,3.9,3.9,8.5,4.1,8.9
+			l8.3,18.6c2.3,5.2,7.4,8.5,13.1,8.5l0,0c5.7,0,10.9-3.4,13.2-8.6l10.8-24.8c1.2-2.7,5.3-1.9,5.3,1.1v44.9
+			c0,6.9,5.6,12.5,12.5,12.5l0,0c6.9,0,12.5-5.6,12.5-12.5v-76c0-9.1-7.4-16.5-16.5-16.5l0,0c-8.1,0-15.4,4.7-18.8,12.1l-14.3,31
+			C296.8,212.7,291.6,212.6,289.9,209z" />
+<path fill="#C10000" d="M249.5,166L249.5,166c-6.9,0-12.5,5.6-12.5,12.5v80c0,6.9,5.6,12.5,12.5,12.5l0,0
+			c6.9,0,12.5-5.6,12.5-12.5v-80C262,171.6,256.4,166,249.5,166z" />
+	</g>
+</g>
+<g id="Layer_2" display="none">
+<line display="inline" fill="none" stroke="#8C0000" stroke-miterlimit="10" x1="158.5" y1="221" x2="158.5" y2="187" />
+<line display="inline" fill="none" stroke="#8C0000" stroke-miterlimit="10" x1="216.5" y1="221" x2="216.5" y2="187" />
+<line display="inline" fill="none" stroke="#8C0000" stroke-miterlimit="10" x1="286.4" y1="270.5" x2="292.6" y2="251.5" />
+<line display="inline" fill="none" stroke="#8C0000" stroke-miterlimit="10" x1="395.5" y1="206" x2="395.5" y2="187" />
+<line display="inline" fill="none" stroke="#8C0000" stroke-miterlimit="10" x1="395.5" y1="257" x2="395.5" y2="238" />
+<line display="inline" fill="none" stroke="#2AB600" stroke-miterlimit="10" x1="125.5" y1="292" x2="125.5" y2="206" />
+<line display="inline" fill="none" stroke="#1E92FF" stroke-miterlimit="10" x1="91.5" y1="292" x2="91.5" y2="178" />
+<line display="inline" fill="none" stroke="#D06430" stroke-miterlimit="10" x1="58.5" y1="292" x2="58.5" y2="194" />
+</g>
+<g id="Layer_3">
+</g>
+</svg>

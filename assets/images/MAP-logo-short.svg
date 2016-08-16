@@ -1,0 +1,20 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 250 172" enable-background="new 0 0 449.5 172" xml:space="preserve">
+<g id="Layer_1">
+	<g>
+		<path fill="#A90000" d="M225.7,129.3h-27V58.8l-19.5,45.7h-18.7L141,58.8v70.5h-25.6V24.1h31.5l23.7,52.8l23.6-52.8h31.5V129.3z"
+			/>
+	</g>
+	<line fill="none" x1="78.3" y1="-63" x2="60.5" y2="-71.3"/>
+</g>
+<g id="Layer_2" display="none">
+	<line display="inline" fill="none" stroke="#2AB600" stroke-miterlimit="10" x1="107.5" y1="129.5" x2="107.5" y2="43.5"/>
+	<line display="inline" fill="none" stroke="#1E92FF" stroke-miterlimit="10" x1="73.5" y1="129.5" x2="73.5" y2="15.5"/>
+	<line display="inline" fill="none" stroke="#D06430" stroke-miterlimit="10" x1="40.5" y1="129.5" x2="40.5" y2="31.5"/>
+</g>
+<g id="Layer_3">
+	<rect x="14" y="28.5" fill="#FF792D" width="28.5" height="101.2"/>
+	<rect x="47.2" y="12.9" fill="#1EB6FF" width="28.5" height="116.9"/>
+	<rect x="80.6" y="41.2" fill="#2AE500" width="28.5" height="88.6"/>
+</g>
+</svg>

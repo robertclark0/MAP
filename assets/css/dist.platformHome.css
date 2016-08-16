@@ -1,0 +1,135 @@
+/*Core Module - Platform Home*/
+#cm-ph-header {
+    height: 100px;
+}
+
+    #cm-ph-header > .row {
+        background-color: #fff;
+        width: 250px;
+        height: 95px;
+        /*border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;*/
+    }
+
+    #cm-ph-header img {
+        width: 235px;
+        padding: 5px 0 0 12px;
+    }
+
+#cm-ph-carousel {
+    height: calc((100vh - 135px)*0.25);
+    min-height: 140px;
+    color: #fff;
+}
+
+    #cm-ph-carousel h1 {
+        font-size: 68px;
+        text-shadow: 0 3px rgba(0,0,0,0.1);
+        color: #fff;
+    }
+
+#cm-ph-content {
+    height: calc((100vh - 135px)*0.75);
+    min-height: 263px; /*This is a sum of the sub rows*/
+    margin-bottom: 5px;
+    padding: 0 25px;
+    background-color: rgba(242, 242, 242, 1);
+}
+
+    /*#cm-ph-content > .cm-ph-content-header {
+        background-color: #fff;
+        height: 80px;
+        padding: 25px 10px 0 10px;
+        border-bottom: rgb(230,230,230) solid 1px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }*/
+
+    #cm-ph-content > .cm-ph-content-items {
+        background-color: #fff;
+        height: calc(100% - 75px);
+        min-height: 175px;
+        padding: 25px 25px 0 25px;
+        overflow: auto;
+    }
+
+    #cm-ph-content .cm-ph-content-item {
+        margin-top: 25px;
+        text-align: center;       
+    }
+
+        #cm-ph-content .cm-ph-content-item h3 {
+            margin-bottom: 5px;
+            color: #777;
+            font-weight: 400;
+        }
+
+        #cm-ph-content .cm-ph-content-item h4 {
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+    #cm-ph-content .cm-ph-content-item-inactive {
+        opacity: 0.5;
+    }
+
+.cm-ph-service-icons > svg {
+    font-size: 24px;
+    height: 68px;
+    width: 68px;
+    line-height: 68px;
+    fill: #fff;
+    margin-right: 5px;
+    margin-left: 5px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 2%; /*10%*/
+    margin-bottom: 0;
+    padding: 7px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+.cm-ph-lock > svg {
+    width: 25px;
+    position: absolute;
+    top: -14px;
+    left: 17px;
+    fill: rgb(250, 250, 250);
+    stroke: rgb(130, 130, 130);
+}
+
+#cm-ph-billboard {
+    height: 45vh;
+    width: 100%;
+    min-height: 325px;
+    position: fixed;
+    top: 0;
+    background-image: url(../../core-components/platform-home/assets/cover.jpg);
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.color1 > svg {
+    background-color: #5bc0eb;
+}
+
+.color2 > svg {
+    background-color: #ffbf00;
+}
+
+.color3 > svg {
+    background-color: #9bc53d;
+}
+
+.color4 > svg {
+    background-color: #e55934;
+}
+
+.color5 > svg {
+    background-color: #fa7921;
+}
+
+.colorMed > svg {
+    background-color: #8C1717;
+}

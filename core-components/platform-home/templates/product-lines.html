@@ -1,0 +1,44 @@
+﻿<!--<div class="row cm-ph-content-header">
+    <div class="content-header-text">
+        <a href="#/platform-home/about">Learn about MEDCOM360 Analytics Platform ></a>
+        <span flex></span>
+        <md-button href="#/platform-home/about">Learn about MEDCOM360 Analytics Platform ></md-button>
+    </div>
+</div>-->
+<section layout="row">
+    <md-toolbar class="site-content-toolbar">
+        <div class="md-toolbar-tools">
+            
+            <md-button href="#/platform-home/about">Learn about MEDCOM360 Analytics Platform ></md-button>
+            <span flex></span>
+        </div>
+    </md-toolbar>
+</section>
+<div class="row cm-ph-content-items scrollbar-dynamic"
+     ng-show="!productLoadFailure"
+     data-jquery-scrollbar>
+
+    <div ng-repeat="product in products | orderBy:'-Active'"
+         class="col-md-3 col-sm-6 cm-ph-content-item"
+         ng-class="{'cm-ph-content-item-inactive' : product.Active === 0}">
+
+        <div>
+            <a style="position: relative;" href=""
+               ng-click="productLineSelected(product)">
+
+                <div ng-include="'assets/icons/' + product.Icon + '.svg'"
+                     class="cm-ph-service-icons {{product.IconClass}}">
+                </div>
+                <div ng-show="product.HasPII === 1" ng-include="'assets/icons/lock2.svg'"
+                     class="cm-ph-lock">
+                </div>
+                <h3>{{product.Name}}</h3>
+                <h4>{{product.ModuleName}}</h4>
+            </a>
+        </div>
+    </div>
+</div>
+<div ng-show="productLoadFailure" style="text-align: center;">
+        <h2>MAP was unable to load service line data from the database.</h2>
+        <h4>Check your network connectivity and reload the page.</h4>
+</div>

@@ -1,0 +1,1 @@
+﻿var metricDashboard = angular.module('metricDashboard', ['gridster']);

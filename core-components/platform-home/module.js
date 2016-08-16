@@ -1,0 +1,1 @@
+﻿var platformHome = angular.module('platformHome', []);

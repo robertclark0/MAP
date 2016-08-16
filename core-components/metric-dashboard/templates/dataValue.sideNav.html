@@ -1,0 +1,82 @@
+﻿<md-sidenav md-component-id="panelData" ng-class="{'md-sidenav-right' : panel.side === 'right', 'md-sidenav-left' : panel.side === 'left'}" class="map-gray-1" md-whiteframe="4" md-is-locked-open="panel.lock" flex>
+    <md-toolbar class="">
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>Data</span>
+            </h2>
+            <span flex></span>
+            <!--<md-button class="md-icon-button" aria-label="Menu">
+                <md-icon md-svg-icon="assets/icons/lock2.svg"></md-icon>
+            </md-button>-->
+        </div>
+    </md-toolbar>
+    <md-fab-toolbar md-direction="left" style="margin-top:-67px;">
+        <md-fab-trigger class="align-with-text">
+            <md-button aria-label="menu" class="md-fab md-primary md-no-shadow">
+                <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+            </md-button>
+        </md-fab-trigger>
+        <md-toolbar>
+            <md-fab-actions class="md-toolbar-tools">
+                <md-button aria-label="dock" class="md-icon-button" ng-click="panel.lock = !panel.lock">
+                    <!--<md-tooltip md-direction="bottom">
+                        Dock Panel
+                    </md-tooltip>-->
+                    <md-icon md-svg-icon="assets/icons/md-lock-outline.svg"></md-icon>
+                </md-button>
+                <md-button aria-label="right" class="md-icon-button" ng-click="panel.side = 'right'">
+                    <!--<md-tooltip md-direction="bottom">
+                        Dock Right
+                    </md-tooltip>-->
+                    <md-icon md-svg-icon="assets/icons/md-arrow-right.svg"></md-icon>
+                </md-button>
+                <md-button aria-label="left" class="md-icon-button" ng-click="panel.side = 'left'">
+                    <!--<md-tooltip md-direction="bottom">
+                        Dock Left
+                    </md-tooltip>-->
+                    <md-icon md-svg-icon="assets/icons/md-arrow-left.svg"></md-icon>
+                </md-button>
+            </md-fab-actions>
+        </md-toolbar>
+    </md-fab-toolbar>
+
+    <md-content class="map-gray-1">
+        <md-subheader class="md-primary">Data Group Name</md-subheader>
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <div class="md-headline">TmtParentName</div>
+                </md-card-title-text>
+
+                <md-button class="md-icon-button" aria-label="Delete">
+                    <md-tooltip md-direction="bottom">
+                        Delete
+                    </md-tooltip>
+                    <md-icon md-svg-src="assets/icons/md-clear.svg"></md-icon>
+                </md-button>
+            </md-card-title>
+            
+            <md-card-actions layout="row" layout-align="end center">               
+                <md-switch>Sum</md-switch>
+                <span flex></span>
+                <md-button ng-disabled="true">Count</md-button>
+                <md-button ng-disabled="true">Sum</md-button>
+            </md-card-actions>
+
+            <md-card-actions layout="row" layout-align="end center">
+                <md-switch>Sum</md-switch>
+                <span flex></span>
+                <md-button ng-disabled="true">Count</md-button>
+                <md-button ng-disabled="true">Sum</md-button>
+            </md-card-actions>
+        </md-card>
+
+        <section layout="row">
+            <span flex></span>
+            <md-button class="md-fab md-mini" aria-label="Add">
+                <md-icon md-svg-src="assets/icons/md-add.svg"></md-icon>
+            </md-button>
+        </section>
+
+    </md-content>
+</md-sidenav>
