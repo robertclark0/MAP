@@ -3,6 +3,7 @@
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     var SC = appManager.state.SC;
     $scope.SF = appManager.state.SF;
+    $scope.DSO = appManager.state.DSO;
 
 
     // ---- ---- ---- ---- Dashboard Components ---- ---- ---- ----
@@ -12,6 +13,7 @@
 
     // ---- ---- ---- ---- Component List ---- ---- ---- ----
     $scope.componentActions = componentViewFactory.componentActions;
+    $scope.componentList = componentViewFactory.componentList;
 
 
     // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
