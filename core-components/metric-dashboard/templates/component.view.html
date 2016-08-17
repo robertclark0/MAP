@@ -1,29 +1,31 @@
 ﻿<ng-include src="'core-components/metric-dashboard/templates/menuBar.html'"></ng-include>
 <section layout="row" style="height: calc(100vh - 100px); background-color: white">
 
+    <!--DASHBOARD COMPONENTS-->
     <div layout="column" flex="20">
-        <md-subheader class="md-no-sticky">Dashboard Components</md-subheader>
+        <md-subheader>Dashboard Components</md-subheader>
         <md-content>
             <md-list flex>
-                <md-list-item ng-repeat="component in components" ng-click="component.action()">
-                    <md-icon md-svg-src="{{component.icon}}" aria-label="component"></md-icon>
-                    <p>{{component.text}}</p>
+                <md-list-item ng-repeat="dashboardComponent in dashboardComponents.items" ng-click="dashboardComponents.select(dashboardComponent.component)">
+                    <md-icon md-svg-src="{{dashboardComponent.icon}}" aria-label="component"></md-icon>
+                    <p>{{dashboardComponent.text}}</p>
                 </md-list-item>
             </md-list>
+            <!--Dashboard Actions-->
             <md-divider flex="75"></md-divider>
-            <md-subheader class="md-primary" style="background-color: transparent">Component Actions</md-subheader>
+            <md-subheader class="md-primary" style="background-color: transparent">Dashboard Actions</md-subheader>
             <md-list>
-                <md-list-item ng-repeat="componentAction in componentActions | filter: {component: componentMenuSelection}" ng-click="componentAction.action()">
-                    <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
-                    <p>{{componentAction.text}}</p>
+                <md-list-item ng-repeat="dashboardAction in dashboardActions | filter: {component: dashboardComponents.selection}" ng-click="dashboardAction.action(dashboardAction.component)">
+                    <md-icon md-svg-src="{{dashboardAction.icon}}" aria-label="action"></md-icon>
+                    <p>{{dashboardAction.text}}</p>
                 </md-list-item>
             </md-list>
-
         </md-content>
     </div>
-    <div layout="column" flex="35">
-        <md-subheader class="md-no-sticky">Component List</md-subheader>
 
+    <!--COMPONENT LIST-->
+    <div layout="column" flex="35">
+        <md-subheader>Component List</md-subheader>
         <md-content>
             <md-list flex class="mdo-listitem-padding">
                 <md-list-item ng-repeat="canvas in canvases track by $index" class="md-3-line">
@@ -32,68 +34,46 @@
                         <h4>Data Groups...</h4>
                         <p class="md-primary">{{canvas.GUID}}</p>
                     </div>
-                    <!--<md-button class="md-secondary md-icon-button" ng-click="showConfirm()">
-                        <md-tooltip md-direction="bottom">
-                            Save to Database
-                        </md-tooltip>
-                        <md-icon md-svg-src="assets/icons/md-cloud-upload.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>-->
-                    <md-button class="md-secondary md-icon-button" ng-click="$parent.canvasToEdit = SF.state.canvases({ returns: 'index' }, $index)">
-                        <md-tooltip md-direction="bottom">
-                            Edit
-                        </md-tooltip>
-                        <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>
-                    <md-button class="md-secondary md-icon-button">
-                        <md-tooltip md-direction="bottom">
-                            Duplicate
-                        </md-tooltip>
-                        <md-icon md-svg-src="assets/icons/md-copy.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>
-                    <md-button class="md-secondary md-icon-button" ng-click="SF.state.canvases({ method: 'delete' }, $index)">
-                        <md-tooltip md-direction="bottom">
-                            Delete
-                        </md-tooltip>
-                        <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="Close dialog"></md-icon>
+                    <md-button ng-repeat="componentAction in componentActions track by $index" class="md-secondary md-icon-button" ng-click="componentAction.action(canvas)">
+                        <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
+                        <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
                     </md-button>
                     <md-divider></md-divider>
                 </md-list-item>
-
             </md-list>
         </md-content>
-
     </div>
-    <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
-        <md-subheader class="md-no-sticky">Component Properties</md-subheader>
-        <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
-            <div>
-                <form name="userForm">
 
+    <!--COMPONENT PROPERTIES-->
+    <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
+        <md-subheader>Component Properties</md-subheader>
+        <md-subheader ng-show="properties.editType === 'new'" style="background-color: #56a734; color: white;">New</md-subheader>
+        <md-subheader ng-show="properties.editType === 'existing'" style="background-color: #3464a7; color: white;">Edit</md-subheader>
+        <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
+            <div ng-show="properties.editType !== null">
+                <form name="userForm" ng-submit="testSubmission()">
                     <div layout="row">
                         <md-input-container class="md-block md-accent" flex="75">
                             <label>Canvas Name</label>
-                            <input ng-model="canvasToEdit.name" required>
+                            <input value=" " ng-model="properties.editObject.name" required>
                         </md-input-container>
                         <md-input-container class="md-block md-accent" flex>
                             <label>User Role</label>
-                            <md-select ng-model="canvasToEdit.roleType" class="md-accent">
-                                <md-option value="user">
-                                    User
-                                </md-option>
-                                <md-option value="admin">
-                                    Admin
-                                </md-option>
+                            <md-select ng-model="properties.editObject.roleType" class="md-accent">
+                                <md-option value="user">User</md-option>
+                                <md-option value="admin">Admin</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div layout="row">
                         <md-input-container class="md-block md-accent" flex>
                             <label>GUID</label>
-                            <input ng-model="canvasToEdit.GUID" disabled>
+                            <input ng-model="properties.editObject.GUID" disabled>
                         </md-input-container>
                     </div>
+                    <md-button ng-click="cancelEdit()">Cancel</md-button>
+                    <md-button type="submit">Save</md-button>
                 </form>
-
             </div>
         </md-content>
     </div>
