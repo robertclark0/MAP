@@ -25,20 +25,20 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     });
 
 
-    // REMOVE BEFORE FLIGHT - THIS SECTION FOR TESTING WITHOUT API
-    // ---------------- DANGER ------------------------------------
-    DO.productLines = new DO.ProductLines([{ Active: 1, Icon: 'th', IconClass: 'colorMed', HasPII: 0, Name: 'TeleHealth', ModuleName: 'Metric Dashboard', Code: 'TELE' }]);
-    $scope.products = DO.productLines.value;
-    // ------------------ END -------------------------------------
-    //// Get product lines
-    //$scope.productLoadFailure = false;
-    //API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
-    //    DO.productLines = new DO.ProductLines(response.result);
-    //    $scope.products = DO.productLines.value;
-    //}).catch(function (error) {
-    //    logger.toast.error('Error Getting Product Lines', error);
-    //    $scope.productLoadFailure = true;
-    //});
+    //// REMOVE BEFORE FLIGHT - THIS SECTION FOR TESTING WITHOUT API
+    //// ---------------- DANGER ------------------------------------
+    //DO.productLines = new DO.ProductLines([{ Active: 1, Icon: 'th', IconClass: 'colorMed', HasPII: 0, Name: 'TeleHealth', ModuleName: 'Metric Dashboard', Code: 'TELE' }]);
+    //$scope.products = DO.productLines.value;
+    //// ------------------ END -------------------------------------
+    // Get product lines
+    $scope.productLoadFailure = false;
+    API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
+        DO.productLines = new DO.ProductLines(response.result);
+        $scope.products = DO.productLines.value;
+    }).catch(function (error) {
+        logger.toast.error('Error Getting Product Lines', error);
+        $scope.productLoadFailure = true;
+    });
 
 
     // Selecting Product Line
