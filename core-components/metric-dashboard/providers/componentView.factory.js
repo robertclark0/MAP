@@ -63,7 +63,7 @@
         editObject: null,
         editParent: null,
         cancelEdit: function () {
-            factory.procomponentPropertiesperties.editObject = null;
+            factory.componentProperties.editObject = null;
             factory.componentProperties.editType = null;
         },
         saveEdit: function () {
@@ -72,7 +72,8 @@
                 factory.componentList.components.push(factory.componentProperties.editObject);
             }
             else if (factory.componentProperties.editType === 'existing') {
-                var index = factory.componentProperties.editParent.indexOf(factory.componentProperties.editObject);
+                var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
+                console.log(index);
                 factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
             }
 
