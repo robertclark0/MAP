@@ -44,7 +44,7 @@
         this.roleType = 'user'; //user, admin
         this.dataGroups = [];
 
-        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID() }(this);
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
     stateClasses.Group = function (GUID) {
         this.name = '';
@@ -58,7 +58,7 @@
             tableColumns: [],
             query: {}, //ToChange - need way to include query for stored proc
             calc: {} //ToChange - expand calculation cababilities
-        }
+        };
     };
     stateClasses.Filter = function (GUID) {
         this.name = '';
@@ -87,12 +87,6 @@
     var stateFunctions = {};
 
     stateFunctions.state = {
-        current: {
-            canvas: function (index) { return session.DynamicStateObject.canvases[session.DynamicStateObject.dashboard.index.canvas] }
-        },
-        add: {
-            canvas: function () { session.DynamicStateObject.canvases.push(new stateClasses.Canvas('Pushed Canvas')); }
-        },
         canvases: function (options, object) {
             switch (options) {
                 case null:
@@ -105,13 +99,14 @@
                             return session.DynamicStateObject.canvases.length - 1; //returns index of new object
                         case 'delete':
                             session.DynamicStateObject.canvases.splice(object, 1);
+                            break;
                         case 'return':
                         default:
                             switch (options.returns) {
                                 case 'index':
-                                    return session.DynamicStateObject.canvases[object]
+                                    return session.DynamicStateObject.canvases[object];
                                 case 'current':
-                                    return session.DynamicStateObject.canvases[session.DynamicStateObject.dashboard.index.canvas]
+                                    return session.DynamicStateObject.canvases[session.DynamicStateObject.dashboard.index.canvas];
                                 case 'all':
                                 default:
                                     return session.DynamicStateObject.canvases;
@@ -177,7 +172,7 @@
     var stateScope = $rootScope.$new(true);
 
     var session = $sessionStorage;
-    session.StateObject = (typeof session.StateObject === 'undefined') ? new stateClasses.StateObject : session.StateObject;
+    session.StateObject = (typeof session.StateObject === 'undefined') ? new stateClasses.StateObject() : session.StateObject;
     session.DynamicStateObject = (typeof session.DynamicStateObject === 'undefined') ? {} : session.DynamicStateObject;
 
     stateScope.DSO = session.DynamicStateObject;

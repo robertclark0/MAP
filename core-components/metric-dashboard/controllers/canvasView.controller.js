@@ -1,7 +1,6 @@
 ﻿metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
-    var SF = appManager.state.SF;
     var DSO = appManager.state.DSO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;

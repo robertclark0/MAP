@@ -6,7 +6,7 @@
         <md-subheader>Dashboard Components</md-subheader>
         <md-content>
             <md-list flex>
-                <md-list-item ng-repeat="dashboardComponent in dashboardComponents.items" ng-click="dashboardComponent.action(dashboardComponent.component, DSO.canvases)">
+                <md-list-item ng-repeat="dashboardComponent in dashboardComponents.components" ng-click="dashboardComponent.action(dashboardComponent.component, DSO.canvases)">
                     <md-icon md-svg-src="{{dashboardComponent.icon}}" aria-label="component"></md-icon>
                     <p>{{dashboardComponent.text}}</p>
                 </md-list-item>
@@ -15,7 +15,7 @@
             <md-divider flex="75"></md-divider>
             <md-subheader class="md-primary" style="background-color: transparent">Dashboard Actions</md-subheader>
             <md-list>
-                <md-list-item ng-repeat="dashboardAction in dashboardActions | filter: {component: dashboardComponents.selection} : true" ng-click="dashboardAction.action(dashboardAction.component)">
+                <md-list-item ng-repeat="dashboardAction in dashboardComponents.actions | filter: {component: dashboardComponents.selection} : true" ng-click="dashboardAction.action(dashboardAction.component)">
                     <md-icon md-svg-src="{{dashboardAction.icon}}" aria-label="action"></md-icon>
                     <p>{{dashboardAction.text}}</p>
                 </md-list-item>
@@ -28,13 +28,13 @@
         <md-subheader>Component List</md-subheader>
         <md-content>
             <md-list flex class="mdo-listitem-padding">
-                <md-list-item ng-repeat="component in componentList.list track by $index" class="md-3-line">
+                <md-list-item ng-repeat="component in componentList.components track by $index" class="md-3-line">
                     <div class="md-list-item-text" layout="column">
                         <h3>{{component.name}}</h3>
                         <h4>Data Groups...</h4>
                         <p class="md-primary">{{component.GUID}}</p>
                     </div>
-                    <md-button ng-repeat="componentAction in componentActions track by $index" class="md-secondary md-icon-button" ng-click="componentAction.action(component, componentList.list)">
+                    <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button" ng-click="componentAction.action(component, componentList.components)">
                         <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
                         <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
                     </md-button>
@@ -47,19 +47,19 @@
     <!--COMPONENT PROPERTIES-->
     <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
         <md-subheader>Component Properties</md-subheader>
-        <md-subheader ng-show="properties.editType === 'new'" style="background-color: #56a734; color: white;">New</md-subheader>
-        <md-subheader ng-show="properties.editType === 'existing'" style="background-color: #3464a7; color: white;">Edit</md-subheader>
+        <md-subheader ng-show="componentProperties.editType === 'new'" style="background-color: #56a734; color: white;">New</md-subheader>
+        <md-subheader ng-show="componentProperties.editType === 'existing'" style="background-color: #3464a7; color: white;">Edit</md-subheader>
         <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
-            <div ng-show="properties.editType !== null">
-                <form name="userForm" ng-submit="testSubmission()">
+            <div ng-show="componentProperties.editType !== null">
+                <form name="componentForm" ng-submit="componentProperties.saveEdit()">
                     <div layout="row">
                         <md-input-container class="md-block md-accent" flex="75">
                             <label>Canvas Name</label>
-                            <input value=" " ng-model="properties.editObject.name" required>
+                            <input value=" " ng-model="componentProperties.editObject.name" required>
                         </md-input-container>
                         <md-input-container class="md-block md-accent" flex>
                             <label>User Role</label>
-                            <md-select ng-model="properties.editObject.roleType" class="md-accent">
+                            <md-select ng-model="componentProperties.editObject.roleType" class="md-accent">
                                 <md-option value="user">User</md-option>
                                 <md-option value="admin">Admin</md-option>
                             </md-select>
@@ -68,10 +68,10 @@
                     <div layout="row">
                         <md-input-container class="md-block md-accent" flex>
                             <label>GUID</label>
-                            <input ng-model="properties.editObject.GUID" disabled>
+                            <input ng-model="componentProperties.editObject.GUID" disabled>
                         </md-input-container>
                     </div>
-                    <md-button ng-click="cancelEdit()">Cancel</md-button>
+                    <md-button ng-click="componentProperties.cancelEdit()">Cancel</md-button>
                     <md-button type="submit">Save</md-button>
                 </form>
             </div>

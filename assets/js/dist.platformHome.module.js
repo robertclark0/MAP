@@ -6,7 +6,6 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     var SO = appManager.state.SO;
     var API = appManager.data.API;    
     var DO = appManager.data.DO;
-    var DF = appManager.data.DF;
     var logger = appManager.logger;
 
     //Set Session GUID
@@ -26,15 +25,20 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     });
 
 
-    // Get product lines
-    $scope.productLoadFailure = false;
-    API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
-        DO.productLines = new DO.ProductLines(response.result);
-        $scope.products = DO.productLines.value;
-    }).catch(function (error) {
-        logger.toast.error('Error Getting Product Lines', error);
-        $scope.productLoadFailure = true;
-    });
+    // REMOVE BEFORE FLIGHT - THIS SECTION FOR TESTING WITHOUT API
+    // ---------------- DANGER ------------------------------------
+    DO.productLines = new DO.ProductLines([{ Active: 1, Icon: 'th', IconClass: 'colorMed', HasPII: 0, Name: 'TeleHealth', ModuleName: 'Metric Dashboard', Code: 'TELE' }]);
+    $scope.products = DO.productLines.value;
+    // ------------------ END -------------------------------------
+    //// Get product lines
+    //$scope.productLoadFailure = false;
+    //API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
+    //    DO.productLines = new DO.ProductLines(response.result);
+    //    $scope.products = DO.productLines.value;
+    //}).catch(function (error) {
+    //    logger.toast.error('Error Getting Product Lines', error);
+    //    $scope.productLoadFailure = true;
+    //});
 
 
     // Selecting Product Line
@@ -69,12 +73,12 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
         }
     };
     function userActiveInProduct(product) {
-        var productLines = DO.user.productLines.userActive.map(function (obj) { return obj.productName });
+        var productLines = DO.user.productLines.userActive.map(function (obj) { return obj.productName; });
         if (productLines.indexOf(product.Name) > -1) {
             return true;
         }
         return false;
-    };
+    }
     function setProductLine(product) {
         SF.setProduct(product);
         $state.go('metricDashboard.view', { viewName: 'data'});
