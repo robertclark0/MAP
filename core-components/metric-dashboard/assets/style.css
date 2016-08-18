@@ -1,3 +1,6 @@
 ﻿.md-no-shadow{
     box-shadow: none !important;
 }
+.md-seconday-icon-override{
+    min-width: 40px !important;
+}

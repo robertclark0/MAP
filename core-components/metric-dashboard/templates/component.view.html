@@ -6,7 +6,7 @@
         <md-subheader>Dashboard Components</md-subheader>
         <md-content>
             <md-list flex>
-                <md-list-item ng-repeat="dashboardComponent in dashboardComponents.components" ng-click="dashboardComponent.action(dashboardComponent.component, DSO.canvases)">
+                <md-list-item ng-repeat="dashboardComponent in dashboardComponents.components" ng-click="dashboardComponent.action(dashboardComponent.component, DSO)">
                     <md-icon md-svg-src="{{dashboardComponent.icon}}" aria-label="component"></md-icon>
                     <p>{{dashboardComponent.text}}</p>
                 </md-list-item>
@@ -27,20 +27,37 @@
     <div layout="column" flex="35">
         <md-subheader>Component List</md-subheader>
         <md-content>
-            <md-list flex class="mdo-listitem-padding">
-                <md-list-item ng-repeat="component in componentList.components track by $index" class="md-3-line">
+            <section ng-repeat="component in componentList.components track by $index">
+                <md-subheader class="md-primary" style="background-color: transparent">{{component.header}}</md-subheader>
+                <md-list flex class="mdo-listitem-padding">
+                    <md-list-item ng-repeat="childComponent in component.children track by $index" class="md-3-line" ng-click="null">
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{childComponent.name}}</h3>
+                            <h4>Stuff...</h4>
+                            <p class="md-primary">{{childComponent.GUID}}</p>
+                        </div>
+                        <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button md-seconday-icon-override" ng-click="componentAction.action(childComponent, component.children)">
+                            <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
+                            <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
+                        </md-button>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </section>
+            <!--<md-list flex class="mdo-listitem-padding">
+                <md-list-item ng-repeat="component in componentList.components track by $index" class="md-3-line" ng-click="null">
                     <div class="md-list-item-text" layout="column">
                         <h3>{{component.name}}</h3>
                         <h4>Data Groups...</h4>
                         <p class="md-primary">{{component.GUID}}</p>
                     </div>
-                    <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button" ng-click="componentAction.action(component, componentList.components)">
+                    <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button md-seconday-icon-override" ng-click="componentAction.action(component, componentList.components)">
                         <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
                         <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
                     </md-button>
                     <md-divider></md-divider>
                 </md-list-item>
-            </md-list>
+            </md-list>-->
         </md-content>
     </div>
 

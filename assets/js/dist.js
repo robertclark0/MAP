@@ -252,26 +252,27 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.canvases = [new stateClasses.Canvas('New Canvas')];
     };
     stateClasses.Canvas = function (name) {
-        this.name = name || 'Canvas';
+        this.name = name || 'New Canvas';
         this.GUID = null;
         this.roleType = 'user'; //user, admin
-        this.dataGroups = [];
+        this.dataGroups = [new stateClasses.DataGroup('New Group')];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.Group = function (GUID) {
-        this.name = '';
-        this.GUID = GUID;
+    stateClasses.DataGroup = function (name) {
+        this.name = name || 'New Data Group';
+        this.GUID = null;
         this.dataSource = '';
         this.dataFilters = [];
         this.dataSelections = [];
         this.canvasElements = [];
-        this.data = {
-            results: [],
-            tableColumns: [],
-            query: {}, //ToChange - need way to include query for stored proc
-            calc: {} //ToChange - expand calculation cababilities
-        };
+        //this.data = {
+        //    results: [],
+        //    tableColumns: [],
+        //    query: {}, //ToChange - need way to include query for stored proc
+        //    calc: {} //ToChange - expand calculation cababilities
+        //};
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
     stateClasses.Filter = function (GUID) {
         this.name = '';

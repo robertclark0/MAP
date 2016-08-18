@@ -8,8 +8,8 @@
     factory.dashboardComponents = {
         selection: null,
         components: [
-            { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: select },
-            { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: select },
+            { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: selectCanvas },
+            { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: selectDataGroup },
             { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: select },
             { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: select },
             { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: select }
@@ -26,6 +26,28 @@
     function select(component, parent) {
         factory.componentList.components = parent;
         factory.dashboardComponents.selection = component;
+    }
+    function selectCanvas(component, productLine) {
+        factory.dashboardComponents.selection = component;
+        var list = [{
+            header: productLine.name,
+            parent: productLine.canvases,
+            children: productLine.canvases
+        }];       
+        factory.componentList.components = list;
+    };
+    function selectDataGroup(component, productLine) {
+        factory.dashboardComponents.selection = component;
+        var list = [];
+        productLine.canvases.forEach(function (canvas) {
+            var listItem = {
+                header: 'Canvas: ' + canvas.name,
+                parent: canvas.dataGroups,
+                children: canvas.dataGroups
+            };
+            list.push(listItem);
+        });
+        factory.componentList.components = list;
     }
     function newComponent(component) {
         newEdit({ editType: 'new', componentType: component, editParent: null });
@@ -73,7 +95,6 @@
             }
             else if (factory.componentProperties.editType === 'existing') {
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
-                console.log(index);
                 factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
             }
 

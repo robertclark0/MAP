@@ -203,7 +203,7 @@ body {
 .ink-bar-top md-pagination-wrapper {
     height: 2px;
 }
-md-list.mdo-listitem-padding md-list-item{
+md-list.mdo-listitem-padding md-list-item div:first-child{
     padding-top: 12px;
 }
 
