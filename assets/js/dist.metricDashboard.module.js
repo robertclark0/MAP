@@ -2,7 +2,6 @@ var metricDashboard = angular.module('metricDashboard', ['gridster']);
 metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
-    var SF = appManager.state.SF;
     var DSO = appManager.state.DSO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
@@ -51,21 +50,19 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
     $scope.controlPanels = DSO.dashboard.controlPanels;
     $scope.canvases = DSO.canvases; //used in children scopes
 
-    $scope.viewName = $state.params.viewName.charAt(0).toUpperCase() + $state.params.viewName.slice(1)
-    $scope.newState = function (state, stateObject) {       
+    $scope.viewName = $state.params.viewName.charAt(0).toUpperCase() + $state.params.viewName.slice(1);
+    $scope.newState = function (state, stateObject) {
         $state.go(state, stateObject);
         if (stateObject && stateObject.viewName) {
             $scope.viewName = stateObject.viewName.charAt(0).toUpperCase() + stateObject.viewName.slice(1);
         }
-    }
+    };
 
 
 }]);
 metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
-    var SF = appManager.state.SF;
-    var SO = appManager.state.SO;
     var DSO = appManager.state.DSO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
