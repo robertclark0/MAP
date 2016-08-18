@@ -16,7 +16,8 @@
         ],
         actions: [
             { text: 'Add New Canvas', icon: 'assets/icons/md-add-circle.svg', component: 'canvas', action: newComponent },
-            { text: 'Open Save Canvas', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
+            { text: 'Open Saved Canvas', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
+            { text: 'Open Report', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
             { text: 'Add New Data Group', icon: 'assets/icons/md-add-circle.svg', component: 'dataGroup', action: newComponent },
             { text: 'Select New Data', icon: 'assets/icons/md-done.svg', component: 'dataSelection', action: '' },
             { text: 'Add New Data Filter', icon: 'assets/icons/md-add-circle.svg', component: 'dataFilter', action: newComponent },
@@ -25,7 +26,7 @@
     };
     function select(component, parent) {
         factory.componentList.components = parent;
-        factory.dashboardComponents.selection = component;
+        factory.dashboardComponents.selection = component; 
     }
     function selectCanvas(component, productLine) {
         factory.dashboardComponents.selection = component;

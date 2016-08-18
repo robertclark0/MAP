@@ -28,7 +28,7 @@
         <md-subheader>Component List</md-subheader>
         <md-content>
             <section ng-repeat="component in componentList.components track by $index">
-                <md-subheader class="md-primary" style="background-color: transparent">{{component.header}}</md-subheader>
+                <md-subheader class="md-accent" style="background-color: transparent">{{component.header}}</md-subheader>
                 <md-list flex class="mdo-listitem-padding">
                     <md-list-item ng-repeat="childComponent in component.children track by $index" class="md-3-line" ng-click="null">
                         <div class="md-list-item-text" layout="column">
@@ -44,28 +44,14 @@
                     </md-list-item>
                 </md-list>
             </section>
-            <!--<md-list flex class="mdo-listitem-padding">
-                <md-list-item ng-repeat="component in componentList.components track by $index" class="md-3-line" ng-click="null">
-                    <div class="md-list-item-text" layout="column">
-                        <h3>{{component.name}}</h3>
-                        <h4>Data Groups...</h4>
-                        <p class="md-primary">{{component.GUID}}</p>
-                    </div>
-                    <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button md-seconday-icon-override" ng-click="componentAction.action(component, componentList.components)">
-                        <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
-                        <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
-                    </md-button>
-                    <md-divider></md-divider>
-                </md-list-item>
-            </md-list>-->
         </md-content>
     </div>
 
     <!--COMPONENT PROPERTIES-->
     <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
         <md-subheader>Component Properties</md-subheader>
-        <md-subheader ng-show="componentProperties.editType === 'new'" style="background-color: #56a734; color: white;">New</md-subheader>
-        <md-subheader ng-show="componentProperties.editType === 'existing'" style="background-color: #3464a7; color: white;">Edit</md-subheader>
+        <md-subheader ng-show="componentProperties.editType === 'new'" style="background-color: rgb(139, 195, 74); color: white;">New</md-subheader>
+        <md-subheader ng-show="componentProperties.editType === 'existing'" style="background-color: rgb(68, 138, 255); color: white;">Edit</md-subheader>
         <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
             <div ng-show="componentProperties.editType !== null">
                 <form name="componentForm" ng-submit="componentProperties.saveEdit()">

@@ -40,6 +40,10 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
     $scope.componentProperties = componentViewFactory.componentProperties;
     
 
+    $scope.testFunction = function (value) {
+        console.log(value);
+        console.log(componentViewFactory.componentProperties.editParent);
+    };
 }]);
 metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
 
@@ -107,7 +111,8 @@ metricDashboard.factory('componentViewFactory', ['appManager', function (appMana
         ],
         actions: [
             { text: 'Add New Canvas', icon: 'assets/icons/md-add-circle.svg', component: 'canvas', action: newComponent },
-            { text: 'Open Save Canvas', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
+            { text: 'Open Saved Canvas', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
+            { text: 'Open Report', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
             { text: 'Add New Data Group', icon: 'assets/icons/md-add-circle.svg', component: 'dataGroup', action: newComponent },
             { text: 'Select New Data', icon: 'assets/icons/md-done.svg', component: 'dataSelection', action: '' },
             { text: 'Add New Data Filter', icon: 'assets/icons/md-add-circle.svg', component: 'dataFilter', action: newComponent },
@@ -116,7 +121,7 @@ metricDashboard.factory('componentViewFactory', ['appManager', function (appMana
     };
     function select(component, parent) {
         factory.componentList.components = parent;
-        factory.dashboardComponents.selection = component;
+        factory.dashboardComponents.selection = component; 
     }
     function selectCanvas(component, productLine) {
         factory.dashboardComponents.selection = component;

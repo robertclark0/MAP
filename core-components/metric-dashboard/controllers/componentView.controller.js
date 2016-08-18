@@ -17,4 +17,8 @@
     $scope.componentProperties = componentViewFactory.componentProperties;
     
 
+    $scope.testFunction = function (value) {
+        console.log(value);
+        console.log(componentViewFactory.componentProperties.editParent);
+    };
 }]);
