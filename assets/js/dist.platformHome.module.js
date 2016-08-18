@@ -81,7 +81,7 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     }
     function setProductLine(product) {
         SF.setProduct(product);
-        $state.go('metricDashboard.view', { viewName: 'data'});
+        $state.go('metricDashboard.view', { viewName: 'component'});
     }
 
 
