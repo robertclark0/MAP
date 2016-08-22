@@ -1,0 +1,16 @@
+﻿<md-dialog aria-label="List dialog" style="width: 400px; padding: 0 25px">
+    <form name="validateParent" ng-submit="componentProperties.saveEdit(); closeDialog()">
+        <div layout="column" style="height:150px;">
+            <h4>Add component to:</h4>
+            <md-input-container class="md-block md-accent" flex>
+                <md-select ng-model="componentProperties.editParent" required>
+                    <md-option ng-selected="componentList.components[0]" ng-value="opt.parent" ng-repeat="opt in componentList.components">{{ opt.header }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <md-dialog-actions>
+            <md-button ng-click="closeDialog()" class="md-primary">Cancel</md-button>
+            <md-button type="submit" class="md-primary">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -26,7 +26,7 @@
     };
     function select(component, parent) {
         factory.componentList.components = parent;
-        factory.dashboardComponents.selection = component; 
+        factory.dashboardComponents.selection = component;
     }
     function selectCanvas(component, productLine) {
         factory.dashboardComponents.selection = component;
@@ -34,7 +34,7 @@
             header: productLine.name,
             parent: productLine.canvases,
             children: productLine.canvases
-        }];       
+        }];
         factory.componentList.components = list;
     };
     function selectDataGroup(component, productLine) {
@@ -85,58 +85,8 @@
         editType: null,
         editObject: null,
         editParent: null,
-        cancelEdit: function () {
-            factory.componentProperties.editObject = null;
-            factory.componentProperties.editType = null;
-        },
-        saveEdit: function ($event) {           
-            if (factory.componentProperties.editParent === null) {
-                if (factory.componentList.components.length === 1) {
-                    factory.componentProperties.editParent = factory.componentList.components[0].parent;
-                    factory.componentProperties.saveEdit();
-                }
-                else {
-                    showDialog($event);
-                }                
-            }
-            else {
-                if (factory.componentProperties.editType === 'new') {
-                    factory.componentProperties.editParent.push(factory.componentProperties.editObject);
-                }
-                else if (factory.componentProperties.editType === 'existing') {
-                    var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
-                    factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
-                }
-                factory.componentProperties.editType = null;
-                factory.componentProperties.editObject = null;
-            }
-        }
-    };
-    function showDialog($event) {
-        var parentEl = angular.element(document.body);
-        $mdDialog.show({
-            parent: parentEl,
-            targetEvent: $event,
-            template:
-              '<md-dialog aria-label="List dialog">' +
-              '  <div layout="row">' +
-              '    <md-input-container class="md-block md-accent" flex>' +
-              '      <md-select ng-model="componentProperties.editParent" >' +
-              '        <md-option ng-value="opt.parent" ng-repeat="opt in componentList.components">{{ opt.header }}</md-option>' +
-              '      </md-select>' + 
-              '    </md-input-container>' + 
-              '  </div>' +
-              '  <md-dialog-actions>' +
-              '    <md-button ng-click="closeDialog()" class="md-primary">' +
-              '      Cancel' +
-              '    </md-button>' +
-              '    <md-button ng-click="closeDialog(); componentProperties.saveEdit()" class="md-primary">' +
-              '      Save' +
-              '    </md-button>' +
-              '  </md-dialog-actions>' +
-              '</md-dialog>',
-            controller: 'ComponentView'
-        });
+        cancelEdit: cancelEdit,
+        saveEdit: saveEdit,
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
@@ -153,6 +103,38 @@
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
         }
     }
+    function saveEdit() {
+        if (factory.componentProperties.editParent === null) {
+            if (factory.componentList.components.length === 1) {
+                factory.componentProperties.editParent = factory.componentList.components[0].parent;
+                factory.componentProperties.saveEdit();
+            }
+            else { validateParentDialog(); }
+        }
+        else {
+            if (factory.componentProperties.editType === 'new') {
+                factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+            }
+            else if (factory.componentProperties.editType === 'existing') {
+                var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
+                factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
+            }
+            factory.componentProperties.editType = null;
+            factory.componentProperties.editObject = null;
+        }
+    }
+    function cancelEdit() {
+        factory.componentProperties.editObject = null;
+        factory.componentProperties.editType = null;
+    }
+    function validateParentDialog() {
+        $mdDialog.show({
+            parent: angular.element(document.body),
+            templateUrl: 'core-components/metric-dashboard/templates/validateParent.dialog.html',
+            controller: 'ComponentView'
+        });
+    };
+
 
     return factory;
 }]);
