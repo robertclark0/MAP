@@ -21,7 +21,7 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     ];
 
 }]);
-metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', function ($scope, appManager, componentViewFactory) {
+metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     $scope.SF = appManager.state.SF;
@@ -39,11 +39,9 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
     // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
     $scope.componentProperties = componentViewFactory.componentProperties;
     
-
-    $scope.testFunction = function (value) {
-        console.log(value);
-        console.log(componentViewFactory.componentProperties.editParent);
-    };
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
 }]);
 metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
 
@@ -93,7 +91,7 @@ metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', fu
     ];
 
 }]);
-metricDashboard.factory('componentViewFactory', ['appManager', function (appManager) {
+metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
     var factory = {};
@@ -184,19 +182,54 @@ metricDashboard.factory('componentViewFactory', ['appManager', function (appMana
             factory.componentProperties.editObject = null;
             factory.componentProperties.editType = null;
         },
-        saveEdit: function () {
-            if (factory.componentProperties.editType === 'new')
-            {
-                factory.componentList.components.push(factory.componentProperties.editObject);
+        saveEdit: function ($event) {           
+            if (factory.componentProperties.editParent === null) {
+                if (factory.componentList.components.length === 1) {
+                    factory.componentProperties.editParent = factory.componentList.components[0].parent;
+                    factory.componentProperties.saveEdit();
+                }
+                else {
+                    showDialog($event);
+                }                
             }
-            else if (factory.componentProperties.editType === 'existing') {
-                var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
-                factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
+            else {
+                if (factory.componentProperties.editType === 'new') {
+                    factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+                }
+                else if (factory.componentProperties.editType === 'existing') {
+                    var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
+                    factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
+                }
+                factory.componentProperties.editType = null;
+                factory.componentProperties.editObject = null;
             }
-
-            factory.componentProperties.editType = null;
-            factory.componentProperties.editObject = null;
         }
+    };
+    function showDialog($event) {
+        var parentEl = angular.element(document.body);
+        $mdDialog.show({
+            parent: parentEl,
+            targetEvent: $event,
+            template:
+              '<md-dialog aria-label="List dialog">' +
+              '  <div layout="row">' +
+              '    <md-input-container class="md-block md-accent" flex>' +
+              '      <md-select ng-model="componentProperties.editParent" >' +
+              '        <md-option ng-value="opt.parent" ng-repeat="opt in componentList.components">{{ opt.header }}</md-option>' +
+              '      </md-select>' + 
+              '    </md-input-container>' + 
+              '  </div>' +
+              '  <md-dialog-actions>' +
+              '    <md-button ng-click="closeDialog()" class="md-primary">' +
+              '      Cancel' +
+              '    </md-button>' +
+              '    <md-button ng-click="closeDialog(); componentProperties.saveEdit()" class="md-primary">' +
+              '      Save' +
+              '    </md-button>' +
+              '  </md-dialog-actions>' +
+              '</md-dialog>',
+            controller: 'ComponentView'
+        });
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
@@ -213,12 +246,6 @@ metricDashboard.factory('componentViewFactory', ['appManager', function (appMana
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
         }
     }
-    //editConfig Template - Don't Uncomment
-    //{
-    //    editType: 'new' | 'existing',
-    //    editObject: *reference, If editType is not 'new', then pass object reference
-    //    componentType: 'canvases'
-    //}
 
     return factory;
 }]);

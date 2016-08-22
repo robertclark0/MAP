@@ -54,7 +54,7 @@
         <md-subheader ng-show="componentProperties.editType === 'existing'" style="background-color: rgb(68, 138, 255); color: white;">Edit</md-subheader>
         <md-content layout-padding style="background-color: transparent; padding: 0 50px;">
             <div ng-show="componentProperties.editType !== null">
-                <form name="componentForm" ng-submit="componentProperties.saveEdit()">
+                <form name="componentForm" ng-submit="componentProperties.saveEdit($event)">
                     <div layout="row">
                         <md-input-container class="md-block md-accent" flex="75">
                             <label>Canvas Name</label>

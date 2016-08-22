@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', function ($scope, appManager, componentViewFactory) {
+﻿metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     $scope.SF = appManager.state.SF;
@@ -16,9 +16,7 @@
     // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
     $scope.componentProperties = componentViewFactory.componentProperties;
     
-
-    $scope.testFunction = function (value) {
-        console.log(value);
-        console.log(componentViewFactory.componentProperties.editParent);
-    };
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
 }]);
