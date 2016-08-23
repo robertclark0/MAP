@@ -158,16 +158,19 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var apiResource = {};
 
     var userInfoAPI = apiEndpoint + 'user-info';
-    apiResource.userInfo = function () {
-        return $resource(userInfoAPI);
-    };
-
-    var productLinesAPI = apiEndpoint + 'product-lines';
-    apiResource.productLines = function () { return $resource(productLinesAPI); };
+    apiResource.userInfo = function () { return $resource(userInfoAPI); };
 
     var userActiveAPI = apiEndpoint + 'user-active';
     apiResource.userActive = function () { return $resource(userActiveAPI); };
 
+    var productLinesAPI = apiEndpoint + 'product-lines';
+    apiResource.productLines = function () { return $resource(productLinesAPI); };
+
+    var dataSourcesAPI = apiEndpoint + 'data-sources';
+    apiResource.dataSources = function () { return $resource(dataSourcesAPI); };
+
+    var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
+    apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
 
     //    STRUCTURE
     //
@@ -275,19 +278,24 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         //};
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.DataFilter = function (GUID) {
-        this.name = '';
+    stateClasses.DataFilter = function (name) {
+        this.name = name || 'New Data Filter';
         this.GUID = GUID;
         this.visibleInReport = true;
-        this.selectedValue = [];
+        //this.selectedValue = []; this should probably be extracted out to the data side.
+
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.CanvasElement = function () {
-        this.name = '';
+    stateClasses.CanvasElement = function (name) {
+        this.name = name || 'New Canvas Element';
+        this.GUID = null;
         this.type = '';
         this.width = 3;
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
+
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
     stateClasses.ColumnProperty = function () {
         this.column = '';

@@ -44,16 +44,19 @@
     var apiResource = {};
 
     var userInfoAPI = apiEndpoint + 'user-info';
-    apiResource.userInfo = function () {
-        return $resource(userInfoAPI);
-    };
-
-    var productLinesAPI = apiEndpoint + 'product-lines';
-    apiResource.productLines = function () { return $resource(productLinesAPI); };
+    apiResource.userInfo = function () { return $resource(userInfoAPI); };
 
     var userActiveAPI = apiEndpoint + 'user-active';
     apiResource.userActive = function () { return $resource(userActiveAPI); };
 
+    var productLinesAPI = apiEndpoint + 'product-lines';
+    apiResource.productLines = function () { return $resource(productLinesAPI); };
+
+    var dataSourcesAPI = apiEndpoint + 'data-sources';
+    apiResource.dataSources = function () { return $resource(dataSourcesAPI); };
+
+    var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
+    apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
 
     //    STRUCTURE
     //

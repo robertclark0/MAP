@@ -62,19 +62,24 @@
         //};
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.DataFilter = function (GUID) {
-        this.name = '';
+    stateClasses.DataFilter = function (name) {
+        this.name = name || 'New Data Filter';
         this.GUID = GUID;
         this.visibleInReport = true;
-        this.selectedValue = [];
+        //this.selectedValue = []; this should probably be extracted out to the data side.
+
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.CanvasElement = function () {
-        this.name = '';
+    stateClasses.CanvasElement = function (name) {
+        this.name = name || 'New Canvas Element';
+        this.GUID = null;
         this.type = '';
         this.width = 3;
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
+
+        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
     stateClasses.ColumnProperty = function () {
         this.column = '';

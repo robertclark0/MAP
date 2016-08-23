@@ -61,6 +61,7 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
     };
 
 
+
 }]);
 metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
@@ -103,16 +104,16 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         components: [
             { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: selectCanvas },
             { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: selectDataGroup },
-            { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: '' },
-            { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: '' },
-            { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: '' }
+            { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: selectDataSelection },
+            { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: selectDataFilter },
+            { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: selectCanvasElement }
         ],
         actions: [
             { text: 'Add New Canvas', icon: 'assets/icons/md-add-circle.svg', component: 'canvas', action: newComponent },
             { text: 'Open Saved Canvas', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
             { text: 'Open Report', icon: 'assets/icons/md-cloud.svg', component: 'canvas', action: '' },
             { text: 'Add New Data Group', icon: 'assets/icons/md-add-circle.svg', component: 'dataGroup', action: newComponent },
-            { text: 'Select New Data', icon: 'assets/icons/md-done.svg', component: 'dataSelection', action: '' },
+            { text: 'Select New Data', icon: 'assets/icons/md-done.svg', component: 'dataSelection', action: newComponent },
             { text: 'Add New Data Filter', icon: 'assets/icons/md-add-circle.svg', component: 'dataFilter', action: newComponent },
             { text: 'Add New Canvas Element', icon: 'assets/icons/md-add-circle.svg', component: 'canvasElement', action: newComponent }
         ]
@@ -136,6 +137,58 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
                 header: 'Canvas: ' + canvas.name,
                 parent: canvas.dataGroups,
                 children: canvas.dataGroups
+            };
+            list.push(listItem);
+        });
+        factory.componentList.components = list;
+    }
+    function selectDataSelection(component, productLine) {
+        closeEdit();
+        factory.dashboardComponents.selection = component;
+        var list = [];
+        productLine.canvases.forEach(function (canvas) {
+            var header = 'Canvas: ' + canvas.name;
+            canvas.dataGroups.forEach(function (dataGroup) {
+                var endHeader = header + ' | Data Group: ' + dataGroup.name;
+                var listItem = {
+                    header: endHeader,
+                    parent: dataGroup.dataSelections,
+                    children: dataGroup.dataSelections
+                };
+                list.push(listItem);
+            });
+            
+        });
+        factory.componentList.components = list;
+    }
+    function selectDataFilter(component, productLine) {
+        closeEdit();
+        factory.dashboardComponents.selection = component;
+        var list = [];
+        productLine.canvases.forEach(function (canvas) {
+            var header = 'Canvas: ' + canvas.name;
+            canvas.dataGroups.forEach(function (dataGroup) {
+                var endHeader = header + ' | Data Group: ' + dataGroup.name;
+                var listItem = {
+                    header: endHeader,
+                    parent: dataGroup.dataFilters,
+                    children: dataGroup.dataFilters
+                };
+                list.push(listItem);
+            });
+
+        });
+        factory.componentList.components = list;
+    }
+    function selectCanvasElement(component, productLine) {
+        closeEdit();
+        factory.dashboardComponents.selection = component;
+        var list = [];
+        productLine.canvases.forEach(function (canvas) {
+            var listItem = {
+                header: 'Canvas: ' + canvas.name,
+                parent: canvas.canvasElements,
+                children: canvas.canvasElements
             };
             list.push(listItem);
         });
@@ -190,7 +243,16 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
                     editObject = new SC.Canvas('New Canvas');
                     break;
                 case 'dataGroup':
-                    editObject = new SC.DataGroup('New Data Groupz');
+                    editObject = new SC.DataGroup('New Data Group');
+                    break;
+                case 'dataSelection':
+                    editObject = new SC.DataFilter('New Data Selection');
+                    break;
+                case 'dataFilter':
+                    editObject = new SC.DataFilter('New Data Filter');
+                    break;
+                case 'canvasElement':
+                    editObject = new SC.CanvasElement('New Canvas Element');
                     break;
             }
             factory.componentProperties.editObject = editObject;

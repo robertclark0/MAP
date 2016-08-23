@@ -62,6 +62,15 @@
                         <div ng-switch-when="dataGroup">
                             <ng-include src="'core-components/metric-dashboard/templates/dataGroupForm.partial.html'"></ng-include>
                         </div>
+                        <div ng-switch-when="dataSelection">
+                            <ng-include src="'core-components/metric-dashboard/templates/dataSelectionForm.partial.html'"></ng-include>
+                        </div>
+                        <div ng-switch-when="dataFilter">
+                            <ng-include src="'core-components/metric-dashboard/templates/dataFilterForm.partial.html'"></ng-include>
+                        </div>
+                        <div ng-switch-when="canvasElement">
+                            <ng-include src="'core-components/metric-dashboard/templates/canvasElementForm.partial.html'"></ng-include>
+                        </div>
                     </div>
                     <md-button ng-click="componentProperties.closeEdit()">Cancel</md-button>
                     <md-button type="submit">Save</md-button>
