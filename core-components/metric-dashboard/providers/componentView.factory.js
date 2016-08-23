@@ -10,9 +10,9 @@
         components: [
             { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: selectCanvas },
             { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: selectDataGroup },
-            { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: select },
-            { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: select },
-            { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: select }
+            { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: '' },
+            { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: '' },
+            { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: '' }
         ],
         actions: [
             { text: 'Add New Canvas', icon: 'assets/icons/md-add-circle.svg', component: 'canvas', action: newComponent },
@@ -24,11 +24,8 @@
             { text: 'Add New Canvas Element', icon: 'assets/icons/md-add-circle.svg', component: 'canvasElement', action: newComponent }
         ]
     };
-    function select(component, parent) {
-        factory.componentList.components = parent;
-        factory.dashboardComponents.selection = component;
-    }
     function selectCanvas(component, productLine) {
+        closeEdit();
         factory.dashboardComponents.selection = component;
         var list = [{
             header: productLine.name,
@@ -38,6 +35,7 @@
         factory.componentList.components = list;
     };
     function selectDataGroup(component, productLine) {
+        closeEdit();
         factory.dashboardComponents.selection = component;
         var list = [];
         productLine.canvases.forEach(function (canvas) {
@@ -85,7 +83,7 @@
         editType: null,
         editObject: null,
         editParent: null,
-        cancelEdit: cancelEdit,
+        closeEdit: closeEdit,
         saveEdit: saveEdit,
     };
     function newEdit(editConfig) {
@@ -96,6 +94,8 @@
             switch (editConfig.componentType) {
                 case 'canvas':
                     editObject = new SC.Canvas('New Canvas');
+                case 'dataGroup':
+                    editObject = new SC.DataGroup('New Data Group');
             }
             factory.componentProperties.editObject = editObject;
         }
@@ -119,11 +119,10 @@
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);
                 factory.componentProperties.editParent[index] = factory.componentProperties.editObject;
             }
-            factory.componentProperties.editType = null;
-            factory.componentProperties.editObject = null;
+            closeEdit();
         }
     }
-    function cancelEdit() {
+    function closeEdit() {
         factory.componentProperties.editObject = null;
         factory.componentProperties.editType = null;
     }

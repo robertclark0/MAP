@@ -1,0 +1,19 @@
+﻿<div layout="row">
+    <md-input-container class="md-block md-accent" flex="75">
+        <label>Canvas Name</label>
+        <input value=" " ng-model="componentProperties.editObject.name" required>
+    </md-input-container>
+    <md-input-container class="md-block md-accent" flex>
+        <label>User Role</label>
+        <md-select ng-model="componentProperties.editObject.roleType" class="md-accent" required>
+            <md-option value="user">User</md-option>
+            <md-option value="admin">Admin</md-option>
+        </md-select>
+    </md-input-container>
+</div>
+<div layout="row">
+    <md-input-container class="md-block md-accent" flex>
+        <label>GUID</label>
+        <input ng-model="componentProperties.editObject.GUID" disabled>
+    </md-input-container>
+</div>

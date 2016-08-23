@@ -255,7 +255,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.name = name || 'New Canvas';
         this.GUID = null;
         this.roleType = 'user'; //user, admin
-        this.dataGroups = [new stateClasses.DataGroup('New Group')];
+        this.dataGroups = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

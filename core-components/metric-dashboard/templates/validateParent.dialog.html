@@ -4,7 +4,7 @@
             <h4>Add component to:</h4>
             <md-input-container class="md-block md-accent" flex>
                 <md-select ng-model="componentProperties.editParent" required>
-                    <md-option ng-selected="componentList.components[0]" ng-value="opt.parent" ng-repeat="opt in componentList.components">{{ opt.header }}</md-option>
+                    <md-option ng-value="opt.parent" ng-repeat="opt in componentList.components">{{ opt.header }}</md-option>
                 </md-select>
             </md-input-container>
         </div>
