@@ -43,6 +43,7 @@
         this.GUID = null;
         this.roleType = 'user'; //user, admin
         this.dataGroups = [];
+        this.canvasElements = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
@@ -52,7 +53,7 @@
         this.dataSource = '';
         this.dataFilters = [];
         this.dataSelections = [];
-        this.canvasElements = [];
+
         //this.data = {
         //    results: [],
         //    tableColumns: [],
@@ -61,13 +62,13 @@
         //};
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.Filter = function (GUID) {
+    stateClasses.DataFilter = function (GUID) {
         this.name = '';
         this.GUID = GUID;
         this.visibleInReport = true;
         this.selectedValue = [];
     };
-    stateClasses.Element = function () {
+    stateClasses.CanvasElement = function () {
         this.name = '';
         this.type = '';
         this.width = 3;

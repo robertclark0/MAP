@@ -184,11 +184,14 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         factory.componentProperties.editParent = editConfig.editParent;
         if (editConfig.editType === 'new') {
             var editObject;
+            console.log(editConfig.componentType);
             switch (editConfig.componentType) {
                 case 'canvas':
                     editObject = new SC.Canvas('New Canvas');
+                    break;
                 case 'dataGroup':
-                    editObject = new SC.DataGroup('New Data Group');
+                    editObject = new SC.DataGroup('New Data Groupz');
+                    break;
             }
             factory.componentProperties.editObject = editObject;
         }
@@ -197,6 +200,7 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         }
     }
     function saveEdit() {
+        //console.log(factory.componentProperties);
         if (factory.componentProperties.editParent === null) {
             if (factory.componentList.components.length === 1) {
                 factory.componentProperties.editParent = factory.componentList.components[0].parent;

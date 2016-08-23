@@ -59,6 +59,9 @@
                         <div ng-switch-when="canvas">
                             <ng-include src="'core-components/metric-dashboard/templates/canvasForm.partial.html'"></ng-include>
                         </div>
+                        <div ng-switch-when="dataGroup">
+                            <ng-include src="'core-components/metric-dashboard/templates/dataGroupForm.partial.html'"></ng-include>
+                        </div>
                     </div>
                     <md-button ng-click="componentProperties.closeEdit()">Cancel</md-button>
                     <md-button type="submit">Save</md-button>
