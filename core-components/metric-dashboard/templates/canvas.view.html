@@ -11,7 +11,8 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: white;">
-                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>
+                            <!--<directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>-->
+                            <hc-chart options="chartOptions"></hc-chart>
                         </li>
                     </ul>
                 </div>

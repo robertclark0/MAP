@@ -18,13 +18,19 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
         $scope.currentCanvas = canvas;
     };
 
+    $scope.chartOptions = {
+        title: {
+            text: 'Temperature data'
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
 
-    $scope.standardItems = [
-        { sizeX: 2, sizeY: 1, row: 0, col: 0 },
-        { sizeX: 2, sizeY: 2, row: 0, col: 2 },
-        { sizeX: 1, sizeY: 1, row: 0, col: 4 },
-        { sizeX: 1, sizeY: 1, row: 0, col: 5 },
-    ];
+        series: [{
+            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        }]
+    };
 
 }]);
 metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
@@ -127,6 +133,23 @@ metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', fu
     ];
 
 }]);
+metricDashboard.directive('hcChart', function () {
+    return {
+        restrict: 'E',
+        template: '<div></div>',
+        scope: {
+            options: '='
+        },
+        link: function (scope, element) {
+
+            var chart = Highcharts.chart(element[0], scope.options);
+
+            scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
+                chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
+            });
+        }
+    };
+})
 metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;

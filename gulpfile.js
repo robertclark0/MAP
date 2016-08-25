@@ -18,7 +18,7 @@ gulp.task('libraries.js', function () {
         'libraries/angular/angular-ui-router.min.js',
         'libraries/angular/angular-css.min.js',
         'libraries/angular/angular-gridster.min.js',
-        'libraries/highcharts/highcharts.js',
+        'libraries/highcharts/highcharts.min.js',
         'libraries/ngStorage/ngStorage.min.js',
         'libraries/ocLazyLoad/ocLazyLoad.min.js'
     ])
