@@ -19,16 +19,14 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     };
 
     $scope.chartOptions = {
-        title: {
-            text: 'Temperature data'
-        },
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E']
         },
 
         series: [{
-            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            name: 'Aggregate Count',
+            type: 'bar',
+            data: [4687,3416,1612,450]
         }]
     };
 
@@ -138,10 +136,12 @@ metricDashboard.directive('hcChart', function () {
         restrict: 'E',
         template: '<div></div>',
         scope: {
-            options: '='
+            options: '=',
+            canvasElement: '='
         },
         link: function (scope, element) {
 
+            scope.options.title = { text: scope.canvasElement.name };
             var chart = Highcharts.chart(element[0], scope.options);
 
             scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
