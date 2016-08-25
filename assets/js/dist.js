@@ -172,6 +172,7 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
     apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
 
+
     //    STRUCTURE
     //
     var dataScope = $rootScope.$new(true);
@@ -182,6 +183,26 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     return dataScope;
 
 
+}]);
+mapApp.directive('directiveGenerator', ['$compile', function ($compile) {
+    return {
+        restrict: 'E',
+        scope: {
+            name: '@',
+            attributes: '='
+        },
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        var attributes = '';
+        Object.keys(scope.attributes).forEach(function (key, index) {
+            attributes = attributes + key + "='" + scope.attributes[key] + "' ";
+        });
+
+        elem.replaceWith($compile('<' + scope.name + ' ' + attributes + "></" + scope.name + '>')(scope));
+    };
 }]);
 //applicationManager.factory('$exceptionHandler', function () {
 //    return function (exception, cause) {
@@ -351,32 +372,6 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         });
         return GUID;
     };
-    //stateFunctions.newStateObject = function (type) {
-    //    switch (type) {
-    //        case 'canvas':
-
-    //        case 'group':
-
-    //        case 'filter':
-
-    //        case 'element':
-
-    //        case 'columnProperty':
-    //            return new stateClasses.ColumnProperty;
-    //    }
-    //};
-    //stateFunctions.createStateObject = {
-    //    Canvas: function () { return new stateClasses.Canvas(stateFunctions.generateGUID()); },
-    //    DataGroup: function () { return new stateClasses.Group(stateFunctions.generateGUID()); },
-    //    Filter: function () { return new stateClasses.Filter(stateFunctions.generateGUID()); },
-    //    Element: function () { return new stateClasses.Element; }
-    //};
-    //stateFunctions.Current = function (indexedObjectName) {
-    //    switch (indexedObjectName) {
-    //        case 'canvas':
-    //            return 'canvas';
-    //    }
-    //};
     stateFunctions.setProduct = function (product, state) {
         session.StateObject.productLine.current = product.Code;
         session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name) : session.StateObject[product.Code];

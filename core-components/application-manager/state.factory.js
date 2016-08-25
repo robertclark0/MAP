@@ -135,32 +135,6 @@
         });
         return GUID;
     };
-    //stateFunctions.newStateObject = function (type) {
-    //    switch (type) {
-    //        case 'canvas':
-
-    //        case 'group':
-
-    //        case 'filter':
-
-    //        case 'element':
-
-    //        case 'columnProperty':
-    //            return new stateClasses.ColumnProperty;
-    //    }
-    //};
-    //stateFunctions.createStateObject = {
-    //    Canvas: function () { return new stateClasses.Canvas(stateFunctions.generateGUID()); },
-    //    DataGroup: function () { return new stateClasses.Group(stateFunctions.generateGUID()); },
-    //    Filter: function () { return new stateClasses.Filter(stateFunctions.generateGUID()); },
-    //    Element: function () { return new stateClasses.Element; }
-    //};
-    //stateFunctions.Current = function (indexedObjectName) {
-    //    switch (indexedObjectName) {
-    //        case 'canvas':
-    //            return 'canvas';
-    //    }
-    //};
     stateFunctions.setProduct = function (product, state) {
         session.StateObject.productLine.current = product.Code;
         session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name) : session.StateObject[product.Code];

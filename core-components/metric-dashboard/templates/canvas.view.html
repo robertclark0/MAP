@@ -10,7 +10,8 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item="item" ng-repeat="item in standardItems" style="background-color: white;">
+                        <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: white;">
+                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>
                         </li>
                     </ul>
                 </div>
@@ -18,7 +19,7 @@
 
             <div class="map-gray-2">
                 <md-tabs md-align-tabs="bottom" class="ink-bar-top">
-                    <md-tab ng-repeat="canvas in canvases">{{canvas.name}}</md-tab>
+                    <md-tab ng-repeat="canvas in canvases" md-on-select="changeCanvas(canvas)">{{canvas.name}}</md-tab>
                 </md-tabs>
             </div>
         </div>

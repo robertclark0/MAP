@@ -58,6 +58,7 @@
     var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
     apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
 
+
     //    STRUCTURE
     //
     var dataScope = $rootScope.$new(true);

@@ -3,7 +3,7 @@
     // Dependancies
     var SF = appManager.state.SF;
     var SO = appManager.state.SO;
-    var API = appManager.data.API;    
+    var API = appManager.data.API;
     var DO = appManager.data.DO;
     var logger = appManager.logger;
 
