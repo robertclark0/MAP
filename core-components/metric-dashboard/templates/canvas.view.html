@@ -10,9 +10,10 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: white;">
+                        <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
                             <!--<directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>-->
-                            <hc-chart options="chartOptions" canvas-element="element"></hc-chart>
+                            <span ng-click="changeOptions(element)">OPTION CHANGE</span>
+                            <hc-chart canvas-element="element" data="chartData"></hc-chart>
                         </li>
                     </ul>
                 </div>

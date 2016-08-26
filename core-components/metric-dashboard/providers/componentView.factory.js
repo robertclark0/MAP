@@ -143,7 +143,7 @@
         factory.componentProperties.editParent = editConfig.editParent;
         if (editConfig.editType === 'new') {
             var editObject;
-            console.log(editConfig.componentType);
+
             switch (editConfig.componentType) {
                 case 'canvas':
                     editObject = new SC.Canvas('New Canvas');

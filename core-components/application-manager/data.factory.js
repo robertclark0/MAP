@@ -31,6 +31,8 @@
         this.value = productLinesAPIResponse;
     };
 
+    dataObject.canvasElements = [];
+
 
 
     //    DATA FUNCTIONS

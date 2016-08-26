@@ -145,6 +145,8 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
         this.value = productLinesAPIResponse;
     };
 
+    dataObject.canvasElements = [];
+
 
 
     //    DATA FUNCTIONS

@@ -3,6 +3,7 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
+    var DO = appManager.data.DO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
@@ -11,24 +12,77 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     };
 
     $scope.gridsterOpts = {
-        columns: 36
+        columns: 36,
+        resizable: {
+            start: function (event, $element, widget) {
+                widget.destroyChart();
+            },
+            stop: function (event, $element, widget) {
+                widget.createChart();
+            }
+        },
+        draggable: {
+            start: function (event, $element, widget) {
+                widget.destroyChart();
+            },
+            stop: function (event, $element, widget) {
+                widget.createChart();
+            }
+        }
     };
     $scope.currentCanvas = DSO.canvases[0];
     $scope.changeCanvas = function (canvas) {
         $scope.currentCanvas = canvas;
     };
 
-    $scope.chartOptions = {
-        xAxis: {
-            categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E']
-        },
 
-        series: [{
-            name: 'Aggregate Count',
-            type: 'bar',
-            data: [4687,3416,1612,450]
-        }]
+
+    $scope.changeOptions = function (element) {
+        
+        var options = element.chartOptions;
+        options.title.text = 'Chart #' + Math.floor(Math.random() * 100);
+        element.chartOptions = options;
+
     };
+
+    //$scope.addChart = function (chartObject) {
+    //    if (DO.charts.map(function (obj) { return obj.GUID }).indexOf(chartObject.GUID) === -1) {
+    //        DO.charts.push(chartObject);
+    //    }
+    //    console.log(DO.charts);
+    //};
+
+
+
+    //temp
+    $scope.chartData = [{
+        name: 'CHUP',
+        type: 'column',
+        color: 'red',
+        data: [4687, 3416, 1612, 450],
+        dataLabels: {
+            enabled: true
+        }
+    },
+    {
+        name: 'POLY',
+        type: 'column',
+        color: 'blue',
+        data: [2687, 1416, 2612, 1450],
+        dataLabels: {
+            enabled: true
+        }
+    }];
+
+
+
+
+    //Chart Globals
+    Highcharts.setOptions({
+        lang: {
+            thousandsSep: ','
+        }
+    });
 
 }]);
 metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
@@ -136,17 +190,69 @@ metricDashboard.directive('hcChart', function () {
         restrict: 'E',
         template: '<div></div>',
         scope: {
-            options: '=',
-            canvasElement: '='
+            canvasElement: '=',
+            data: '='
         },
         link: function (scope, element) {
+            var chart;
 
-            scope.options.title = { text: scope.canvasElement.name };
-            var chart = Highcharts.chart(element[0], scope.options);
+            var defaultchartOptions = {
+                chart: {
+                    backgroundColor: 'transparent',
+                    animation: false
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
+                },
+                yAxis: {
+                    labels: {
+                        format: '{value:,.0f}'
+                    },
+                    title: {
+                        text: 'Patients',
+                        align: 'low'
+                    }
+                },
+                series: []
+            };
 
-            scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
+            scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
+
+            loadChart();
+            
+
+            //scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
+            //    chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
+            //});
+
+            //scope.$watch('canvasElement.chartOptions', function (newValue, oldValue) {
+            //    if (newValue !== oldValue)
+            //    {
+            //        loadChart();
+            //    }
+            //}, true);
+
+            function loadChart() {
+                chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
+                
+
+                scope.data.forEach(function (d) {
+                    chart.addSeries(d);
+                });
+
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
-            });
+            };
+
+            scope.canvasElement.destroyChart = function () {
+                chart.destroy();
+            };
+            scope.canvasElement.createChart = function () {
+                loadChart();
+            };
+
         }
     };
 })
@@ -295,7 +401,7 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         factory.componentProperties.editParent = editConfig.editParent;
         if (editConfig.editType === 'new') {
             var editObject;
-            console.log(editConfig.componentType);
+
             switch (editConfig.componentType) {
                 case 'canvas':
                     editObject = new SC.Canvas('New Canvas');
