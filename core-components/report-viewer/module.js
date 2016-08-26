@@ -1,1 +1,1 @@
-﻿var reportViewer = angular.module('reportViewer', []);
+﻿var reportViewer = angular.module('reportViewer', ['gridster']);

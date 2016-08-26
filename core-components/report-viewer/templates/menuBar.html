@@ -1,0 +1,70 @@
+﻿<div style="height:41px; border-top: 1px solid rgb(225,225,225);">
+    <md-menu-bar class="map-gray-1">
+        <md-menu>
+            <button ng-click="$mdOpenMenu()">
+                Report
+            </button>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                        Open
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                        Publish
+                    </md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                        Report List
+                    </md-button>
+                </md-menu-item>
+
+            </md-menu-content>
+        </md-menu>
+        <md-menu>
+            <button ng-click="$mdOpenMenu()">
+                View
+            </button>
+            <md-menu-content>
+                <md-menu-item>
+
+                    <md-menu>
+                        <md-button ng-click="$mdOpenMenu()">Properties Panel</md-button>
+                        <md-menu-content>
+                            <md-menu-item>
+                                <md-button ng-click="toggleSideNav('panelFilters')">Filters</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="toggleSideNav('panelData')">Data</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="">Canvas Element</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+        <md-menu>
+            <button ng-click="$mdOpenMenu()">
+                Settings
+            </button>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                        User
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                        About
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </md-menu-bar>
+</div>

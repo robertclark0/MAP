@@ -1,5 +1,6 @@
 ﻿applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', '$state', function ($rootScope, $sessionStorage, $state) {
 
+
     //    STATE OBJECT CLASSES
     //
     var stateClasses = {};

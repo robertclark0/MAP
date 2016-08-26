@@ -1,1 +1,81 @@
 ﻿<ng-include src="'core-components/report-viewer/templates/siteToolbar.html'"></ng-include>
+
+<section layout="row" style="height: calc(100vh - 60px); background-color:white;">
+
+    <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
+        <md-subheader class="md-primary">Reports</md-subheader>
+        <md-list class="md-dense" style="background-color:white;">
+            <md-list-item ng-click="addSeries()">
+                <div>
+                    <p>CHUP Aggregate</p>
+                </div>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-click="null">
+                <div>
+                    <p>CHUP Patient</p>
+                </div>
+            </md-list-item>
+        </md-list>
+        <md-subheader class="md-primary">Data Filters</md-subheader>
+        <md-content class="map-gray-1">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <div class="md-headline">Year</div>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <div class="md-headline">Month</div>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <div class="md-headline">Region</div>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <div class="md-headline">DMIS</div>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <div class="md-headline">MEPRS</div>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+        </md-content>
+    </md-sidenav>
+
+    <div flex class="map-gray-3" style="background-color: white;">
+        <div layout="column" layout-fill>
+
+            <ng-include src="'core-components/report-viewer/templates/menuBar.html'"></ng-include>
+
+            <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+                <!--MAIN CONTENT AREA HERE - GRIDSTER-->
+                <div gridster="gridsterOpts">
+                    <ul>
+                        <li gridster-item="element"
+                            ng-repeat="element in currentReport.canvasElements" style="background-color: #ffffff;">
+                            <!--<directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>-->
+                            <hc-chart canvas-element="element" ng-init=""></hc-chart>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
