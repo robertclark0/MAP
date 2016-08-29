@@ -5,7 +5,7 @@
     <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
         <md-subheader class="md-primary">Reports</md-subheader>
         <md-list class="md-dense" style="background-color:white;">
-            <md-list-item ng-click="addSeries()">
+            <md-list-item ng-click="">
                 <div>
                     <p>CHUP Aggregate</p>
                 </div>
@@ -66,10 +66,24 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item="element"
-                            ng-repeat="element in currentReport.canvasElements" style="background-color: #ffffff;">
-                            <!--<directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>-->
-                            <hc-chart canvas-element="element" ng-init=""></hc-chart>
+                        <li gridster-item row="0" col="1" size-x="35" size-y="2" style="background-color: white;">
+                            <h2>CHUP Aggregate Patient Report</h2>
+                        </li>
+                        <li gridster-item="element1"
+                            style="background-color: #ffffff;">
+                            <hc-chart canvas-element="element1" data="data.chart1" series="series1" drill="drillLevel"></hc-chart>
+                        </li>
+                        <li gridster-item="element2"
+                            style="background-color: #ffffff;">
+                            <hc-chart canvas-element="element2" data="data.chart2" series="series2" drill="drillLevel"></hc-chart>
+                        </li>
+                        <li gridster-item="element3"
+                            style="background-color: #ffffff;">
+                            <hc-chart canvas-element="element3" data="data.chart3" series="series3" drill="drillLevel"></hc-chart>
+                        </li>
+                        <li gridster-item="element4"
+                            style="background-color: #ffffff;">
+                            <hc-chart canvas-element="element4" data="data.chart4" series="series4" drill="drillLevel"></hc-chart>
                         </li>
                     </ul>
                 </div>

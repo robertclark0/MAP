@@ -3,7 +3,9 @@
         restrict: 'E',
         scope: {
             canvasElement: '=',
-            data: '='
+            data: '=',
+            series: '=',
+            drill: '='
         },
         link: function (scope, element) {
 
@@ -11,7 +13,12 @@
                 appManager.data.DO.canvasElements.push({element: scope.canvasElement, ChartDOM: element});
             }();
 
+            
+
             var chart;
+            var plotData;
+            var axisData;
+            var drillData;
 
             var defaultchartOptions = {
                 chart: {
@@ -33,24 +40,19 @@
                         align: 'low'
                     }
                 },
+              
                 series: []
             };
 
             scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
 
             loadChart();
+            chart.addSeries(scope.series);
             
 
             scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             });
-
-            //scope.$watch('canvasElement.chartOptions', function (newValue, oldValue) {
-            //    if (newValue !== oldValue)
-            //    {
-            //        loadChart();
-            //    }
-            //}, true);
 
             function loadChart() {
                 chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
@@ -58,28 +60,43 @@
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             };
 
-            scope.canvasElement.destroyChart = function () {
-                chart.destroy();
-            };
-            scope.canvasElement.createChart = function () {
-                loadChart();
-            };
+            scope.$watch('data', function (newValue, oldValue) {
+                console.log(scope.drill);
+                if (newValue !== oldValue) {
 
-
-            function asyncMe(func) {
-                $timeout(func, 500);
-            };
-            asyncMe(function () {
-                chart.addSeries({
-                    color: '#AA3939',
-                    name: 'Patient Count',
-                    type: 'bar',
-                    data: [4687, 3416, 1612, 450],
-                    dataLabels: {
-                        enabled: true
+                    if (scope.drill === 0) {
+                        axisData = scope.data.map(function (obj) { return obj.REGION });
+                        drillData = scope.data.map(function (obj) { return obj.REGION });
+                        plotData = scope.data.map(function (obj) { return obj.CNT });
                     }
-                });
-            });
+                    if (scope.drill === 1) {
+                        axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                        drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                        plotData = scope.data.map(function (obj) { return obj.CNT });
+                    }
+                    if (scope.drill === 2) {
+                        axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                        drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                        plotData = scope.data.map(function (obj) { return obj.CNT });
+                    }
+                    if (scope.drill === 3) {
+                        axisData = scope.data.map(function (obj) { return obj.PCMNPI });
+                        drillData = scope.data.map(function (obj) { return obj.PCMNPI });
+                        plotData = scope.data.map(function (obj) { return obj.CNT });
+                    }
+
+                    chart.xAxis[0].setCategories(axisData);
+                    chart.series[0].setData(plotData);
+                }
+            }, true);
+
+
+            //function asyncMe(func) {
+            //    $timeout(func, 500);
+            //};
+            //asyncMe(function () {
+            //    chart.addSeries(scope.data);               
+            //});
 
         }
     };

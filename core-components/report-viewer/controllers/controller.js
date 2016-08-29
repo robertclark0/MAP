@@ -1,4 +1,4 @@
-﻿reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$timeout', function ($scope, appManager, $state, $timeout) {
+﻿reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$timeout', '$resource', function ($scope, appManager, $state, $timeout, $resource) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -20,62 +20,126 @@
     };
 
     //ALL TEMP VALUES
-    //// TEMP DATA ===================================================
-
-    //function asyncMe(func) {
-    //    $timeout(func, 0);
-    //};
-    //function addSeriesIndex(index) {
-    //    var chart = DO.canvasElements[index].ChartDOM.highcharts();
-    //    chart.addSeries(series1);
-    //}
-    //function addEach() {
-    //    for (var i = 0; i < 4; i++) {
-    //        asyncMe(addSeriesIndex(i));
-    //    }
-    //};
-
-    //$scope.addSeries =function(){
-    //    addEach();
-    //};
+    /// drill functions
+    $scope.drillLevel = 0;
 
 
-    var series1 = {
-        color: '#AA3939',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [4687, 3416, 1612, 450],
-        dataLabels: {
-            enabled: true
+    var forAllChup = function () {
+        for (var i = 0; i < 4; i++) {
+            getChupData(i, query[i]);
         }
-    };
-    var series2 = {
-        color: '#AA6C39',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [3687, 2416, 3612, 1450],
-        dataLabels: {
-            enabled: true
+    }
+
+    $scope.drillBaby = function (value) {
+        if ($scope.drillLevel < 4) {
+            query.forEach(function (obj) {
+                //obj.region = 'RHC-A';
+                if ($scope.drillLevel === 0) {
+                    obj.region = value;
+                }
+                else if ($scope.drillLevel === 1) {
+                    obj.DMISID = value;
+                }
+                else if ($scope.drillLevel === 2) {
+                    obj.MEPRSCode = value;
+                }
+                else if ($scope.drillLevel === 3) {
+                    obj.PCMNPI = value;
+                }
+
+            });
+            $scope.drillLevel++;
+            forAllChup();
         }
+
     };
-    var series3 = {
-        color: '#226666',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [1687, 2416, 612, 1450],
-        dataLabels: {
-            enabled: true
+
+
+    /// =================================================================
+    // API
+    var apiEndpoint = 'http://localhost:51880/api/';
+    var userInfoAPI = apiEndpoint + 'chup';
+    var userInfo = $resource(userInfoAPI);
+
+    var query = [
+        {
+            region: null,
+            DMISID: null,
+            MEPRSCode: null,
+            PCMNPI: null,
+            ChupFlag: 1,
+            HUFlag: 0,
+            PainFlag: 0,
+            PolyFlag: 0,
+            FY: 2016,
+            FM: 7,
+            RowStart: 1,
+            RowEnd: 10
+        },
+        {
+            region: null,
+            DMISID: null,
+            MEPRSCode: null,
+            PCMNPI: null,
+            ChupFlag: 0,
+            HUFlag: 1,
+            PainFlag: 0,
+            PolyFlag: 0,
+            FY: 2016,
+            FM: 7,
+            RowStart: 1,
+            RowEnd: 10
+        },
+        {
+            region: null,
+            DMISID: null,
+            MEPRSCode: null,
+            PCMNPI: null,
+            ChupFlag: 0,
+            HUFlag: 0,
+            PainFlag: 0,
+            PolyFlag: 1,
+            FY: 2016,
+            FM: 7,
+            RowStart: 1,
+            RowEnd: 10
+        },
+        {
+            region: null,
+            DMISID: null,
+            MEPRSCode: null,
+            PCMNPI: null,
+            ChupFlag: 0,
+            HUFlag: 0,
+            PainFlag: 1,
+            PolyFlag: 0,
+            FY: 2016,
+            FM: 7,
+            RowStart: 1,
+            RowEnd: 10
         }
+    ];
+
+    $scope.data = {
+        chart1: [],
+        chart2: [],
+        chart3: [],
+        chart4: []
+    }
+
+
+
+
+    function getChupData(index, query) {
+        userInfo.save(query).$promise.then(function (response) {
+            $scope.data['chart' + (index + 1)] = response.result;
+            console.log(response.result);
+        }).catch(function (error) { console.log(error); });
     };
-    var series4 = {
-        color: '#2D882D',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [2687, 3016, 1012, 2450],
-        dataLabels: {
-            enabled: true
-        }
-    };
+
+
+
+    //// TEMP ELEMENTS ===================================================
 
     //Chart Globals
     Highcharts.setOptions({
@@ -84,179 +148,251 @@
         }
     });
 
-    var report1 = {
-        name: 'CHUP Aggregate',
-        GUID: 'temp-1000',
-        roleType: 'admin',
-        dataGroups: [],
-        canvasElements: [
-            {
-                name: 'Chart 1',
-                row: 0,
-                col: 0,
-                sizeX: 17,
-                sizeY: 10,
-                chartOptions: {
-                    
-                    title: {
-                        text: 'CHUP Patients'
-                    },
-                    chart: {
-                        backgroundColor: 'transparent',
-                        animation: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    xAxis: {
-                        categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                    },
-                    yAxis: {
-                        labels: {
-                            format: '{value:,.0f}'
-                        },
-                        title: {
-                            text: 'Patients',
-                            align: 'high'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: []
+    $scope.element1 = {
+        name: 'Chart 1',
+        row: 3,
+        col: 0,
+        sizeX: 17,
+        sizeY: 9,
+        chartOptions: {
+
+            title: {
+                text: 'CHUP Patients'
+            },
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                animation: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
+            },
+            yAxis: {
+                labels: {
+                    format: '{value:,.0f}'
+                },
+                title: {
+                    text: 'Patients',
+                    align: 'high'
                 }
             },
-            {
-                name: 'Chart 2',
-                row: 0,
-                col: 18,
-                sizeX: 17,
-                sizeY: 10,
-                chartOptions: {
-                    
-                    title: {
-                        text: 'High Utilizer Patients'
-                    },
-                    chart: {
-                        backgroundColor: 'transparent',
-                        animation: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    xAxis: {
-                        categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                    },
-                    yAxis: {
-                        labels: {
-                            format: '{value:,.0f}'
-                        },
-                        title: {
-                            text: 'Patients',
-                            align: 'high'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: []
-                }
+            legend: {
+                enabled: false
             },
-            {
-                name: 'Chart 3',
-                row: 12,
-                col: 0,
-                sizeX: 17,
-                sizeY: 10,
-                chartOptions: {
-                    
-                    title: {
-                        text: 'Polypharm Patients'
-                    },
-                    chart: {
-                        backgroundColor: 'transparent',
-                        animation: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    xAxis: {
-                        categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                    },
-                    yAxis: {
-                        labels: {
-                            format: '{value:,.0f}'
-                        },
-                        title: {
-                            text: 'Patients',
-                            align: 'high'
+            series: [],
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    events: {
+                        click: function (event) {
+                            $scope.drillBaby(event.point.category);
                         }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: []
-                }
-            },
-            {
-                name: 'Chart 4',
-                row: 12,
-                col: 18,
-                sizeX: 17,
-                sizeY: 10,
-                chartOptions: {
-                    
-                    title: {
-                        text: 'Pain Patients'
-                    },
-                    chart: {
-                        backgroundColor: 'transparent',
-                        animation: false
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    xAxis: {
-                        categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                    },
-                    yAxis: {
-                        labels: {
-                            format: '{value:,.0f}'
-                        },
-                        title: {
-                            text: 'Patients',
-                            align: 'high'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: []
+                    }
                 }
             }
-        ]
-
+        }
     };
-    var report2 = {
-        name: 'CHUP Patient',
-        GUID: 'temp-1001',
-        roleType: 'admin',
-        dataGroups: [],
-        canvasElements: []
+    $scope.element2 = {
+        name: 'Chart 2',
+        row: 3,
+        col: 18,
+        sizeX: 17,
+        sizeY: 9,
+        chartOptions: {
 
+            title: {
+                text: 'High Utilizer Patients'
+            },
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                animation: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
+            },
+            yAxis: {
+                labels: {
+                    format: '{value:,.0f}'
+                },
+                title: {
+                    text: 'Patients',
+                    align: 'high'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [],
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    events: {
+                        click: function (event) {
+                            $scope.drillBaby(event.point.category);
+                        }
+                    }
+                }
+            }
+        }
+    };
+    $scope.element3 = {
+        name: 'Chart 3',
+        row: 12,
+        col: 0,
+        sizeX: 17,
+        sizeY: 9,
+        chartOptions: {
+
+            title: {
+                text: 'Polypharm Patients'
+            },
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                animation: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
+            },
+            yAxis: {
+                labels: {
+                    format: '{value:,.0f}'
+                },
+                title: {
+                    text: 'Patients',
+                    align: 'high'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [],
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    events: {
+                        click: function (event) {
+                            $scope.drillBaby(event.point.category);
+                        }
+                    }
+                }
+            }
+        }
+    };
+    $scope.element4 = {
+        name: 'Chart 4',
+        row: 12,
+        col: 18,
+        sizeX: 17,
+        sizeY: 9,
+        chartOptions: {
+
+            title: {
+                text: 'Pain Patients'
+            },
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                animation: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
+            },
+            yAxis: {
+                labels: {
+                    format: '{value:,.0f}'
+                },
+                title: {
+                    text: 'Patients',
+                    align: 'high'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [],
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    events: {
+                        click: function (event) {
+
+                            $scope.drillBaby(event.point.category);
+
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
+    ///===============================================================
+    //TEMP DATA
+
+    $scope.series1 = {
+        color: '#AA3939',
+        name: 'Patient Count',
+        type: 'bar',
+        data: [],
+        dataLabels: {
+            enabled: true
+        }
+    };
+    $scope.series2 = {
+        color: '#AA6C39',
+        name: 'Patient Count',
+        type: 'bar',
+        data: [],
+        dataLabels: {
+            enabled: true
+        }
+    };
+    $scope.series3 = {
+        color: '#226666',
+        name: 'Patient Count',
+        type: 'bar',
+        data: [],
+        dataLabels: {
+            enabled: true
+        }
+    };
+    $scope.series4 = {
+        color: '#2D882D',
+        name: 'Patient Count',
+        type: 'bar',
+        data: [],
+        dataLabels: {
+            enabled: true
+        }
     };
 
     ///===============================================================
 
-    $scope.reports = [report1, report2];
-
-    $scope.currentReport = $scope.reports[0];
 
 
     $scope.newState = function (state, stateObject) {
         $state.go(state, stateObject);
     };
 
+
+    ///============================= RUN =============================
+
+
+    forAllChup();
 
 
 }]);
