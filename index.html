@@ -17,6 +17,17 @@
 </head>
 
 <body style="overflow: hidden;">
+    <!--[if lte IE 9]>
+        <div style="width: 100vw; height: 100vh; background-color: rgba(100,100,100,0.75); position: absolute; z-index: 100; ">
+            <div id="oldie" style="position: absolute; top: 25%; z-index: 100; background-color: orange; left: 25%; width: 50%; height: 50%; font-size: 50px; color: white; padding: 50px; ">
+                Your version of Internet Explorer is not compatible with this application.
+                <div style="font-size: 30px; margin-top: 25px">Contact your local IMD to install an approved version of IE11, Firefox or Chrome.</div>
+                <div style="cursor: pointer; position: absolute; bottom: 25px">
+                    <a style="font-size: 30px; color: white; background-color: rgb(145,145,145); padding: 10px 15px;" href="https://pasba.army.mil">Back to PASBA</a>
+                </div>
+            </div>
+        </div>
+    <![endif]-->
 
     <div ui-view></div>
     <md-toast></md-toast>

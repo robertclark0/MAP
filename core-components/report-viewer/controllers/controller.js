@@ -22,22 +22,22 @@
     //ALL TEMP VALUES
     //// TEMP DATA ===================================================
 
-    function asyncMe(func) {
-        $timeout(func, 0);
-    };
-    function addSeriesIndex(index) {
-        var chart = DO.canvasElements[index].ChartDOM.highcharts();
-        chart.addSeries(series1);
-    }
-    function addEach() {
-        for (var i = 0; i < 4; i++) {
-            asyncMe(addSeriesIndex(i));
-        }
-    };
+    //function asyncMe(func) {
+    //    $timeout(func, 0);
+    //};
+    //function addSeriesIndex(index) {
+    //    var chart = DO.canvasElements[index].ChartDOM.highcharts();
+    //    chart.addSeries(series1);
+    //}
+    //function addEach() {
+    //    for (var i = 0; i < 4; i++) {
+    //        asyncMe(addSeriesIndex(i));
+    //    }
+    //};
 
-    $scope.addSeries =function(){
-        addEach();
-    };
+    //$scope.addSeries =function(){
+    //    addEach();
+    //};
 
 
     var series1 = {
