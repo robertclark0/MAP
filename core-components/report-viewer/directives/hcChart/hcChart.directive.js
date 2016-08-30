@@ -5,7 +5,10 @@
             canvasElement: '=',
             data: '=',
             series: '=',
-            drill: '='
+            drill: '=',
+            axisData: '=',
+            drillData: '=',
+            plotData:'='
         },
         link: function (scope, element) {
 
@@ -61,32 +64,32 @@
             };
 
             scope.$watch('data', function (newValue, oldValue) {
-                console.log(scope.drill);
+
                 if (newValue !== oldValue) {
 
-                    if (scope.drill === 0) {
-                        axisData = scope.data.map(function (obj) { return obj.REGION });
-                        drillData = scope.data.map(function (obj) { return obj.REGION });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 1) {
-                        axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                        drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 2) {
-                        axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                        drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 3) {
-                        axisData = scope.data.map(function (obj) { return obj.PCMNPI });
-                        drillData = scope.data.map(function (obj) { return obj.PCMNPI });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
+                    //if (scope.drill === 0) {
+                    //    axisData = scope.data.map(function (obj) { return obj.REGION });
+                    //    drillData = scope.data.map(function (obj) { return obj.REGION });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 1) {
+                    //    axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                    //    drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 2) {
+                    //    axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                    //    drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 3) {
+                    //    axisData = scope.data.map(function (obj) { return obj.PCMNPI });
+                    //    drillData = scope.data.map(function (obj) { return obj.PCMNPI });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
 
-                    chart.xAxis[0].setCategories(axisData);
-                    chart.series[0].setData(plotData);
+                    chart.xAxis[0].setCategories(scope.axisData);
+                    chart.series[0].setData(scope.plotData);
                 }
             }, true);
 

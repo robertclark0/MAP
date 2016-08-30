@@ -27,7 +27,7 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
 
     var forAllChup = function () {
 
-            getChupData(query[0]);
+        getChupData(query[0]);
 
     }
 
@@ -62,10 +62,10 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
     var userInfoAPI = apiEndpoint + 'chup';
     var userInfo = $resource(userInfoAPI);
 
-    $scope.chup = false;
-    $scope.poly = false;
-    $scope.hu = false;
-    $scope.pain = false;
+    $scope.chup = true;
+    $scope.poly = true;
+    $scope.hu = true;
+    $scope.pain = true;
     $scope.checkAll = function () {
         if ($scope.chup) {
             $scope.poly = true;
@@ -82,7 +82,7 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
         if ($scope.poly && $scope.hu && $scope.pain) {
             $scope.chup = true;
         }
-        else{
+        else {
             $scope.chup = false;
         }
         cohortQuery();
@@ -103,9 +103,9 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
             MEPRSCode: null,
             PCMNPI: null,
             ChupFlag: 1,
-            HUFlag: 0,
-            PainFlag: 0,
-            PolyFlag: 0,
+            HUFlag: 1,
+            PainFlag: 1,
+            PolyFlag: 1,
             FY: 2016,
             FM: 7,
             RowStart: 1,
@@ -121,20 +121,25 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
 
 
 
+
     function getChupData(query) {
 
-        if (DO.canvasElements[0]) {
-            var chart = DO.canvasElements[0].ChartDOM.highcharts();
-            chart.showLoading();
+        if ($scope.drillLevel < 4) {
+
+            if (DO.canvasElements[0]) {
+                var chart = DO.canvasElements[0].ChartDOM.highcharts();
+                chart.showLoading();
+            }
+
+            userInfo.save(query).$promise.then(function (response) {
+                $scope.data.chart1 = response.result;
+
+                if (chart) { chart.hideLoading(); }
+
+                updateChartArrays();
+
+            }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
         }
-
-
-        userInfo.save(query).$promise.then(function (response) {
-            $scope.data.chart1 = response.result;
-
-            if (chart) { chart.hideLoading(); }
-
-        }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
     };
 
 
@@ -179,13 +184,24 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
                     align: 'high'
                 }
             },
-            series: [],
+            series: [{
+                color: '#AA3939',
+                name: 'Patient Count',
+                type: 'column',
+                data: [],
+                dataLabels: {
+                    enabled: true
+                }
+            }],
             plotOptions: {
                 series: {
                     cursor: 'pointer',
                     events: {
                         click: function (event) {
-                            $scope.drillBaby(event.point.category);
+                            //console.log(event);
+                            //var drillIndex = $scope.axisData.indexOf(event.point.index);
+                            //console.log($scope.drillDatadrillIndex);
+                            $scope.drillBaby($scope.drillData[event.point.index]);
                         }
                     }
                 }
@@ -196,42 +212,34 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
     ///===============================================================
     //TEMP DATA
 
-    $scope.series1 = {
-        color: '#AA3939',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
+    $scope.axisData;
+    $scope.drillData;
+    $scope.plotData;
+
+    function updateChartArrays() {
+        if ($scope.drillLevel === 0) {
+            $scope.axisData = $scope.data.chart1.map(function (obj) { return obj.REGION });
+            $scope.drillData = $scope.data.chart1.map(function (obj) { return obj.REGION });
+            $scope.plotData = $scope.data.chart1.map(function (obj) { return obj.CNT });
         }
-    };
-    $scope.series2 = {
-        color: '#AA6C39',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
+        if ($scope.drillLevel === 1) {
+            $scope.axisData = $scope.data.chart1.map(function (obj) { return obj.DMIS_NAME });
+            $scope.drillData = $scope.data.chart1.map(function (obj) { return obj.DMIS_ID });
+            $scope.plotData = $scope.data.chart1.map(function (obj) { return obj.CNT });
         }
-    };
-    $scope.series3 = {
-        color: '#226666',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
+        if ($scope.drillLevel === 2) {
+            $scope.axisData = $scope.data.chart1.map(function (obj) { return obj.MED_HOME_MEPRS });
+            $scope.drillData = $scope.data.chart1.map(function (obj) { return obj.MED_HOME_MEPRS });
+            $scope.plotData = $scope.data.chart1.map(function (obj) { return obj.CNT });
         }
-    };
-    $scope.series4 = {
-        color: '#2D882D',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
+        if ($scope.drillLevel === 3) {
+            $scope.axisData = $scope.data.chart1.map(function (obj) { return obj.PCM_NAME });
+            $scope.drillData = $scope.data.chart1.map(function (obj) { return obj.PCMNPI });
+            $scope.plotData = $scope.data.chart1.map(function (obj) { return obj.CNT });
         }
-    };
+    }
+
+
 
     ///===============================================================
 
@@ -256,7 +264,10 @@ reportViewer.directive('hcChart', function (appManager, $timeout) {
             canvasElement: '=',
             data: '=',
             series: '=',
-            drill: '='
+            drill: '=',
+            axisData: '=',
+            drillData: '=',
+            plotData:'='
         },
         link: function (scope, element) {
 
@@ -312,32 +323,32 @@ reportViewer.directive('hcChart', function (appManager, $timeout) {
             };
 
             scope.$watch('data', function (newValue, oldValue) {
-                console.log(scope.drill);
+
                 if (newValue !== oldValue) {
 
-                    if (scope.drill === 0) {
-                        axisData = scope.data.map(function (obj) { return obj.REGION });
-                        drillData = scope.data.map(function (obj) { return obj.REGION });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 1) {
-                        axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                        drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 2) {
-                        axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                        drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
-                    if (scope.drill === 3) {
-                        axisData = scope.data.map(function (obj) { return obj.PCMNPI });
-                        drillData = scope.data.map(function (obj) { return obj.PCMNPI });
-                        plotData = scope.data.map(function (obj) { return obj.CNT });
-                    }
+                    //if (scope.drill === 0) {
+                    //    axisData = scope.data.map(function (obj) { return obj.REGION });
+                    //    drillData = scope.data.map(function (obj) { return obj.REGION });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 1) {
+                    //    axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                    //    drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 2) {
+                    //    axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                    //    drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
+                    //if (scope.drill === 3) {
+                    //    axisData = scope.data.map(function (obj) { return obj.PCMNPI });
+                    //    drillData = scope.data.map(function (obj) { return obj.PCMNPI });
+                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
+                    //}
 
-                    chart.xAxis[0].setCategories(axisData);
-                    chart.series[0].setData(plotData);
+                    chart.xAxis[0].setCategories(scope.axisData);
+                    chart.series[0].setData(scope.plotData);
                 }
             }, true);
 
