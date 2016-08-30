@@ -21,6 +21,14 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
     };
 
     //ALL TEMP VALUES
+    $scope.reportValue = 1;
+    $scope.goReport1 - function () {
+        $scope.reportValue = 1;
+    };
+    $scope.goReport2 - function () {
+        $scope.reportValue = 2;
+    };
+
     /// drill functions
     $scope.drillLevel = 0;
 
@@ -124,7 +132,6 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
 
     function getChupData(query) {
 
-        if ($scope.drillLevel < 4) {
 
             if (DO.canvasElements[0]) {
                 var chart = DO.canvasElements[0].ChartDOM.highcharts();
@@ -139,7 +146,7 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
                 updateChartArrays();
 
             }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
-        }
+        
     };
 
 
@@ -158,7 +165,7 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
         row: 3,
         col: 0,
         sizeX: 36,
-        sizeY: 20,
+        sizeY: 19,
         chartOptions: {
 
             title: {

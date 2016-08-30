@@ -5,13 +5,13 @@
     <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
         <md-subheader class="md-primary">Reports</md-subheader>
         <md-list class="md-dense" style="background-color:white;">
-            <md-list-item ng-click="">
+            <md-list-item ng-click="goReport1()">
                 <div>
                     <p>CHUP Aggregate</p>
                 </div>
             </md-list-item>
             <md-divider></md-divider>
-            <md-list-item ng-click="null">
+            <md-list-item ng-click="goReport2()">
                 <div>
                     <p>CHUP Patient</p>
                 </div>
@@ -68,12 +68,29 @@
 
             <ng-include src="'core-components/report-viewer/templates/menuBar.html'"></ng-include>
 
-            <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+
+            <div ng-show="reportValue === 1" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item >
-
+                        <li gridster-item col="1" row="0" size-x="34" size-y="2" style="background-color: #ffffff;">
+                            <md-chips ng-model="chipModel" md-autocomplete-snap
+                                      md-require-match="true"
+                                      md-max-chips="4">
+                                <md-autocomplete md-selected-item="ctrl.selectedItem"
+                                                 md-search-text="axisData"
+                                                 md-items="item in axisData"
+                                                 md-item-text="item.name"
+                                                 placeholder="Search for chart drilldown">
+                                    <span md-highlight-text="ctrl.searchText">{{item.name}} :: {{item.type}}</span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{$chip.name}}</strong>
+                                        <em>({{$chip.type}})</em>
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
                         </li>
                         <li gridster-item="element1"
                             style="background-color: #ffffff;">
@@ -81,6 +98,33 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div ng-show="reportValue === 2" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+                <table>
+                    <tr>
+                        <td>
+                            GRID
+                        </td>
+                        <td>
+                            GRID
+                        </td>
+                        <td>
+                            GRID
+                        </td>
+                        <td>
+                            GRID
+                        </td>
+                        <td>
+                            GRID
+                        <td>
+                            GRID
+                        <td>
+                            GRID
+                        </td>
+                        </td>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

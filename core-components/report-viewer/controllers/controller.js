@@ -20,6 +20,14 @@
     };
 
     //ALL TEMP VALUES
+    $scope.reportValue = 1;
+    $scope.goReport1 - function () {
+        $scope.reportValue = 1;
+    };
+    $scope.goReport2 - function () {
+        $scope.reportValue = 2;
+    };
+
     /// drill functions
     $scope.drillLevel = 0;
 
@@ -123,7 +131,6 @@
 
     function getChupData(query) {
 
-        if ($scope.drillLevel < 4) {
 
             if (DO.canvasElements[0]) {
                 var chart = DO.canvasElements[0].ChartDOM.highcharts();
@@ -138,7 +145,7 @@
                 updateChartArrays();
 
             }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
-        }
+        
     };
 
 
@@ -157,7 +164,7 @@
         row: 3,
         col: 0,
         sizeX: 36,
-        sizeY: 20,
+        sizeY: 19,
         chartOptions: {
 
             title: {
