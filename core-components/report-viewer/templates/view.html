@@ -22,9 +22,15 @@
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
-                        <div class="md-headline">Year</div>
+                        <div class="md-headline">Patient Cohort</div>
                     </md-card-title-text>
                 </md-card-title>
+                <md-card-content>
+                    <md-checkbox aria-label="CHUP" ng-model="chup" ng-change="checkAll()"><em>CHUP</em></md-checkbox><br />
+                    <md-checkbox aria-label="Poly" ng-model="poly" ng-change="allChecked()">PolyPharm</md-checkbox>
+                    <md-checkbox aria-label="High" ng-model="hu" ng-change="allChecked()">High Utilizer</md-checkbox>
+                    <md-checkbox aria-label="Pain" ng-model="pain" ng-change="allChecked()">Pain</md-checkbox>
+                </md-card-content>
             </md-card>
             <md-card>
                 <md-card-title>
@@ -66,24 +72,12 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item row="0" col="1" size-x="35" size-y="2" style="background-color: white;">
-                            <h2>CHUP Aggregate Patient Report</h2>
+                        <li gridster-item >
+
                         </li>
                         <li gridster-item="element1"
                             style="background-color: #ffffff;">
                             <hc-chart canvas-element="element1" data="data.chart1" series="series1" drill="drillLevel"></hc-chart>
-                        </li>
-                        <li gridster-item="element2"
-                            style="background-color: #ffffff;">
-                            <hc-chart canvas-element="element2" data="data.chart2" series="series2" drill="drillLevel"></hc-chart>
-                        </li>
-                        <li gridster-item="element3"
-                            style="background-color: #ffffff;">
-                            <hc-chart canvas-element="element3" data="data.chart3" series="series3" drill="drillLevel"></hc-chart>
-                        </li>
-                        <li gridster-item="element4"
-                            style="background-color: #ffffff;">
-                            <hc-chart canvas-element="element4" data="data.chart4" series="series4" drill="drillLevel"></hc-chart>
                         </li>
                     </ul>
                 </div>

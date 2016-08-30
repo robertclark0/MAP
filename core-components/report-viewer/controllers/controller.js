@@ -25,9 +25,9 @@
 
 
     var forAllChup = function () {
-        for (var i = 0; i < 4; i++) {
-            getChupData(i, query[i]);
-        }
+
+            getChupData(query[0]);
+
     }
 
     $scope.drillBaby = function (value) {
@@ -61,6 +61,40 @@
     var userInfoAPI = apiEndpoint + 'chup';
     var userInfo = $resource(userInfoAPI);
 
+    $scope.chup = false;
+    $scope.poly = false;
+    $scope.hu = false;
+    $scope.pain = false;
+    $scope.checkAll = function () {
+        if ($scope.chup) {
+            $scope.poly = true;
+            $scope.hu = true;
+            $scope.pain = true;
+        } else {
+            $scope.poly = false;
+            $scope.hu = false;
+            $scope.pain = false;
+        }
+        cohortQuery();
+    };
+    $scope.allChecked = function () {
+        if ($scope.poly && $scope.hu && $scope.pain) {
+            $scope.chup = true;
+        }
+        else{
+            $scope.chup = false;
+        }
+        cohortQuery();
+    };
+    function cohortQuery() {
+        query[0].ChupFlag = $scope.chup ? 1 : 0;
+        query[0].HUFlag = $scope.hu ? 1 : 0;
+        query[0].PainFlag = $scope.pain ? 1 : 0;
+        query[0].PolyFlag = $scope.poly ? 1 : 0;
+
+        forAllChup();
+    };
+
     var query = [
         {
             region: null,
@@ -75,66 +109,32 @@
             FM: 7,
             RowStart: 1,
             RowEnd: 10
-        },
-        {
-            region: null,
-            DMISID: null,
-            MEPRSCode: null,
-            PCMNPI: null,
-            ChupFlag: 0,
-            HUFlag: 1,
-            PainFlag: 0,
-            PolyFlag: 0,
-            FY: 2016,
-            FM: 7,
-            RowStart: 1,
-            RowEnd: 10
-        },
-        {
-            region: null,
-            DMISID: null,
-            MEPRSCode: null,
-            PCMNPI: null,
-            ChupFlag: 0,
-            HUFlag: 0,
-            PainFlag: 0,
-            PolyFlag: 1,
-            FY: 2016,
-            FM: 7,
-            RowStart: 1,
-            RowEnd: 10
-        },
-        {
-            region: null,
-            DMISID: null,
-            MEPRSCode: null,
-            PCMNPI: null,
-            ChupFlag: 0,
-            HUFlag: 0,
-            PainFlag: 1,
-            PolyFlag: 0,
-            FY: 2016,
-            FM: 7,
-            RowStart: 1,
-            RowEnd: 10
         }
     ];
 
     $scope.data = {
-        chart1: [],
-        chart2: [],
-        chart3: [],
-        chart4: []
+        chart1: []
     }
 
 
 
 
-    function getChupData(index, query) {
+
+
+    function getChupData(query) {
+
+        if (DO.canvasElements[0]) {
+            var chart = DO.canvasElements[0].ChartDOM.highcharts();
+            chart.showLoading();
+        }
+
+
         userInfo.save(query).$promise.then(function (response) {
-            $scope.data['chart' + (index + 1)] = response.result;
-            console.log(response.result);
-        }).catch(function (error) { console.log(error); });
+            $scope.data.chart1 = response.result;
+
+            if (chart) { chart.hideLoading(); }
+
+        }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
     };
 
 
@@ -152,12 +152,12 @@
         name: 'Chart 1',
         row: 3,
         col: 0,
-        sizeX: 17,
-        sizeY: 9,
+        sizeX: 36,
+        sizeY: 20,
         chartOptions: {
 
             title: {
-                text: 'CHUP Patients'
+                text: 'Aggregate Patient Cohorts'
             },
             chart: {
                 type: 'column',
@@ -179,9 +179,6 @@
                     align: 'high'
                 }
             },
-            legend: {
-                enabled: false
-            },
             series: [],
             plotOptions: {
                 series: {
@@ -195,190 +192,30 @@
             }
         }
     };
-    $scope.element2 = {
-        name: 'Chart 2',
-        row: 3,
-        col: 18,
-        sizeX: 17,
-        sizeY: 9,
-        chartOptions: {
-
-            title: {
-                text: 'High Utilizer Patients'
-            },
-            chart: {
-                type: 'column',
-                backgroundColor: 'transparent',
-                animation: false
-            },
-            credits: {
-                enabled: false
-            },
-            xAxis: {
-                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-            },
-            yAxis: {
-                labels: {
-                    format: '{value:,.0f}'
-                },
-                title: {
-                    text: 'Patients',
-                    align: 'high'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [],
-            plotOptions: {
-                series: {
-                    cursor: 'pointer',
-                    events: {
-                        click: function (event) {
-                            $scope.drillBaby(event.point.category);
-                        }
-                    }
-                }
-            }
-        }
-    };
-    $scope.element3 = {
-        name: 'Chart 3',
-        row: 12,
-        col: 0,
-        sizeX: 17,
-        sizeY: 9,
-        chartOptions: {
-
-            title: {
-                text: 'Polypharm Patients'
-            },
-            chart: {
-                type: 'column',
-                backgroundColor: 'transparent',
-                animation: false
-            },
-            credits: {
-                enabled: false
-            },
-            xAxis: {
-                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-            },
-            yAxis: {
-                labels: {
-                    format: '{value:,.0f}'
-                },
-                title: {
-                    text: 'Patients',
-                    align: 'high'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [],
-            plotOptions: {
-                series: {
-                    cursor: 'pointer',
-                    events: {
-                        click: function (event) {
-                            $scope.drillBaby(event.point.category);
-                        }
-                    }
-                }
-            }
-        }
-    };
-    $scope.element4 = {
-        name: 'Chart 4',
-        row: 12,
-        col: 18,
-        sizeX: 17,
-        sizeY: 9,
-        chartOptions: {
-
-            title: {
-                text: 'Pain Patients'
-            },
-            chart: {
-                type: 'column',
-                backgroundColor: 'transparent',
-                animation: false
-            },
-            credits: {
-                enabled: false
-            },
-            xAxis: {
-                categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-            },
-            yAxis: {
-                labels: {
-                    format: '{value:,.0f}'
-                },
-                title: {
-                    text: 'Patients',
-                    align: 'high'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [],
-            plotOptions: {
-                series: {
-                    cursor: 'pointer',
-                    events: {
-                        click: function (event) {
-
-                            $scope.drillBaby(event.point.category);
-
-                        }
-                    }
-                }
-            }
-        }
-    };
-
 
     ///===============================================================
     //TEMP DATA
 
-    $scope.series1 = {
-        color: '#AA3939',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
-        }
-    };
-    $scope.series2 = {
-        color: '#AA6C39',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
-        }
-    };
-    $scope.series3 = {
-        color: '#226666',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
-        }
-    };
-    $scope.series4 = {
-        color: '#2D882D',
-        name: 'Patient Count',
-        type: 'bar',
-        data: [],
-        dataLabels: {
-            enabled: true
-        }
-    };
+    if (scope.drill === 0) {
+        axisData = scope.data.map(function (obj) { return obj.REGION });
+        drillData = scope.data.map(function (obj) { return obj.REGION });
+        plotData = scope.data.map(function (obj) { return obj.CNT });
+    }
+    if (scope.drill === 1) {
+        axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
+        drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
+        plotData = scope.data.map(function (obj) { return obj.CNT });
+    }
+    if (scope.drill === 2) {
+        axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+        drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
+        plotData = scope.data.map(function (obj) { return obj.CNT });
+    }
+    if (scope.drill === 3) {
+        axisData = scope.data.map(function (obj) { return obj.PCMNPI });
+        drillData = scope.data.map(function (obj) { return obj.PCMNPI });
+        plotData = scope.data.map(function (obj) { return obj.CNT });
+    }
 
     ///===============================================================
 
