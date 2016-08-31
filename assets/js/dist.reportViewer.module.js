@@ -21,15 +21,40 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
     };
 
     //ALL TEMP VALUES
+    $scope.start = 1;
+    $scope.end = 10;
+
+    $scope.add = function () {
+        query[0].RowStart += 10;
+        query[0].RowEnd += 10;
+        console.log(query);
+        forAllChup();
+    }
+    $scope.subtract = function () {
+        query[0].RowStart -= 10;
+        query[0].RowEnd -= 10;
+        forAllChup();
+    }
+
     $scope.reportValue = 1;
-    $scope.goReport1 - function () {
+    $scope.goReport1 = function () {
         $scope.reportValue = 1;
+        $timeout(function () {
+            DO.canvasElements[0].ChartDOM.highcharts().redraw();
+        }, 0);
     };
-    $scope.goReport2 - function () {
+    $scope.goReport2 = function () {
         $scope.reportValue = 2;
+        $timeout(function () {
+            DO.canvasElements[1].ChartDOM.highcharts().redraw();
+        }, 100);
+    };
+    $scope.goReport3 = function () {
+        $scope.reportValue = 3;
     };
 
     /// drill functions
+    $scope.chipModel = [];
     $scope.drillLevel = 0;
 
 
@@ -116,8 +141,8 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
             PolyFlag: 1,
             FY: 2016,
             FM: 7,
-            RowStart: 1,
-            RowEnd: 10
+            RowStart: $scope.start,
+            RowEnd: $scope.end
         }
     ];
 
@@ -144,6 +169,10 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
                 if (chart) { chart.hideLoading(); }
 
                 updateChartArrays();
+
+                if ($scope.drillLevel === 4) {
+                    $scope.reportValue = 2;
+                }
 
             }).catch(function (error) { console.log(error); if (chart) { chart.hideLoading(); } });
         
@@ -209,6 +238,7 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
                             //var drillIndex = $scope.axisData.indexOf(event.point.index);
                             //console.log($scope.drillDatadrillIndex);
                             $scope.drillBaby($scope.drillData[event.point.index]);
+
                         }
                     }
                 }
@@ -218,6 +248,11 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
 
     ///===============================================================
     //TEMP DATA
+
+    $scope.month = function(monthValue) {
+        query[0].FM = monthValue;
+        forAllChup();
+    };
 
     $scope.axisData;
     $scope.drillData;
@@ -256,6 +291,115 @@ reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$tim
         $state.go(state, stateObject);
     };
 
+    ///============================= TRENDING CHART ===========================
+
+    var trending = {
+        title: {
+            text: 'RHC-A Trending CHUP Patients',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: ['May', 'Jun',
+                'Jul']
+        },
+        yAxis: {
+            labels: {
+                format: '{value:,.0f}'
+            },
+            title: {
+                text: 'Pateint Count'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' Patients'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        plotOptions: {
+            series: {
+                //marker: {
+                //    states: {
+                //        hover: {
+                //            radiusPlus: 5,
+                //            lineWidthPlus: 2
+                //        }
+                //    }
+                //},
+                states: {
+                    hover: {
+                        lineWidthPlus: 3
+                    }
+                }
+            }
+        },
+        series: [
+        { name: 'AHC FOX-REDSTONE ARSENAL', data: [1305, 1360, 1421] },
+{ name: 'AHC LYSTER-RUCKER', data: [1170, 1267, 1265] },
+{ name: 'AMC EISENHOWER-GORDON', data: [1899, 2017, 2008] },
+{ name: 'ACH MARTIN-BENNING', data: [2263, 2358, 2305] },
+{ name: 'ACH WINN-STEWART', data: [1383, 1462, 1438] },
+{ name: 'ACH BLANCHFIELD-CAMPBELL', data: [1673, 1747, 1741] },
+{ name: 'ACH IRELAND- KNOX', data: [2330, 2468, 2466] },
+{ name: 'KIMBROUGH AMB CAR CEN-MEADE', data: [1139, 1246, 1247] },
+{ name: 'ACH KELLER-WEST POINT', data: [228, 249, 260] },
+{ name: 'AMC WOMACK-BRAGG', data: [1049, 1084, 1084] },
+{ name: 'ACH MONCRIEF-JACKSON', data: [1292, 1334, 1296] },
+{ name: 'AHC MCDONALD-EUSTIS', data: [1209, 1308, 1302] },
+{ name: 'AHC KENNER-LEE', data: [1635, 1771, 1799] },
+{ name: 'AHC MCNAIR-MYER-HENDERSON HALL', data: [19, 24, 26] },
+{ name: 'AHC TUTTLE-HUNTER ARMY AIRFLD', data: [762, 812, 785] },
+{ name: 'AHC ROCK ISLAND ARSENAL', data: [149, 163, 168] },
+{ name: 'AHC KIRK-ABERDEEN PRVNG GD', data: [581, 626, 631] },
+{ name: 'AHC BARQUIST-DETRICK', data: [385, 404, 425] },
+{ name: 'AHC GUTHRIE-DRUM', data: [753, 781, 793] },
+{ name: 'AHC DUNHAM-CARLISLE BARRACKS', data: [360, 393, 379] },
+{ name: 'AHC ANDREW RADER-MYER-HENDERSN', data: [261, 277, 291] },
+{ name: 'AHC FILLMORE-NEW CUMBERLAND', data: [119, 129, 134] },
+{ name: 'AHC-STORY', data: [70, 77, 81] },
+{ name: 'OHC EDGEWOOD ARS', data: [39, 42, 46] },
+{ name: 'TMC-1-EUSTIS', data: [7, 11, 17] },
+{ name: 'TMC-2-EUSTIS', data: [370, 395, 411] },
+{ name: 'CTMC-BENNING', data: [392, 402, 389] },
+{ name: 'CTMC 2-HARMONY CHURCH-BENNING', data: [353, 353, 357] },
+{ name: 'TMC 9-7TH SPECIAL FORCES-EGLIN', data: [152, 178, 188] },
+{ name: 'AVIATION MEDICINE C-CAMPBELL', data: [414, 442, 435] },
+{ name: 'TMC-4-GORDON', data: [809, 873, 855] },
+{ name: 'CTMC SLEDGEHAMMER-BENNING', data: [128, 172, 228] },
+{ name: 'TMC-5-BENNING', data: [163, 167, 160] },
+{ name: 'TMC MOLOGNE-WEST POINT', data: [54, 62, 74] },
+{ name: 'TROOP & FAMILY MED CL-BRAGG', data: [865, 931, 923] },
+{ name: 'CBMH FAYETTEVILLE-BRAGG', data: [308, 305, 313] },
+{ name: 'CBMH HOPE MILLS-BRAGG', data: [459, 466, 461] },
+{ name: 'CBMH LINDEN OAKS-BRAGG', data: [299, 307, 299] },
+{ name: 'CBMH SCREAMING EAGLE-CAMPBELL', data: [660, 678, 663] },
+{ name: 'CBMH MONCRIEF-JACKSON', data: [562, 595, 585] },
+{ name: 'CBMH RICHMOND HILL-STEWART', data: [517, 554, 547] },
+{ name: 'CBMH NORTH COLUMBUS-BENNING', data: [427, 449, 446] },
+{ name: 'CTMC CONNER-DRUM', data: [690, 733, 738] },
+{ name: 'ROBINSON CLINIC-BRAGG', data: [1355, 1391, 1358] },
+{ name: 'CONNELLY HLTH CLIN-GORDON', data: [12, 12, 11] },
+{ name: 'SOUTHCOM CLINIC-GORDON', data: [317, 345, 341] },
+{ name: 'JOEL CLINIC-BRAGG', data: [1037, 1136, 1105] },
+{ name: 'CLARK CLINIC-BRAGG', data: [1219, 1286, 1276] },
+{ name: 'LA POINTE HLTH CLINIC-CAMPBELL', data: [560, 579, 585] },
+{ name: 'BYRD HEALTH CLINIC-CAMPBELL', data: [871, 919, 937] },
+{ name: 'TMC-STEWART', data: [220, 256, 263] },
+{ name: 'TMC LLOYD C HAWKS-STEWART', data: [963, 1039, 1068] },
+{ name: 'AHC RODRIGUEZ-BUCHANAN', data: [145, 155, 157] },
+
+        ]
+    }
+
+    angular.element('#trendingChart').highcharts(trending)
 
     ///============================= RUN =============================
 
@@ -333,39 +477,11 @@ reportViewer.directive('hcChart', function (appManager, $timeout) {
 
                 if (newValue !== oldValue) {
 
-                    //if (scope.drill === 0) {
-                    //    axisData = scope.data.map(function (obj) { return obj.REGION });
-                    //    drillData = scope.data.map(function (obj) { return obj.REGION });
-                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
-                    //}
-                    //if (scope.drill === 1) {
-                    //    axisData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                    //    drillData = scope.data.map(function (obj) { return obj.DMIS_ID });
-                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
-                    //}
-                    //if (scope.drill === 2) {
-                    //    axisData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                    //    drillData = scope.data.map(function (obj) { return obj.MED_HOME_MEPRS });
-                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
-                    //}
-                    //if (scope.drill === 3) {
-                    //    axisData = scope.data.map(function (obj) { return obj.PCMNPI });
-                    //    drillData = scope.data.map(function (obj) { return obj.PCMNPI });
-                    //    plotData = scope.data.map(function (obj) { return obj.CNT });
-                    //}
-
                     chart.xAxis[0].setCategories(scope.axisData);
                     chart.series[0].setData(scope.plotData);
                 }
             }, true);
 
-
-            //function asyncMe(func) {
-            //    $timeout(func, 500);
-            //};
-            //asyncMe(function () {
-            //    chart.addSeries(scope.data);               
-            //});
 
         }
     };
