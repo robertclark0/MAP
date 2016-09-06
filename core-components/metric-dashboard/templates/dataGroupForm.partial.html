@@ -1,5 +1,5 @@
 ﻿<div layout="row">
-    <md-input-container class="md-block md-accent" flex="75">
+    <md-input-container class="md-block md-accent" flex>
         <label>Data Group Name</label>
         <input value=" " ng-model="componentProperties.editObject.name" required>
     </md-input-container>
@@ -10,3 +10,21 @@
         <input ng-model="componentProperties.editObject.GUID" disabled>
     </md-input-container>
 </div>
+<div layout="row">
+    <md-list flex>
+        <md-list-item ng-click="null">
+            <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
+            <p>Select Data Source</p>
+        </md-list-item>
+        <md-list-item ng-click="null">
+            <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
+            <p>Configure Data Selections</p>
+        </md-list-item>
+        <md-list-item ng-click="null">
+            <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
+            <p>Configure Data Filters</p>
+        </md-list-item>
+    </md-list>
+</div>
+
+

@@ -10,8 +10,9 @@
         components: [
             { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: selectCanvas },
             { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: selectDataGroup },
-            { text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: selectDataSelection },
-            { text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: selectDataFilter },
+            //{ text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: selectDataSelection },
+            //{ text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: selectDataFilter },
+            //removed to place inside data group properties
             { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: selectCanvasElement }
         ],
         actions: [
