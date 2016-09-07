@@ -52,8 +52,8 @@
         //  Module
         //  Metric Dashboard
         .state("metricDashboard", {
-            url: "/metric-dashboard",
-            templateUrl: "core-components/metric-dashboard/templates/view.html",
+            url: "/analysis",
+            templateUrl: "core-components/analysis/templates/view.html",
             css: "assets/css/dist.metricDashboard.css",
             controller: 'MetricDashboard',
             resolve: {
@@ -70,7 +70,7 @@
             params: {
                 viewName: null
             },
-            templateUrl: function ($stateParams) { return "core-components/metric-dashboard/templates/" + $stateParams.viewName + ".view.html"; },
+            templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
             controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
             css: "assets/css/dist.metricDashboard.css",
             resolve: {

@@ -83,7 +83,7 @@ gulp.task('platformHome.module.css', function () {
 //  Metric Dashboard
 gulp.task('metricDashboard.module.js', function () {
     return gulp.src([
-        'core-components/metric-dashboard/**/*.js',
+        'core-components/analysis/**/*.js',
     ])
       .pipe(order([
           '**/module.js'
@@ -93,7 +93,7 @@ gulp.task('metricDashboard.module.js', function () {
 });
 gulp.task('metricDashboard.module.css', function () {
     return gulp.src([
-        'core-components/metric-dashboard/**/*.css',
+        'core-components/analysis/**/*.css',
     ])
       .pipe(concat('dist.metricDashboard.css'))
       .pipe(gulp.dest('assets/css'));

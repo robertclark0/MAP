@@ -13,7 +13,7 @@
     stateClasses.ProductLine = function (name) {
         this.name = name;
         this.dashboard = {
-            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and metric-dashboard
+            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and analysis
             index: {
                 adminReport: 0,
                 userReport: 0,
@@ -26,12 +26,12 @@
                 {
                     side: 'right', // left, right | this sets the default value
                     lock: false,
-                    templateUrl: 'core-components/metric-dashboard/templates/filter.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
                 },
                 {
                     side: 'left',
                     lock: false,
-                    templateUrl: 'core-components/metric-dashboard/templates/dataValue.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
                 }
             ]
         };

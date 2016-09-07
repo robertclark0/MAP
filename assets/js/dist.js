@@ -65,8 +65,8 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
         //  Module
         //  Metric Dashboard
         .state("metricDashboard", {
-            url: "/metric-dashboard",
-            templateUrl: "core-components/metric-dashboard/templates/view.html",
+            url: "/analysis",
+            templateUrl: "core-components/analysis/templates/view.html",
             css: "assets/css/dist.metricDashboard.css",
             controller: 'MetricDashboard',
             resolve: {
@@ -83,7 +83,7 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
             params: {
                 viewName: null
             },
-            templateUrl: function ($stateParams) { return "core-components/metric-dashboard/templates/" + $stateParams.viewName + ".view.html"; },
+            templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
             controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
             css: "assets/css/dist.metricDashboard.css",
             resolve: {
@@ -252,7 +252,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateClasses.ProductLine = function (name) {
         this.name = name;
         this.dashboard = {
-            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and metric-dashboard
+            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and analysis
             index: {
                 adminReport: 0,
                 userReport: 0,
@@ -265,12 +265,12 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                 {
                     side: 'right', // left, right | this sets the default value
                     lock: false,
-                    templateUrl: 'core-components/metric-dashboard/templates/filter.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
                 },
                 {
                     side: 'left',
                     lock: false,
-                    templateUrl: 'core-components/metric-dashboard/templates/dataValue.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
                 }
             ]
         };

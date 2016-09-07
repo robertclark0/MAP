@@ -453,7 +453,7 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
     function validateParentDialog() {
         $mdDialog.show({
             parent: angular.element(document.body),
-            templateUrl: 'core-components/metric-dashboard/templates/validateParent.dialog.html',
+            templateUrl: 'core-components/analysis/templates/validateParent.dialog.html',
             controller: 'ComponentView'
         });
     };

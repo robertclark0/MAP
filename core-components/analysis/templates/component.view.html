@@ -1,4 +1,4 @@
-﻿<ng-include src="'core-components/metric-dashboard/templates/menuBar.html'"></ng-include>
+﻿<ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>
 <section layout="row" style="height: calc(100vh - 100px); background-color: white">
 
     <!--DASHBOARD COMPONENTS-->
@@ -57,19 +57,19 @@
                 <form name="componentForm" ng-submit="componentProperties.saveEdit($event)">
                     <div ng-switch on="dashboardComponents.selection">
                         <div ng-switch-when="canvas">
-                            <ng-include src="'core-components/metric-dashboard/templates/canvasForm.partial.html'"></ng-include>
+                            <ng-include src="'core-components/analysis/templates/canvasForm.partial.html'"></ng-include>
                         </div>
                         <div ng-switch-when="dataGroup">
-                            <ng-include src="'core-components/metric-dashboard/templates/dataGroupForm.partial.html'"></ng-include>
+                            <ng-include src="'core-components/analysis/templates/dataGroupForm.partial.html'"></ng-include>
                         </div>
                         <div ng-switch-when="dataSelection">
-                            <ng-include src="'core-components/metric-dashboard/templates/dataSelectionForm.partial.html'"></ng-include>
+                            <ng-include src="'core-components/analysis/templates/dataSelectionForm.partial.html'"></ng-include>
                         </div>
                         <div ng-switch-when="dataFilter">
-                            <ng-include src="'core-components/metric-dashboard/templates/dataFilterForm.partial.html'"></ng-include>
+                            <ng-include src="'core-components/analysis/templates/dataFilterForm.partial.html'"></ng-include>
                         </div>
                         <div ng-switch-when="canvasElement">
-                            <ng-include src="'core-components/metric-dashboard/templates/canvasElementForm.partial.html'"></ng-include>
+                            <ng-include src="'core-components/analysis/templates/canvasElementForm.partial.html'"></ng-include>
                         </div>
                     </div>
                     <md-button ng-click="componentProperties.closeEdit()">Cancel</md-button>
