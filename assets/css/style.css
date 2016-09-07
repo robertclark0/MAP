@@ -62,11 +62,36 @@ body {
     fill: rgb(150,150,150);
 }
 
+.listItem-active {
+    background-color: rgba(228, 241, 213, 1);
+}
+
+    .listItem-active svg {
+        fill: rgba(108, 157, 52, 1)
+    }
+
+    .listItem-active p {
+        color: rgba(108, 157, 52, 1)
+    }
+
+.listItem-active-accent {
+    background-color: rgba(219, 232, 255, 1);
+}
+
+    .listItem-active-accent svg {
+        fill: rgba(68, 137, 254, 1);
+    }
+
+    .listItem-active-accent p, .listItem-active-accent h2, .listItem-active-accent h3, .listItem-active-accent h4, .listItem-active-accent h5, .listItem-active-accent h6 {
+        color: rgba(68, 137, 254, 1) !important;
+    }
+
 /*---- Angular Material Overwride ----*/
 .ink-bar-top md-pagination-wrapper {
     height: 2px;
 }
-md-list.mdo-listitem-padding md-list-item div:first-child{
+
+md-list.mdo-listitem-padding md-list-item div:first-child {
     padding-top: 12px;
 }
 
