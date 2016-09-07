@@ -48,8 +48,8 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
         //  Module
         //  Report Viewer
         .state("reportViewer", {
-            url: "/report-viewer",
-            templateUrl: "core-components/report-viewer/templates/view.html",
+            url: "/reporting",
+            templateUrl: "core-components/reporting/templates/view.html",
             controller: "ReportViewer",
             resolve: {
                 log: ['appManager', function (appManager) {
@@ -252,7 +252,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateClasses.ProductLine = function (name) {
         this.name = name;
         this.dashboard = {
-            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and analysis
+            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between reporting and analysis
             index: {
                 adminReport: 0,
                 userReport: 0,

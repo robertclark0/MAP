@@ -80,7 +80,7 @@ gulp.task('platformHome.module.css', function () {
 
 
 //  Module
-//  Metric Dashboard
+//  Analysis
 gulp.task('metricDashboard.module.js', function () {
     return gulp.src([
         'core-components/analysis/**/*.js',
@@ -101,10 +101,10 @@ gulp.task('metricDashboard.module.css', function () {
 
 
 //  Module
-//  Report Viewer
+//  Reporting
 gulp.task('reportViewer.module.js', function () {
     return gulp.src([
-        'core-components/report-viewer/**/*.js',
+        'core-components/reporting/**/*.js',
     ])
       .pipe(order([
           '**/module.js'
@@ -114,7 +114,7 @@ gulp.task('reportViewer.module.js', function () {
 });
 gulp.task('reportViewer.module.css', function () {
     return gulp.src([
-        'core-components/report-viewer/**/*.css',
+        'core-components/reporting/**/*.css',
     ])
       .pipe(concat('dist.reportViewer.css'))
       .pipe(gulp.dest('assets/css'));

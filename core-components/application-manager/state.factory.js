@@ -13,7 +13,7 @@
     stateClasses.ProductLine = function (name) {
         this.name = name;
         this.dashboard = {
-            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between report-viewer and analysis
+            //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between reporting and analysis
             index: {
                 adminReport: 0,
                 userReport: 0,

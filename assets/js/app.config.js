@@ -35,8 +35,8 @@
         //  Module
         //  Report Viewer
         .state("reportViewer", {
-            url: "/report-viewer",
-            templateUrl: "core-components/report-viewer/templates/view.html",
+            url: "/reporting",
+            templateUrl: "core-components/reporting/templates/view.html",
             controller: "ReportViewer",
             resolve: {
                 log: ['appManager', function (appManager) {
