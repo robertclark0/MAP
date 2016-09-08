@@ -174,6 +174,9 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
     apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
 
+    var queryAPI = apiEndpoint + 'query';
+    apiResource.query = function () { return $resource(queryAPI); };
+
 
     //    STRUCTURE
     //

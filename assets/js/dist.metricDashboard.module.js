@@ -167,10 +167,101 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
         //p.then(function (big) {
         //    console.log(big);
         //});
-        
+
     }).catch(function (error) {
         logger.toast.error('Error Getting Data Sources', error);
     });
+
+
+    $scope.sendTestQuery = function () {
+
+        var queryObject = {
+            pagination:
+            {
+                enabled: true,
+                page: 1,
+                range: 10
+            },
+            aggregation:
+            {
+                enabled: true
+            },
+            selections:
+            [
+                    {
+                        name: 'Region',
+                        order: 'asc',
+                        aggregate: false
+                    },
+                    {
+                        name: 'Gender',
+                        order: 'asc',
+                        aggregate: true,
+                        aggregation: {
+                            type: 'case-count',
+                            allias: 'Gender_F',
+                            operators: [
+                                {
+                                    type: 'equal',
+                                    values: ['F'],
+                                    valueType: 'string'
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Gender',
+                        order: 'asc',
+                        aggregate: true,
+                        aggregation: {
+                            type: 'case-count',
+                            allias: 'Gender_M',
+                            operators: [
+                                {
+                                    type: 'equal',
+                                    values: ['M'],
+                                    valueType: 'string'
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        name: 'PA_Work_RVU',
+                        order: 'asc',
+                        aggregate: true,
+                        aggregation: {
+                            type: 'case-sum',
+                            round: 2,
+                            allias: 'Sum',
+                            operators:
+                            [
+                                {
+                                    type: 'greater',
+                                    values: [0],
+                                    valueType: null
+                                },
+                                {
+                                    type: 'lessEqual',
+                                    values: [1],
+                                    valueType: null
+                                }
+                            ]
+                        }
+                    },
+            ],
+            filters:
+            [
+                {
+                    name: 'Region',
+                    operators: {
+                        type: 'is',
+                        values: ['F']
+                    }
+                }
+            ]
+        };
+        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
+    };
 
 }]);
 metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
