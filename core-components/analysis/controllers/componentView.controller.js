@@ -19,4 +19,21 @@
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }
+
+
+    //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP
+    $scope.showSelectDataSource = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'dialog1.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+        })
+        .then(function (answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+        }, function () {
+            $scope.status = 'You cancelled the dialog.';
+        });
+    };
+
+
 }]);

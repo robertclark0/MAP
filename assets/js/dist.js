@@ -47,7 +47,7 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
 
         //  Module
         //  Report Viewer
-        .state("reportViewer", {
+        .state("reporting", {
             url: "/reporting",
             templateUrl: "core-components/reporting/templates/view.html",
             controller: "ReportViewer",
@@ -64,7 +64,7 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
 
         //  Module
         //  Metric Dashboard
-        .state("metricDashboard", {
+        .state("analysis", {
             url: "/analysis",
             templateUrl: "core-components/analysis/templates/view.html",
             css: "assets/css/dist.metricDashboard.css",
@@ -78,7 +78,7 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
                 }]
             }
         })
-        .state("metricDashboard.view", {
+        .state("analysis.view", {
             url: "/:viewName",
             params: {
                 viewName: null

@@ -106,6 +106,23 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }
+
+
+    //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP
+    $scope.showSelectDataSource = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'dialog1.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+        })
+        .then(function (answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+        }, function () {
+            $scope.status = 'You cancelled the dialog.';
+        });
+    };
+
+
 }]);
 metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
 
@@ -268,9 +285,6 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         components: [
             { text: 'Canvases', icon: 'assets/icons/md-tab.svg', component: 'canvas', action: selectCanvas },
             { text: 'Data Groups', icon: 'assets/icons/md-storage.svg', component: 'dataGroup', action: selectDataGroup },
-            //{ text: 'Data Selections', icon: 'assets/icons/md-add-check.svg', component: 'dataSelection', action: selectDataSelection },
-            //{ text: 'Data Filters', icon: 'assets/icons/md-tune.svg', component: 'dataFilter', action: selectDataFilter },
-            //removed to place inside data group properties
             { text: 'Canvas Elements', icon: 'assets/icons/md-quilt.svg', component: 'canvasElement', action: selectCanvasElement }
         ],
         actions: [
@@ -409,12 +423,6 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
                     break;
                 case 'dataGroup':
                     editObject = new SC.DataGroup('New Data Group');
-                    break;
-                case 'dataSelection':
-                    editObject = new SC.DataFilter('New Data Selection');
-                    break;
-                case 'dataFilter':
-                    editObject = new SC.DataFilter('New Data Filter');
                     break;
                 case 'canvasElement':
                     editObject = new SC.CanvasElement('New Canvas Element');
