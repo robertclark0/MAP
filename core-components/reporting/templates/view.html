@@ -1,18 +1,65 @@
 ﻿<ng-include src="'core-components/reporting/templates/siteToolbar.html'"></ng-include>
 
 <section layout="row" style="height: calc(100vh - 60px);">
-    
-    <md-sidenav md-component-id="panelFilters" class="map-gray-1" md-whiteframe="4" md-is-locked-open="true" flex>
 
-        <md-subheader class="md-primary">Reports</md-subheader>
+    <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
+        <md-subheader class="md-primary">Report</md-subheader>
+        <!--<md-list class="md-dense" style="background-color:white;">
+            <md-list-item class="md-3-line" ng-click="null">
+                <h3>CHUP Aggregate</h3>
+                <div class="md-secondary md-icon-button">
+                    <md-tooltip md-direction="bottom">More Reports</md-tooltip>
+                    <md-icon md-svg-src="assets/icons/md-expand.svg" aria-label="action"></md-icon>
+                </div>
+            </md-list-item>
+        </md-list>-->
+        <md-menu>
 
+            <md-list class="md-dense" style="background-color:white;">
+                <md-list-item class="md-3-line" ng-click="$mdOpenMenu($event)">
+                    <h3>CHUP Aggregate</h3>
+                    <div class="md-secondary md-icon-button">
+                        <md-tooltip md-direction="bottom">More Reports</md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-expand.svg" aria-label="action"></md-icon>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-menu-content width="4">
+                <md-menu-item>
+                    <md-button ng-click="ctrl.redial($event)">
+                        <md-icon md-svg-icon="call:dialpad"></md-icon>
+                        Redial
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                        <md-icon md-svg-icon="call:voicemail"></md-icon>
+                        Check voicemail
+                    </md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.toggleNotifications()">
+                        <md-icon md-svg-icon="social:notifications-{{ctrl.notificationsEnabled ? 'off' : 'on'}}"></md-icon>
+                        {{ctrl.notificationsEnabled ? 'Disable' : 'Enable' }} notifications
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+        <md-subheader class="md-primary">Data Filters</md-subheader>
         <md-content class="map-gray-1">
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
-                        <div class="md-headline">Fiscal Year</div>
+                        <div class="md-headline">Patient Cohort</div>
                     </md-card-title-text>
                 </md-card-title>
+                <md-card-content>
+                    <md-checkbox aria-label="CHUP" ng-model="chup" ng-change="checkAll()"><em>CHUP</em></md-checkbox><br />
+                    <md-checkbox aria-label="Poly" ng-model="poly" ng-change="allChecked()">PolyPharm</md-checkbox>
+                    <md-checkbox aria-label="High" ng-model="hu" ng-change="allChecked()">High Utilizer</md-checkbox>
+                    <md-checkbox aria-label="Pain" ng-model="pain" ng-change="allChecked()">Pain</md-checkbox>
+                </md-card-content>
             </md-card>
         </md-content>
     </md-sidenav>

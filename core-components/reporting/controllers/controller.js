@@ -1,4 +1,4 @@
-﻿reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
+﻿reportViewer.controller('ReportViewer', ['$scope', 'appManager', '$state', '$mdDialog', function ($scope, appManager, $state, $mdDialog) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
