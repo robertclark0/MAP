@@ -176,15 +176,19 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
     $scope.sendTestQuery = function () {
 
         var queryObject = {
+            source: {
+                type: 'table',
+                name: 'TeleHealth_360_CAPER'
+            },
             pagination:
             {
-                enabled: true,
+                enabled: false,
                 page: 1,
                 range: 10
             },
             aggregation:
             {
-                enabled: true
+                enabled: false
             },
             selections:
             [
@@ -253,10 +257,14 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
             [
                 {
                     name: 'Region',
-                    operators: {
-                        type: 'is',
-                        values: ['F']
-                    }
+                    operators:
+                    [
+                        {
+                            type: 'equal',
+                            values: ['RHC-A(P)'],
+                            valueType: 'string'
+                        }
+                    ]
                 }
             ]
         };
