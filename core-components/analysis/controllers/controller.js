@@ -51,18 +51,19 @@
 
         var queryObject = {
             source: {
+                product: "TELE360",
                 type: 'table',
                 name: 'TeleHealth_360_CAPER'
             },
             pagination:
             {
-                enabled: false,
+                enabled: true,
                 page: 1,
                 range: 10
             },
             aggregation:
             {
-                enabled: false
+                enabled: true
             },
             selections:
             [
@@ -130,19 +131,21 @@
             filters:
             [
                 {
-                    name: 'Region',
+                    name: 'FY',
                     operators:
                     [
                         {
                             type: 'equal',
-                            values: ['RHC-A(P)'],
+                            values: ['2016'],
                             valueType: 'string'
                         }
                     ]
                 }
             ]
         };
-        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
+        //API.download().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
+        API.download().get().$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
+        //window.location = "http://localhost:51880/api/download"
     };
 
 }]);

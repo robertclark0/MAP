@@ -177,6 +177,9 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var queryAPI = apiEndpoint + 'query';
     apiResource.query = function () { return $resource(queryAPI); };
 
+    var downloadAPI = apiEndpoint + 'download';
+    apiResource.download = function () { return $resource(downloadAPI); };
+
 
     //    STRUCTURE
     //
