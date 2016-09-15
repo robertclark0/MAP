@@ -124,7 +124,7 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
 
 
 }]);
-metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
+metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -183,13 +183,13 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
             },
             pagination:
             {
-                enabled: true,
+                enabled: false,
                 page: 1,
                 range: 10
             },
             aggregation:
             {
-                enabled: true
+                enabled: false
             },
             selections:
             [
@@ -201,57 +201,13 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
                     {
                         name: 'Gender',
                         order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'case-count',
-                            allias: 'Gender_F',
-                            operators: [
-                                {
-                                    type: 'equal',
-                                    values: ['F'],
-                                    valueType: 'string'
-                                }
-                            ]
-                        }
+                        aggregate: false,
                     },
-                    {
-                        name: 'Gender',
-                        order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'case-count',
-                            allias: 'Gender_M',
-                            operators: [
-                                {
-                                    type: 'equal',
-                                    values: ['M'],
-                                    valueType: 'string'
-                                }
-                            ]
-                        }
-                    },
+                   
                     {
                         name: 'PA_Work_RVU',
                         order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'case-sum',
-                            round: 2,
-                            allias: 'Sum',
-                            operators:
-                            [
-                                {
-                                    type: 'greater',
-                                    values: [0],
-                                    valueType: null
-                                },
-                                {
-                                    type: 'lessEqual',
-                                    values: [1],
-                                    valueType: null
-                                }
-                            ]
-                        }
+                        aggregate: false,
                     },
             ],
             filters:
@@ -266,12 +222,60 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
                             valueType: 'string'
                         }
                     ]
+                },
+                {
+                    name: 'FM',
+                    operators:
+                    [
+                        {
+                            type: 'equal',
+                            values: ['1'],
+                            valueType: 'string'
+                        }
+                    ]
+                },
+                {
+                    name: 'Region',
+                    operators:
+                    [
+                        {
+                            type: 'equal',
+                            values: ['RHC-E(P)'],
+                            valueType: 'string'
+                        }
+                    ]
                 }
             ]
         };
-        //API.download().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
-        API.download().get().$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
-        //window.location = "http://localhost:51880/api/download"
+        API.download().save({ query: queryObject }).$promise
+            .then(function (response)
+            {
+                console.log(response);
+                if (response.GUID) {
+                    var downloadGUID = response.GUID;
+                    var check;
+
+                    check = $interval(function () {
+                        API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
+                            console.log(response);
+                            if (response.Status === 'complete') {
+                                $interval.cancel(check);
+                                window.location("http://localhost:51880/api/download?GUID=" + downloadGUID);
+                            }
+                        }).catch(function (response) {
+                            console.log(response);
+                        });
+                    }, 5000, 10);
+                }
+            })
+            .catch(function (response)
+            {
+                console.log(response);
+            });
+
+        
+        //API.download().get().$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
+        //window.location("http://localhost:51880/api/download");
     };
 
 }]);

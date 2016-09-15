@@ -66,6 +66,9 @@
     var downloadAPI = apiEndpoint + 'download';
     apiResource.download = function () { return $resource(downloadAPI); };
 
+    var downloadUpdateAPI = apiEndpoint + 'download-update';
+    apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
+
 
     //    STRUCTURE
     //
