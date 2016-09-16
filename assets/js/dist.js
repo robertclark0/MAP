@@ -159,6 +159,8 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     //
     var apiResource = {};
 
+    apiResource.endpoint =  apiEndpoint;
+
     var userInfoAPI = apiEndpoint + 'user-info';
     apiResource.userInfo = function () { return $resource(userInfoAPI); };
 

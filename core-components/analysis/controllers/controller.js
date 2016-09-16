@@ -73,6 +73,26 @@
                         aggregate: false
                     },
                     {
+                        name: 'TmtDMISID',
+                        order: 'asc',
+                        aggregate: false
+                    },
+                    {
+                        name: 'TmtDMISName',
+                        order: 'asc',
+                        aggregate: false
+                    },
+                    {
+                        name: 'EncounterType',
+                        order: 'asc',
+                        aggregate: false
+                    },
+                    {
+                        name: 'EncounterDate',
+                        order: 'asc',
+                        aggregate: false
+                    },
+                    {
                         name: 'Gender',
                         order: 'asc',
                         aggregate: false,
@@ -107,39 +127,43 @@
                             valueType: 'string'
                         }
                     ]
-                },
-                {
-                    name: 'Region',
-                    operators:
-                    [
-                        {
-                            type: 'equal',
-                            values: ['RHC-E(P)'],
-                            valueType: 'string'
-                        }
-                    ]
-                }
+                }//,
+                //{
+                //    name: 'Region',
+                //    operators:
+                //    [
+                //        {
+                //            type: 'equal',
+                //            values: ['RHC-E(P)'],
+                //            valueType: 'string'
+                //        }
+                //    ]
+                //}
             ]
         };
         API.download().save({ query: queryObject }).$promise
             .then(function (response)
             {
-                console.log(response);
                 if (response.GUID) {
                     var downloadGUID = response.GUID;
                     var check;
 
                     check = $interval(function () {
                         API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-                            console.log(response);
                             if (response.Status === 'complete') {
                                 $interval.cancel(check);
-                                window.location("http://localhost:51880/api/download?GUID=" + downloadGUID);
+                                window.location(API.endpoint + "download?GUID=" + downloadGUID);
+                            }
+                            else if (response.Status === 'started') {
+
+                            }
+                            else {
+                                $interval.cancel(check);
                             }
                         }).catch(function (response) {
                             console.log(response);
                         });
-                    }, 5000, 10);
+                    }, 3000, 600);
                 }
             })
             .catch(function (response)
