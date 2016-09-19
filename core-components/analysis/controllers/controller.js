@@ -63,117 +63,84 @@
             },
             aggregation:
             {
-                enabled: false
+                enabled: true
             },
             selections:
             [
+
                     {
                         name: 'Region',
                         order: 'asc',
                         aggregate: false
                     },
                     {
-                        name: 'TmtDMISID',
+                        name: 'Month',
                         order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'TmtDMISName',
-                        order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'EncounterType',
-                        order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'EncounterDate',
-                        order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'Gender',
-                        order: 'asc',
-                        aggregate: false,
-                    },
-                   
-                    {
-                        name: 'PA_Work_RVU',
-                        order: 'asc',
-                        aggregate: false,
-                    },
+                        aggregate: true,
+                        aggregation: {
+                            type: 'count',
+                            allias: 'Month_Count'
+                        }
+                    }
+                    
             ],
             filters:
             [
-                {
-                    name: 'FY',
-                    operators:
-                    [
-                        {
-                            type: 'equal',
-                            values: ['2016'],
-                            valueType: 'string'
-                        }
-                    ]
-                },
-                {
-                    name: 'FM',
-                    operators:
-                    [
-                        {
-                            type: 'equal',
-                            values: ['1'],
-                            valueType: 'string'
-                        }
-                    ]
-                }//,
-                //{
-                //    name: 'Region',
-                //    operators:
-                //    [
-                //        {
-                //            type: 'equal',
-                //            values: ['RHC-E(P)'],
-                //            valueType: 'string'
-                //        }
-                //    ]
-                //}
+            //    {
+            //        name: 'FY',
+            //        operators:
+            //        [
+            //            {
+            //                type: 'equal',
+            //                values: ['2016'],
+            //                valueType: 'string'
+            //            }
+            //        ]
+            //    },
+            //    {
+            //        name: 'FM',
+            //        operators:
+            //        [
+            //            {
+            //                type: 'equal',
+            //                values: ['1'],
+            //                valueType: 'string'
+            //            }
+            //        ]
+            //    }
             ]
         };
-        API.download().save({ query: queryObject }).$promise
-            .then(function (response)
-            {
-                if (response.GUID) {
-                    var downloadGUID = response.GUID;
-                    var check;
+        //API.download().save({ query: queryObject }).$promise
+        //    .then(function (response)
+        //    {
+        //        if (response.GUID) {
+        //            var downloadGUID = response.GUID;
+        //            var check;
 
-                    check = $interval(function () {
-                        API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-                            if (response.Status === 'complete') {
-                                $interval.cancel(check);
-                                window.location(API.endpoint + "download?GUID=" + downloadGUID);
-                            }
-                            else if (response.Status === 'started') {
+        //            check = $interval(function () {
+        //                API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
+        //                    if (response.Status === 'complete') {
+        //                        $interval.cancel(check);
+        //                        window.location(API.endpoint + "download?GUID=" + downloadGUID);
+        //                    }
+        //                    else if (response.Status === 'started') {
 
-                            }
-                            else {
-                                $interval.cancel(check);
-                            }
-                        }).catch(function (response) {
-                            console.log(response);
-                        });
-                    }, 3000, 600);
-                }
-            })
-            .catch(function (response)
-            {
-                console.log(response);
-            });
+        //                    }
+        //                    else {
+        //                        $interval.cancel(check);
+        //                    }
+        //                }).catch(function (response) {
+        //                    console.log(response);
+        //                });
+        //            }, 3000, 600);
+        //        }
+        //    })
+        //    .catch(function (response)
+        //    {
+        //        console.log(response);
+        //    });
+        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
-        
-        //API.download().get().$promise.then(function (response) { console.log(response); }).catch(function (response) { console.log(response); });
-        //window.location("http://localhost:51880/api/download");
     };
 
 }]);
