@@ -33,6 +33,8 @@
 
     dataObject.canvasElements = [];
 
+    dataObject.dataGroups
+
 
 
     //    DATA FUNCTIONS

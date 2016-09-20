@@ -122,6 +122,14 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
         });
     };
 
+    $scope.showConfigureDataSelections = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/dataSelections.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    };
 
 }]);
 metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {

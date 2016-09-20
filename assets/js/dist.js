@@ -147,6 +147,8 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
 
     dataObject.canvasElements = [];
 
+    dataObject.dataGroups
+
 
 
     //    DATA FUNCTIONS

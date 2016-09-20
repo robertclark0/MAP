@@ -35,5 +35,13 @@
         });
     };
 
+    $scope.showConfigureDataSelections = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/dataSelections.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+    };
 
 }]);

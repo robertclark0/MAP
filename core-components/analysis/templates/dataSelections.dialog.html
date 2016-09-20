@@ -1,0 +1,139 @@
+﻿<md-dialog aria-label="List dialog" style="width: 1000px;">
+
+    <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">Data Selections</div>
+    </md-toolbar>
+    <md-dialog-content>
+
+        <section layout="row">
+            <div layout="column" flex="50" style="max-height: 450px;">
+                <md-subheader class="md-primary" style="background-color: transparent">Available Data</md-subheader>
+                <md-content>
+                    <md-list>
+                        <!--<md-list-item ng-repeat="topping in toppings">
+                            <p> {{ topping.name }} </p>
+                            <md-checkbox class="md-secondary" ng-model="topping.wanted"></md-checkbox>
+                        </md-list-item>-->
+                        <md-list-item>
+                            <p> Fiscal Month </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Fiscal Year </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> TmtParentDMIS </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Provider_Work_RVU </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Fiscal Month </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Fiscal Year </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> TmtParentDMIS </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Provider_Work_RVU </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Fiscal Month </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Fiscal Year </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> TmtParentDMIS </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p> Provider_Work_RVU </p>
+                            <md-checkbox class="md-secondary"></md-checkbox>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+                <div layout="row">
+                    
+                    <md-select ng-model="weapon" placeholder="Selection Level Key" class="md-no-underline" style="padding-left: 15px;">
+                        <md-option value="axe">Fiscal Year</md-option>
+                        <md-option value="sword">Fiscal Month</md-option>
+                        <md-option value="wand">TmtParentDMIS</md-option>
+                    </md-select>
+                    <div flex></div>
+                    <md-button>Create Selection</md-button>
+                    <md-button ng-hide="true">Save Selection</md-button>
+                </div>
+            </div>
+
+            <div layout="column" flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
+                <md-content class="inset">
+                    <md-list class="mdo-listitem-padding">
+                        <md-list-item class="md-2-line" ng-click="null">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>Primary: Region</h3>
+                                <p class="md-primary">Fiscal Year, Fiscal Month, Tmt...</p>
+                            </div>
+
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Move Up</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-divider></md-divider>
+                        </md-list-item>
+
+                        <md-list-item class="md-2-line" ng-click="null">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>Primary: DMIS</h3>
+                                <p class="md-primary">Fiscal Year, Fiscal Month, Tmt...</p>
+                            </div>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Move Up</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="null">
+                                <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+
+            </div>
+
+        </section>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        
+        <span flex></span>
+        <md-button ng-click="null">
+            Close
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
