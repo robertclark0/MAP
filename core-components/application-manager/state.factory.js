@@ -50,18 +50,42 @@
     stateClasses.DataGroup = function (name) {
         this.name = name || 'New Data Group';
         this.GUID = null;
-        this.dataSource = '';
-        this.dataFilters = [];
-        this.dataSelections = [];
+        this.source = {
+            product: null,
+            type: null,
+            name: null
+        };
+        this.pagination = {
+            enabled: true,
+            page: 1,
+            range: 10
+        };
+        this.aggregation = {
+            enabled: true
+        };
+        this.selections = [];
+        this.drillDown = [];
+        this.filters = [];
 
-        //this.data = {
-        //    results: [],
-        //    tableColumns: [],
-        //    query: {}, //ToChange - need way to include query for stored proc
-        //    calc: {} //ToChange - expand calculation cababilities
-        //};
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
+    stateClasses.DataSelection = function (name) {
+        this.name = name || null;
+        this.order = 'asc'; // asc | desc
+        this.aggregate = false;
+        this.aggregation = {
+            type: null, // count | sum | case-count | case-sum
+            round: 2,
+            allias: null,
+            operators: []
+        };
+    };
+    stateClasses.DataOperator = function () {
+        this.type = null; // greater | less | greaterEqual | lessEqual | equal | in | between
+        this.values = [];
+        this.valueType = null; // string | int
+    };
+
     stateClasses.DataFilter = function (name) {
         this.name = name || 'New Data Filter';
         this.GUID = GUID;

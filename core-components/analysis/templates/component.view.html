@@ -72,8 +72,12 @@
                             <ng-include src="'core-components/analysis/templates/canvasElementForm.partial.html'"></ng-include>
                         </div>
                     </div>
-                    <md-button ng-click="componentProperties.closeEdit()">Cancel</md-button>
-                    <md-button type="submit">Save</md-button>
+                    <div layout="row">
+                        <div flex></div>
+                        <md-button ng-click="componentProperties.closeEdit()">Cancel</md-button>
+                        <md-button type="submit">Save</md-button>
+                    </div>
+                    
                 </form>
             </div>
         </md-content>

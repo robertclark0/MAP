@@ -1,82 +1,30 @@
 ﻿<md-dialog aria-label="List dialog" style="width: 1000px;">
 
     <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">Data Selections</div>
+        <div class="md-toolbar-tools">Data Selection</div>
     </md-toolbar>
     <md-dialog-content>
 
         <section layout="row">
-            <div layout="column" flex="50" style="max-height: 450px;">
+            <div layout="column" flex="45" style="max-height: 450px;">
                 <md-subheader class="md-primary" style="background-color: transparent">Available Data</md-subheader>
+                <md-select ng-model="weapon" placeholder="Selection Level Key" class="md-no-underline" style="padding-left: 15px;">
+                    <md-option ng-repeat="selection in selected">{{selection}}</md-option>
+                </md-select>
                 <md-content>
                     <md-list>
-                        <!--<md-list-item ng-repeat="topping in toppings">
-                            <p> {{ topping.name }} </p>
-                            <md-checkbox class="md-secondary" ng-model="topping.wanted"></md-checkbox>
-                        </md-list-item>-->
-                        <md-list-item>
-                            <p> Fiscal Month </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Fiscal Year </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> TmtParentDMIS </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Provider_Work_RVU </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Fiscal Month </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Fiscal Year </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> TmtParentDMIS </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Provider_Work_RVU </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Fiscal Month </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Fiscal Year </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> TmtParentDMIS </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
-                        </md-list-item>
-                        <md-list-item>
-                            <p> Provider_Work_RVU </p>
-                            <md-checkbox class="md-secondary"></md-checkbox>
+                        <md-list-item ng-repeat="column in DO.tableSchema">
+                            <p>{{column.COLUMN_NAME}}</p>
+                            <md-checkbox class="md-secondary" ng-model="column.selected"></md-checkbox>
                         </md-list-item>
                     </md-list>
                 </md-content>
-                <div layout="row">
-                    
-                    <md-select ng-model="weapon" placeholder="Selection Level Key" class="md-no-underline" style="padding-left: 15px;">
-                        <md-option value="axe">Fiscal Year</md-option>
-                        <md-option value="sword">Fiscal Month</md-option>
-                        <md-option value="wand">TmtParentDMIS</md-option>
-                    </md-select>
-                    <div flex></div>
-                    <md-button>Create Selection</md-button>
+                <div layout="column">
+                    <md-button ng-disabled="selected.length === 0">Create Selection</md-button>
                     <md-button ng-hide="true">Save Selection</md-button>
                 </div>
             </div>
-
+            <div flex></div>
             <div layout="column" flex="50">
                 <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
                 <md-content class="inset">
@@ -127,12 +75,13 @@
             </div>
 
         </section>
+
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
         
         <span flex></span>
-        <md-button ng-click="null">
+        <md-button ng-click="closeDialog()">
             Close
         </md-button>
     </md-dialog-actions>

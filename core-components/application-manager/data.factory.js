@@ -31,9 +31,14 @@
         this.value = productLinesAPIResponse;
     };
 
-    dataObject.canvasElements = [];
+    dataObject.dataSource = [];
+    dataObject.tableSchema = [];
 
-    dataObject.dataGroups
+    dataObject.canvasElements = [];
+    // {element: , ChartDOM: }
+
+    dataObject.dataGroups = [];
+    // {GUID: , result: }
 
 
 
@@ -72,6 +77,12 @@
 
     var downloadUpdateAPI = apiEndpoint + 'download-update';
     apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
+
+    var tableSchemaAPI = apiEndpoint + 'schema/table';
+    apiResource.tableSchema = function () { return $resource(tableSchemaAPI); };
+
+    var columnSchemaAPI = apiEndpoint + 'schema/column';
+    apiResource.columnSchema = function () { return $resource(columnSchemaAPI); };
 
 
     //    STRUCTURE

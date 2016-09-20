@@ -1,0 +1,25 @@
+﻿<md-dialog aria-label="List dialog" style="width: 600px;">
+
+    <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">Data Source</div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-list>
+            <md-subheader class="md-primary" style="background-color: transparent">Table</md-subheader>
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in DO.dataSource | filter: {SourceType : 'T'}">
+                {{source.SourceName}}
+            </md-list-item>
+            <md-subheader class="md-primary" style="background-color: transparent">Stored Procedure</md-subheader>
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in DO.dataSource | filter: {SourceType : 'P'}">
+                {{source.SourceName}}
+            </md-list-item>
+        </md-list>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="closeDialog()">
+            Close
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

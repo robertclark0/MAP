@@ -88,13 +88,18 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
 metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    var SO = appManager.state.SO;
+    var logger = appManager.logger;
     $scope.SF = appManager.state.SF;
     $scope.DSO = appManager.state.DSO;
+    $scope.DO = appManager.data.DO;
+
 
 
     // ---- ---- ---- ---- Dashboard Components ---- ---- ---- ----
     $scope.dashboardComponents = componentViewFactory.dashboardComponents;
 
+    $scope.dashboardComponents.components[0].action("canvas", $scope.DSO);
 
     // ---- ---- ---- ---- Component List ---- ---- ---- ----
     $scope.componentList = componentViewFactory.componentList;
@@ -107,29 +112,34 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
         $mdDialog.hide();
     }
 
-
-    //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP
-    $scope.showSelectDataSource = function (ev) {
-        $mdDialog.show({
-            templateUrl: 'dialog1.tmpl.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-        })
-        .then(function (answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
-        }, function () {
-            $scope.status = 'You cancelled the dialog.';
-        });
-    };
-
     $scope.showConfigureDataSelections = function (ev) {
+
+        if ($scope.componentProperties.editObject.source.name !== null) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/dataSelection.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataSelection'
+            });
+        }
+        else {
+            logger.toast.warning('Please Select A Data Source First.');
+        }
+
+
+    };
+
+    $scope.showConfigureDataSource = function (ev) {
         $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/dataSelections.dialog.html',
+            templateUrl: 'core-components/analysis/templates/dataSource.dialog.html',
             parent: angular.element(document.body),
             targetEvent: ev,
-            clickOutsideToClose: true
+            clickOutsideToClose: true,
+            controller: 'DataSource'
         });
     };
+
 
 }]);
 metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
@@ -139,6 +149,7 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
     var SO = appManager.state.SO;
     var API = appManager.data.API;
     var logger = appManager.logger;
+    var DO = appManager.data.DO;
 
     $scope.name = DSO.name;
     $scope.controlPanels = DSO.dashboard.controlPanels;
@@ -152,33 +163,6 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
         }
     };
 
-    API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
-
-        console.log(response);
-
-        ////FOREACH respone.result array objecy -->
-        //var tasks = [];
-
-        //tasks = response.result.map(function (res) {
-        //    return function () {
-        //        return API.dataSourceParameters().save({ dataSourceID: res.DataSourceID }).$promise.then(function (data) {
-        //            return data;
-        //        });
-        //    };
-        //});
-
-        //var p = tasks[0]();
-        //for (var i = 1; i < tasks.length; i++) {
-        //    p = p.then(tasks[i]);
-        //}
-
-        //p.then(function (big) {
-        //    console.log(big);
-        //});
-
-    }).catch(function (error) {
-        logger.toast.error('Error Getting Data Sources', error);
-    });
 
 
     $scope.sendTestQuery = function () {
@@ -276,6 +260,90 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
         API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
     };
+
+}]);
+metricDashboard.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    //$scope.SF = appManager.state.SF;
+    //$scope.DSO = appManager.state.DSO;
+    //$scope.DO = appManager.data.DO;
+    //var SO = appManager.state.SO;
+
+
+
+
+}]);
+metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----      
+    var API = appManager.data.API;
+    var logger = appManager.logger;
+    var SO = appManager.state.SO;
+    $scope.DO = appManager.data.DO;
+
+    $scope.componentProperties = componentViewFactory.componentProperties;
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
+
+    //$scope.getTableSchema = function () {
+
+    if ($scope.componentProperties.editObject.source.type === 'T') {
+            API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+                $scope.DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+
+    $scope.selected = [];
+
+    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (nv) {
+        $scope.selected = nv.map(function (column) {
+            return column.COLUMN_NAME;
+        });
+
+        console.log($scope.selected);
+    }, true);
+
+    //}
+
+
+
+
+}]);
+metricDashboard.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    var SO = appManager.state.SO;
+    var API = appManager.data.API;
+    var logger = appManager.logger;
+    var DO = appManager.data.DO;
+    $scope.DO = appManager.data.DO;
+
+
+    $scope.componentProperties = componentViewFactory.componentProperties;
+
+
+    API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+        DO.dataSource = response.result;
+    }).catch(function (error) {
+        logger.toast.error('Error Getting Data Sources', error);
+    });
+
+
+    $scope.setDataSource = function (dataSourceObject) {
+        $scope.componentProperties.editObject.source.product = SO.productLine.current;
+        $scope.componentProperties.editObject.source.type = dataSourceObject.SourceType;
+        $scope.componentProperties.editObject.source.name = dataSourceObject.SourceName;
+        $scope.closeDialog();
+    };
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
 
 }]);
 metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
