@@ -2,7 +2,7 @@
     <md-toolbar class="">
         <div class="md-toolbar-tools">
             <h2>
-                <span>Data</span>
+                <span>Data Controls</span>
             </h2>
             <span flex></span>
             <!--<md-button class="md-icon-button" aria-label="Menu">
@@ -41,42 +41,71 @@
     </md-fab-toolbar>
 
     <md-content class="map-gray-1">
-        <md-subheader class="md-primary">Data Group Name</md-subheader>
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <div class="md-headline">TmtParentName</div>
-                </md-card-title-text>
+        <md-list class="mdo-listitem-padding">
+            <md-list-item>
+                <p> Aggregate Query </p>
+                <md-checkbox class="md-secondary" ng-model="currentCanvas.dataGroups[0].aggregation.enabled"></md-checkbox>
+            </md-list-item>
+            <md-list-item>
+                <p> Paginate Query </p>
+                <md-checkbox class="md-secondary" ng-model="currentCanvas.dataGroups[0].pagination.enabled"></md-checkbox>
+            </md-list-item>
+        </md-list>
 
-                <md-button class="md-icon-button" aria-label="Delete">
-                    <md-tooltip md-direction="bottom">
-                        Delete
-                    </md-tooltip>
-                    <md-icon md-svg-src="assets/icons/md-clear.svg"></md-icon>
-                </md-button>
-            </md-card-title>
-            
-            <md-card-actions layout="row" layout-align="end center">               
-                <md-switch>Sum</md-switch>
-                <span flex></span>
-                <md-button ng-disabled="true">Count</md-button>
-                <md-button ng-disabled="true">Sum</md-button>
-            </md-card-actions>
+        <md-card ng-repeat="selection in currentCanvas.dataGroups[0].selections[0]">
+            <md-toolbar style="background-color: transparent;">
+                <div class="md-toolbar-tools">
+                    <h5>
+                        <span>{{selection.name}}</span>
+                    </h5>
+                    <span flex></span>
+                    <md-menu>
+                        <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="null">
+                                    <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
+                                    Move Data Selection up
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="null">
+                                    <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
+                                    Move Data Selection Down
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="null">
+                                    <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
+                                    Aggregate Functions
+                                </md-button>
+                            </md-menu-item>
+                            <md-divider></md-divider>
+                            <md-menu-item>
+                                <md-button ng-click="null">
+                                    <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
+                                    Delete Data Selection
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </md-toolbar>
+            <!--<md-card-content>
 
-            <md-card-actions layout="row" layout-align="end center">
-                <md-switch>Sum</md-switch>
-                <span flex></span>
-                <md-button ng-disabled="true">Count</md-button>
-                <md-button ng-disabled="true">Sum</md-button>
-            </md-card-actions>
+                <md-list>
+                    <md-list-item>
+                        <md-switch ng-model="selection.order" aria-label="Order Switch" ng-true-value="'desc'" ng-false-value="'asc'">
+                            Order: {{ selection.order }}
+                        </md-switch>
+                    </md-list-item>
+                    <md-list-item>Aggregate Functions</md-list-item>
+                </md-list>
+
+            </md-card-content>-->
         </md-card>
-
-        <section layout="row">
-            <span flex></span>
-            <md-button class="md-fab md-mini" aria-label="Add">
-                <md-icon md-svg-src="assets/icons/md-add.svg"></md-icon>
-            </md-button>
-        </section>
 
     </md-content>
 </md-sidenav>

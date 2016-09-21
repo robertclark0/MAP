@@ -25,6 +25,20 @@
             <md-divider></md-divider>
         </md-list-item>
     </md-list>
+    <md-list class="mdo-listitem-padding">
+        <md-list-item class="md-2-line" ng-click="null" ng-show="componentProperties.editObject.selections.length > 0">
+            <div class="md-list-item-text" layout="column">
+                <h3>Data Selection</h3>
+                <h4>{{componentProperties.editObject.selections[0][0].name}}</h4>
+            </div>
+
+            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="showConfigureDataSelections()">
+                <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
+            </md-button>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
 </div>
 <div layout="row">
     <md-list flex>
@@ -32,7 +46,7 @@
             <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
             <p>Select Data Source</p>
         </md-list-item>
-        <md-list-item ng-click="showConfigureDataSelections()">
+        <md-list-item ng-click="showConfigureDataSelections()" ng-hide="componentProperties.editObject.selections.length > 0">
             <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
             <p>Configure Data Selections</p>
         </md-list-item>

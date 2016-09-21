@@ -20,9 +20,43 @@
             </div>
 
             <div class="map-gray-2">
-                <md-tabs md-align-tabs="bottom" class="ink-bar-top">
+                <!--<md-tabs md-align-tabs="bottom" class="ink-bar-top">
                     <md-tab ng-repeat="canvas in canvases" md-on-select="changeCanvas(canvas)">{{canvas.name}}</md-tab>
-                </md-tabs>
+                </md-tabs>-->
+                <div style="height:41px; border-top: 1px solid rgb(225,225,225);">
+                    <md-menu-bar class="map-gray-1">
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Canvas: <strong>{{currentCanvas.name}}</strong></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="canvas in canvases">
+                                    <md-button ng-click="changeCanvas(canvas)">
+                                        {{canvas.name}}
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Data Group: <strong>Data Group 1</strong></button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                                        Data Group 1
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <strong>Level 1 (Region)</strong></button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <md-button ng-click="ctrl.sampleAction('share', $event)">
+                                        Level 1 (Region)
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
+                </div>
             </div>
         </div>
     </div>

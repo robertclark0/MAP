@@ -187,7 +187,7 @@
         $mdDialog.show({
             parent: angular.element(document.body),
             templateUrl: 'core-components/analysis/templates/validateParent.dialog.html',
-            controller: 'ComponentView'
+            controller: 'DataSelection'
         });
     };
 

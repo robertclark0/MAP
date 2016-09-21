@@ -4,37 +4,121 @@
     var API = appManager.data.API;
     var logger = appManager.logger;
     var SO = appManager.state.SO;
+    var SC = appManager.state.SC;
     $scope.DO = appManager.data.DO;
-
     $scope.componentProperties = componentViewFactory.componentProperties;
-
-    $scope.closeDialog = function () {
-        $mdDialog.hide();
-    }
-
-    //$scope.getTableSchema = function () {
+    $scope.componentList = componentViewFactory.componentList;
 
     if ($scope.componentProperties.editObject.source.type === 'T') {
-            API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
-                $scope.DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
+        API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+            $scope.DO.tableSchema = response.result;
+        }).catch(function (error) {
+            logger.toast.error('Error Getting Table Schema', error);
+        });
+    }
 
     $scope.selected = [];
+    $scope.selectionKey = { value: null };
+    $scope.saveMode = false;
+    $scope.saveIndex = null;
 
     $scope.$watch('DO.tableSchema | filter: { selected : true }', function (nv) {
         $scope.selected = nv.map(function (column) {
             return column.COLUMN_NAME;
         });
-
-        console.log($scope.selected);
     }, true);
 
-    //}
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
 
+    //SAVE
+    $scope.saveSelection = function () {
+        var selectionLevel = [];
 
+        $scope.selected.forEach(function (entry) {
+            var selected = new SC.DataSelection(entry);
+            selectionLevel.push(selected);
+        });
 
+        $scope.componentProperties.editObject.selections.push(selectionLevel);
+        $scope.componentProperties.editObject.drillDown.push($scope.selectionKey.value)
+
+        clearSelections();
+    };
+    var clearSelections = function () {
+        $scope.selected.length = 0;
+        $scope.selectionKey.value = null;
+        $scope.DO.tableSchema.forEach(function (entry) {
+            entry.selected = false;
+        });
+    };
+
+    //UPDATE
+    $scope.updateSelection = function () {
+        var selectionLevel = [];
+
+        $scope.selected.forEach(function (entry) {
+            var selected = new SC.DataSelection(entry);
+            selectionLevel.push(selected);
+        });
+
+        $scope.componentProperties.editObject.selections[$scope.saveIndex] = selectionLevel;
+        $scope.componentProperties.editObject.drillDown[$scope.saveIndex] = $scope.selectionKey.value;
+
+        clearSelections();
+        $scope.saveMode = false;
+    };
+
+    //DELETE
+    $scope.deleteSelectionLevel = function (index) {
+        $scope.componentProperties.editObject.selections.splice(index, 1);
+        $scope.componentProperties.editObject.drillDown.splice(index, 1);
+    };
+
+    //MOVE
+    $scope.moveSelectionLevelUp = function (index) {
+        if (index > 0) {
+            var desitationIndex = index - 1;
+
+            var tempSelection = $scope.componentProperties.editObject.selections[desitationIndex];
+            $scope.componentProperties.editObject.selections[desitationIndex] = $scope.componentProperties.editObject.selections[index];
+            $scope.componentProperties.editObject.selections[index] = tempSelection;
+
+            var tempDrilldown = $scope.componentProperties.editObject.drillDown[desitationIndex];
+            $scope.componentProperties.editObject.drillDown[desitationIndex] = $scope.componentProperties.editObject.drillDown[index];
+            $scope.componentProperties.editObject.drillDown[index] = tempDrilldown;
+        }
+    };
+
+    //EDIT
+    $scope.editSelection = function (index) {
+
+        clearSelections();
+        $scope.saveMode = true;
+        $scope.saveIndex = index;
+
+        $scope.componentProperties.editObject.selections[index].forEach(function (selectionEntry) {
+            $scope.DO.tableSchema.forEach(function (schemaEntry) {
+                if (schemaEntry.COLUMN_NAME === selectionEntry.name) {
+                    schemaEntry.selected = true;
+                }
+            });
+        });
+        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown[index];
+    };
+
+    //PREVIEW
+    $scope.selectionPreview = function (selectionLevel) {
+
+        var returnValue = "";
+        selectionLevel.forEach(function (entry) {
+            returnValue += entry.name + ", ";
+        });
+        if (returnValue.length > 30) {
+            return returnValue.substr(0, 27) + "...";
+        }
+        return returnValue.substr(0, returnValue.length - 2);
+    };
 
 }]);

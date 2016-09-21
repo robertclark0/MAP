@@ -55,6 +55,23 @@
                             type: 'count',
                             allias: 'Month_Count'
                         }
+                    },
+                    {
+                        name: 'Month',
+                        order: 'asc',
+                        aggregate: true,
+                        aggregation: {
+                            type: 'case-count',
+                            allias: 'Month_Jan',
+                            operators:
+                            [
+                                {
+                                    type: 'equal',
+                                    values: ['Jan'],
+                                    valueType: 'string'
+                                }
+                            ]
+                        }
                     }
                     
             ],
