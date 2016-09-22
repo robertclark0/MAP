@@ -41,18 +41,22 @@
     </md-fab-toolbar>
 
     <md-content class="map-gray-1">
-        <md-list class="mdo-listitem-padding">
+        <md-list class="mdo-listitem-padding" ng-show="currentDataGroup">
+            <md-list-item>
+                <p> Auto Query </p>
+                <md-checkbox class="md-secondary" ng-model="autoQuery"></md-checkbox>
+            </md-list-item>
             <md-list-item>
                 <p> Aggregate Query </p>
-                <md-checkbox class="md-secondary" ng-model="currentCanvas.dataGroups[0].aggregation.enabled"></md-checkbox>
+                <md-checkbox class="md-secondary" ng-model="currentDataGroup.aggregation.enabled"></md-checkbox>
             </md-list-item>
             <md-list-item>
                 <p> Paginate Query </p>
-                <md-checkbox class="md-secondary" ng-model="currentCanvas.dataGroups[0].pagination.enabled"></md-checkbox>
+                <md-checkbox class="md-secondary" ng-model="currentDataGroup.pagination.enabled"></md-checkbox>
             </md-list-item>
         </md-list>
 
-        <md-card ng-repeat="selection in currentCanvas.dataGroups[0].selections[0]">
+        <md-card ng-repeat="selection in currentSelectionLevel">
             <md-toolbar style="background-color: transparent;">
                 <div class="md-toolbar-tools">
                     <h5>
@@ -65,13 +69,13 @@
                         </md-button>
                         <md-menu-content width="4">
                             <md-menu-item>
-                                <md-button ng-click="null">
+                                <md-button ng-click="moveDataSelectionUp($index)">
                                     <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
-                                    Move Data Selection up
+                                    Move Data Selection Up
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="null">
+                                <md-button ng-click="moveDataSelectionDown($index)">
                                     <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
                                     Move Data Selection Down
                                 </md-button>
@@ -82,29 +86,29 @@
                                     Aggregate Functions
                                 </md-button>
                             </md-menu-item>
-                            <md-divider></md-divider>
+                            <!--<md-divider></md-divider>
                             <md-menu-item>
                                 <md-button ng-click="null">
                                     <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
                                     Delete Data Selection
                                 </md-button>
-                            </md-menu-item>
+                            </md-menu-item>-->
                         </md-menu-content>
                     </md-menu>
                 </div>
             </md-toolbar>
             <!--<md-card-content>
 
-                <md-list>
-                    <md-list-item>
-                        <md-switch ng-model="selection.order" aria-label="Order Switch" ng-true-value="'desc'" ng-false-value="'asc'">
-                            Order: {{ selection.order }}
-                        </md-switch>
-                    </md-list-item>
-                    <md-list-item>Aggregate Functions</md-list-item>
-                </md-list>
+            <md-list>
+                <md-list-item>
+                    <md-switch ng-model="selection.order" aria-label="Order Switch" ng-true-value="'desc'" ng-false-value="'asc'">
+                        Order: {{ selection.order }}
+                    </md-switch>
+                </md-list-item>
+                <md-list-item>Aggregate Functions</md-list-item>
+            </md-list>
 
-            </md-card-content>-->
+        </md-card-content>-->
         </md-card>
 
     </md-content>

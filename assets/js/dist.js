@@ -114,8 +114,9 @@ applicationManager.factory('appManager', ['appStateManager', 'appLogger', 'appDa
 }]);
 applicationManager.factory('appDataManager', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
-    var apiEndpoint = 'http://localhost:51880/api/';
+    //var apiEndpoint = 'http://localhost:51880/api/';
     //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
+    var apiEndpoint = 'http://localhost:3000/';
 
     //    DATA OBJECT
     //
@@ -261,6 +262,22 @@ applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appData
         };
     };    return logger;
 }]);
+mapApp.directive('selectionControl', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            data: '=',
+            element: '='
+        },
+        templateUrl: 'shared-components/selection-control/selectionControl.html', 
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        
+    };
+}]);
 applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', '$state', function ($rootScope, $sessionStorage, $state) {
 
     //    STATE OBJECT CLASSES
@@ -357,10 +374,10 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.CanvasElement = function (name) {
+    stateClasses.CanvasElement = function (name, type) {
         this.name = name || 'New Canvas Element';
         this.GUID = null;
-        this.type = '';
+        this.type = type;
         this.width = 3;
         this.height = 3;
         this.posX = 0;

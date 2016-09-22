@@ -11,9 +11,9 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
-                            <!--<directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>-->
-                            <span ng-click="changeOptions(element)">OPTION CHANGE</span>
-                            <hc-chart canvas-element="element" data="chartData"></hc-chart>
+                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>
+                            <span>{{element.name}}</span>
+                            <!--<hc-chart canvas-element="element" data="chartData"></hc-chart>-->
                         </li>
                     </ul>
                 </div>
@@ -36,21 +36,21 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Group: <strong>Data Group 1</strong></button>
+                            <button ng-click="$mdOpenMenu()">Data Group: <strong>{{currentDataGroup.name}}</strong></button>
                             <md-menu-content>
-                                <md-menu-item>
-                                    <md-button ng-click="ctrl.sampleAction('share', $event)">
-                                        Data Group 1
+                                <md-menu-item ng-repeat="dataGroup in currentCanvas.dataGroups">
+                                    <md-button ng-click="changeDataGroup(dataGroup)">
+                                        {{dataGroup.name}}
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Selection Level: <strong>Level 1 (Region)</strong></button>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="currentSelectionLevel"><strong>Level {{currentSelectionIndex + 1}} ({{currentDataGroup.drillDown[currentSelectionIndex]}})</strong></span></button>
                             <md-menu-content>
-                                <md-menu-item>
-                                    <md-button ng-click="ctrl.sampleAction('share', $event)">
-                                        Level 1 (Region)
+                                <md-menu-item ng-repeat="level in currentDataGroup.drillDown track by $index">
+                                    <md-button ng-click="changeSelectionLevel(currentDataGroup.selections[$index], $index)">
+                                        Level {{$index + 1}} ({{level}})
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>

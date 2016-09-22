@@ -19,22 +19,8 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
-                <md-menu-item>
-                    <md-button ng-click="showTabDialog($event)">
-                        Components
-                    </md-button>
-                </md-menu-item>
-                <md-menu-divider></md-menu-divider>
-                <md-menu-item>
-                    <md-menu>
-                        <md-button ng-click="$mdOpenMenu()">New</md-button>
-                        <md-menu-content>
-                            <md-menu-item><md-button ng-click="null">Filter</md-button></md-menu-item>
-                            <md-menu-item><md-button ng-click="null">Data Group</md-button></md-menu-item>
-                            <md-menu-item><md-button ng-click="null">Canvas Element</md-button></md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </md-menu-item>
+
+                
                 <md-menu-item>
                     <md-button ng-click="ctrl.sampleAction('share', $event)">
                         Duplicate
@@ -44,6 +30,19 @@
                     <md-button ng-click="ctrl.sampleAction('share', $event)">
                         Delete
                     </md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                    <md-menu>
+                        <md-button ng-click="$mdOpenMenu()">Add Element</md-button>
+                        <md-menu-content>
+                            <md-menu-item><md-button ng-click="null">Title</md-button></md-menu-item>
+                            <md-menu-item><md-button ng-click="null">Text</md-button></md-menu-item>
+                            <md-menu-item><md-button ng-click="null">Chart</md-button></md-menu-item>
+                            <md-menu-item><md-button ng-click="null">Filter List</md-button></md-menu-item>
+                            <md-menu-item><md-button ng-click="addCanvasElement('Selection Control', 'selection-control')">Selection Level Control</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>

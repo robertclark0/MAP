@@ -12,7 +12,9 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     SO.sessionID = (typeof SO.sessionID === 'undefined') ? SF.generateGUID() : SO.sessionID;
 
     // Get user data
-    API.userInfo().save(logger.logPostObject()).$promise.then(function (response) {
+    //REMOVE BEFORE FLIGHT
+    //API.userInfo().save(logger.logPostObject()).$promise.then(function (response) {
+    API.userInfo().get().$promise.then(function (response) {
         if (response.result) {
             DO.user = new DO.User(response.result);
             logger.toast.success('Welcome ' + DO.user.name.first + '!');
@@ -25,14 +27,11 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     });
 
 
-    //// REMOVE BEFORE FLIGHT - THIS SECTION FOR TESTING WITHOUT API
-    //// ---------------- DANGER ------------------------------------
-    //DO.productLines = new DO.ProductLines([{ Active: 1, Icon: 'th', IconClass: 'colorMed', HasPII: 0, Name: 'TeleHealth', ModuleName: 'Metric Dashboard', Code: 'TELE' }]);
-    //$scope.products = DO.productLines.value;
-    //// ------------------ END -------------------------------------
     //Get product lines
     $scope.productLoadFailure = false;
-    API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
+    //REMOVE BEFORE FLIGHT
+    //API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
+    API.productLines().get().$promise.then(function (response) {
         DO.productLines = new DO.ProductLines(response.result);
         $scope.products = DO.productLines.value;
     }).catch(function (error) {
@@ -50,7 +49,9 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
             }
             else {
                 //get user permission
-                API.userActive().save(logger.logPostObject()).$promise.then(function (response) {
+                //REMOVE BEFORE FLIGHT
+                //API.userActive().save(logger.logPostObject()).$promise.then(function (response) {
+                API.userActive().get().$promise.then(function (response) {
                     if (response.result) {
                         DO.user.productLines.userActive = response.result;
                         if (userActiveInProduct(product)) {

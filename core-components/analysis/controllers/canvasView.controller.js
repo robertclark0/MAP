@@ -3,6 +3,7 @@
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
     var DO = appManager.data.DO;
+    var SC = appManager.state.SC;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
@@ -29,11 +30,7 @@
             }
         }
     };
-    $scope.currentCanvas = DSO.canvases[0];
-    $scope.changeCanvas = function (canvas) {
-        $scope.currentCanvas = canvas;
-    };
-
+   
 
 
     $scope.changeOptions = function (element) {
@@ -82,5 +79,56 @@
             thousandsSep: ','
         }
     });
+
+    //MENU FUNCTIONS
+    $scope.addCanvasElement = function (name, type) {
+
+       $scope.currentCanvas.canvasElements.push(new SC.CanvasElement(name, type));
+
+    };
+
+
+    //CURRENT OBJECT CONTROLS
+    $scope.currentCanvas = DSO.canvases[0];
+    $scope.changeCanvas = function (canvas) {
+        $scope.currentCanvas = canvas;
+        $scope.changeDataGroup(canvas.dataGroups[0]);
+    };
+    $scope.currentDataGroup = $scope.currentCanvas.dataGroups[0];
+    $scope.changeDataGroup = function (dataGroup) {
+        $scope.currentDataGroup = dataGroup;
+        if (dataGroup) {
+            $scope.changeSelectionLevel(dataGroup.selections[0], 0);
+        }
+        else {
+            $scope.currentSelectionLevel = undefined;
+        }
+    }
+    $scope.currentSelectionLevel = $scope.currentDataGroup.selections[0];
+    $scope.currentSelectionIndex = 0;
+    $scope.changeSelectionLevel = function (selection, index) {
+        $scope.currentSelectionLevel = selection;
+        $scope.currentSelectionIndex = index;
+    }
+
+    //DATA CONTROLL SIDE NAVE FUNCTIONS
+    $scope.moveDataSelectionUp = function (index) {
+        if (index > 0) {
+            var desitationIndex = index - 1;
+
+            var tempSelection = $scope.currentSelectionLevel[desitationIndex];
+            $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
+            $scope.currentSelectionLevel[index] = tempSelection;
+        }
+    };
+    $scope.moveDataSelectionDown = function (index) {
+        if ($scope.currentSelectionLevel[index + 1]) {
+            var desitationIndex = index + 1;
+
+            var tempSelection = $scope.currentSelectionLevel[desitationIndex];
+            $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
+            $scope.currentSelectionLevel[index] = tempSelection;
+        }
+    };
 
 }]);

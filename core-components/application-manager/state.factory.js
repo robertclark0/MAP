@@ -94,10 +94,10 @@
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.CanvasElement = function (name) {
+    stateClasses.CanvasElement = function (name, type) {
         this.name = name || 'New Canvas Element';
         this.GUID = null;
-        this.type = '';
+        this.type = type;
         this.width = 3;
         this.height = 3;
         this.posX = 0;
