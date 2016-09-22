@@ -1,6 +1,7 @@
 ﻿metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
     var factory = {};
 
 
@@ -125,6 +126,10 @@
     function deleteComponent(component, parent) {
         var index = parent.indexOf(component);
         parent.splice(index, 1);
+        if (component instanceof SC.DataGroup) {
+            var GUIDIndex = parent.map(function (obj) { return obj.GUID }).indexOf(component.GUID);
+            DO.dataGroups.splice(GUIDIndex, 1);
+        }
     }
 
 
@@ -171,6 +176,10 @@
         else {
             if (factory.componentProperties.editType === 'new') {
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+                //psuh new DO.dataGroup registry
+                if (factory.componentProperties.editObject instanceof SC.DataGroup) {
+                    DO.dataGroups.push({ GUID: factory.componentProperties.editObject.GUID, result: null })
+                }
             }
             else if (factory.componentProperties.editType === 'existing') {
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);

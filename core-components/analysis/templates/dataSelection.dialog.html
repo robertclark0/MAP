@@ -32,7 +32,7 @@
 
                         <md-list-item class="md-2-line" ng-click="null" ng-repeat="selectionLevel in componentProperties.editObject.selections">
                             <div class="md-list-item-text" layout="column">
-                                <h3>Primary: {{componentProperties.editObject.drillDown[$index]}}</h3>
+                                <h3>Primary: {{componentProperties.editObject.drillDown.level[$index]}}</h3>
                                 <p class="md-primary">{{selectionPreview(selectionLevel)}}</p>
                             </div>
                             <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">

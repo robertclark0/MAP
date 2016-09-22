@@ -15,20 +15,20 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     $scope.gridsterOpts = {
         columns: 36,
         resizable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         },
         draggable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         }
     };
    
@@ -390,7 +390,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
         });
 
         $scope.componentProperties.editObject.selections.push(selectionLevel);
-        $scope.componentProperties.editObject.drillDown.push($scope.selectionKey.value)
+        $scope.componentProperties.editObject.drillDown.level.push($scope.selectionKey.value)
 
         clearSelections();
     };
@@ -412,7 +412,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
         });
 
         $scope.componentProperties.editObject.selections[$scope.saveIndex] = selectionLevel;
-        $scope.componentProperties.editObject.drillDown[$scope.saveIndex] = $scope.selectionKey.value;
+        $scope.componentProperties.editObject.drillDown.level[$scope.saveIndex] = $scope.selectionKey.value;
 
         clearSelections();
         $scope.saveMode = false;
@@ -421,7 +421,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
     //DELETE
     $scope.deleteSelectionLevel = function (index) {
         $scope.componentProperties.editObject.selections.splice(index, 1);
-        $scope.componentProperties.editObject.drillDown.splice(index, 1);
+        $scope.componentProperties.editObject.drillDown.level.splice(index, 1);
     };
 
     //MOVE
@@ -433,9 +433,9 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
             $scope.componentProperties.editObject.selections[desitationIndex] = $scope.componentProperties.editObject.selections[index];
             $scope.componentProperties.editObject.selections[index] = tempSelection;
 
-            var tempDrilldown = $scope.componentProperties.editObject.drillDown[desitationIndex];
-            $scope.componentProperties.editObject.drillDown[desitationIndex] = $scope.componentProperties.editObject.drillDown[index];
-            $scope.componentProperties.editObject.drillDown[index] = tempDrilldown;
+            var tempDrilldown = $scope.componentProperties.editObject.drillDown.level[desitationIndex];
+            $scope.componentProperties.editObject.drillDown.level[desitationIndex] = $scope.componentProperties.editObject.drillDown.level[index];
+            $scope.componentProperties.editObject.drillDown.level[index] = tempDrilldown;
         }
     };
 
@@ -453,7 +453,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
                 }
             });
         });
-        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown[index];
+        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown.level[index];
     };
 
     //PREVIEW
@@ -606,6 +606,7 @@ metricDashboard.directive('hcChart', function () {
 metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
     var factory = {};
 
 
@@ -730,6 +731,10 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
     function deleteComponent(component, parent) {
         var index = parent.indexOf(component);
         parent.splice(index, 1);
+        if (component instanceof SC.DataGroup) {
+            var GUIDIndex = parent.map(function (obj) { return obj.GUID }).indexOf(component.GUID);
+            DO.dataGroups.splice(GUIDIndex, 1);
+        }
     }
 
 
@@ -776,6 +781,10 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         else {
             if (factory.componentProperties.editType === 'new') {
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+                //psuh new DO.dataGroup registry
+                if (factory.componentProperties.editObject instanceof SC.DataGroup) {
+                    DO.dataGroups.push({ GUID: factory.componentProperties.editObject.GUID, result: null })
+                }
             }
             else if (factory.componentProperties.editType === 'existing') {
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);

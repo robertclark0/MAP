@@ -152,7 +152,13 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     dataObject.canvasElements = [];
     // {element: , ChartDOM: }
 
-    dataObject.dataGroups = [];
+    dataObject.dataGroups = [{ //temp testing values
+        GUID: 0000, results: [], drillDown: [
+            { level: "ACV", disinct: ["RHV-C", "RHC-A", "RHC-P"] },
+            { level: "AGE", disinct: [0025, 0034, 0089, 1006] },
+            { level: "CHUP", disinct: ["BBGA", "BAFF", "DFFS", "BCBB"] },
+        ]
+    }];
     // {GUID: , result: }
 
 
@@ -266,7 +272,6 @@ mapApp.directive('selectionControl', [function () {
     return {
         restrict: 'E',
         scope: {
-            data: '=',
             element: '='
         },
         templateUrl: 'shared-components/selection-control/selectionControl.html',
@@ -275,9 +280,27 @@ mapApp.directive('selectionControl', [function () {
 
     function link(scope, elem, attr) {
 
-        scope.myChips = [];
-        console.log(scope.data);
-        scope.drillDown = scope.data.drillDown;
+        if (scope.element.dataGroup) {
+            scope.drillDown = scope.element.dataGroup.drillDown;
+        }
+        else {
+            scope.drillDown = { level: [], selection: [] };
+        }    
+
+        scope.autoList = ["one", "two", "three", "four"];
+
+        scope.querySearch = function(query) {
+            var results = query ? scope.autoList.filter(createFilterFor(query)) : [];
+            return results;
+        }
+        function createFilterFor(query) {
+            var lowercaseQuery = angular.lowercase(query);
+
+            return function filterFn(vegetable) {
+                return (vegetable.indexOf(lowercaseQuery) === 0);
+            };
+
+        }
     };
 }]);
 applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', '$state', function ($rootScope, $sessionStorage, $state) {
@@ -351,7 +374,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             enabled: true
         };
         this.selections = [];
-        this.drillDown = [];
+        this.drillDown = { level: [], selection: [] };
         this.filters = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);

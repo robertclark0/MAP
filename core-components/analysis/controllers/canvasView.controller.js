@@ -14,20 +14,20 @@
     $scope.gridsterOpts = {
         columns: 36,
         resizable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         },
         draggable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         }
     };
    

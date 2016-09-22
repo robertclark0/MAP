@@ -11,7 +11,7 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
-                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.currentCanvas.dataGroups[0]', element: '$parent.element'}"></directive-generator>
+                            <directive-generator name="{{$parent.element.type}}" attributes="{ element: '$parent.element'}"></directive-generator>
                             <!--<hc-chart canvas-element="element" data="chartData"></hc-chart>-->
 
                         </li>
@@ -53,9 +53,9 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="currentSelectionLevel"><strong>Level {{currentSelectionIndex + 1}} ({{currentDataGroup.drillDown[currentSelectionIndex]}})</strong></span></button>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="currentSelectionLevel"><strong>Level {{currentSelectionIndex + 1}} ({{currentDataGroup.drillDown.level[currentSelectionIndex]}})</strong></span></button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="level in currentDataGroup.drillDown track by $index">
+                                <md-menu-item ng-repeat="level in currentDataGroup.drillDown.level track by $index">
                                     <md-button ng-click="changeSelectionLevel(currentDataGroup.selections[$index], $index)">
                                         Level {{$index + 1}} ({{level}})
                                     </md-button>

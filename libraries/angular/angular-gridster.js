@@ -1133,8 +1133,9 @@
 							y: pageY
 						};
 
-						// IE pointer model
-						if (target.msSetPointerCapture) {
+					    // IE pointer model
+					    //if (target.msSetPointerCapture) { //CUSTOM OVERRIDE
+						if (target.msSetPointerCapture && prevent) {
 							target.msSetPointerCapture(pointerId);
 						} else if (theEvtObj.type === 'mousedown' && numberOfKeys(lastXYById) === 1) {
 							if (useSetReleaseCapture) {

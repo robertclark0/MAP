@@ -44,7 +44,7 @@
         });
 
         $scope.componentProperties.editObject.selections.push(selectionLevel);
-        $scope.componentProperties.editObject.drillDown.push($scope.selectionKey.value)
+        $scope.componentProperties.editObject.drillDown.level.push($scope.selectionKey.value)
 
         clearSelections();
     };
@@ -66,7 +66,7 @@
         });
 
         $scope.componentProperties.editObject.selections[$scope.saveIndex] = selectionLevel;
-        $scope.componentProperties.editObject.drillDown[$scope.saveIndex] = $scope.selectionKey.value;
+        $scope.componentProperties.editObject.drillDown.level[$scope.saveIndex] = $scope.selectionKey.value;
 
         clearSelections();
         $scope.saveMode = false;
@@ -75,7 +75,7 @@
     //DELETE
     $scope.deleteSelectionLevel = function (index) {
         $scope.componentProperties.editObject.selections.splice(index, 1);
-        $scope.componentProperties.editObject.drillDown.splice(index, 1);
+        $scope.componentProperties.editObject.drillDown.level.splice(index, 1);
     };
 
     //MOVE
@@ -87,9 +87,9 @@
             $scope.componentProperties.editObject.selections[desitationIndex] = $scope.componentProperties.editObject.selections[index];
             $scope.componentProperties.editObject.selections[index] = tempSelection;
 
-            var tempDrilldown = $scope.componentProperties.editObject.drillDown[desitationIndex];
-            $scope.componentProperties.editObject.drillDown[desitationIndex] = $scope.componentProperties.editObject.drillDown[index];
-            $scope.componentProperties.editObject.drillDown[index] = tempDrilldown;
+            var tempDrilldown = $scope.componentProperties.editObject.drillDown.level[desitationIndex];
+            $scope.componentProperties.editObject.drillDown.level[desitationIndex] = $scope.componentProperties.editObject.drillDown.level[index];
+            $scope.componentProperties.editObject.drillDown.level[index] = tempDrilldown;
         }
     };
 
@@ -107,7 +107,7 @@
                 }
             });
         });
-        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown[index];
+        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown.level[index];
     };
 
     //PREVIEW

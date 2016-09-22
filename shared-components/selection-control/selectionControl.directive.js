@@ -2,7 +2,6 @@
     return {
         restrict: 'E',
         scope: {
-            data: '=',
             element: '='
         },
         templateUrl: 'shared-components/selection-control/selectionControl.html',
@@ -11,8 +10,26 @@
 
     function link(scope, elem, attr) {
 
-        scope.myChips = [];
-        console.log(scope.data);
-        scope.drillDown = scope.data.drillDown;
+        if (scope.element.dataGroup) {
+            scope.drillDown = scope.element.dataGroup.drillDown;
+        }
+        else {
+            scope.drillDown = { level: [], selection: [] };
+        }    
+
+        scope.autoList = ["one", "two", "three", "four"];
+
+        scope.querySearch = function(query) {
+            var results = query ? scope.autoList.filter(createFilterFor(query)) : [];
+            return results;
+        }
+        function createFilterFor(query) {
+            var lowercaseQuery = angular.lowercase(query);
+
+            return function filterFn(vegetable) {
+                return (vegetable.indexOf(lowercaseQuery) === 0);
+            };
+
+        }
     };
 }]);
