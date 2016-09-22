@@ -269,13 +269,15 @@ mapApp.directive('selectionControl', [function () {
             data: '=',
             element: '='
         },
-        templateUrl: 'shared-components/selection-control/selectionControl.html', 
+        templateUrl: 'shared-components/selection-control/selectionControl.html',
         link: link
     };
 
     function link(scope, elem, attr) {
 
-        
+        scope.myChips = [];
+        console.log(scope.data);
+        scope.drillDown = scope.data.drillDown;
     };
 }]);
 applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', '$state', function ($rootScope, $sessionStorage, $state) {
@@ -304,7 +306,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             },
             controlPanels: [
                 {
-                    side: 'right', // left, right | this sets the default value
+                    side: 'left', // left, right | this sets the default value
                     lock: false,
                     templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
                 },
@@ -312,6 +314,11 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                     side: 'left',
                     lock: false,
                     templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
+                },
+                {
+                    side: 'right',
+                    lock: false,
+                    templateUrl: 'core-components/analysis/templates/canvasElement.sideNav.html'
                 }
             ]
         };
@@ -382,6 +389,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
+        this.dataGroup = null;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

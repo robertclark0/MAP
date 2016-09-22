@@ -24,7 +24,7 @@
             },
             controlPanels: [
                 {
-                    side: 'right', // left, right | this sets the default value
+                    side: 'left', // left, right | this sets the default value
                     lock: false,
                     templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
                 },
@@ -32,6 +32,11 @@
                     side: 'left',
                     lock: false,
                     templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
+                },
+                {
+                    side: 'right',
+                    lock: false,
+                    templateUrl: 'core-components/analysis/templates/canvasElement.sideNav.html'
                 }
             ]
         };
@@ -102,6 +107,7 @@
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
+        this.dataGroup = null;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

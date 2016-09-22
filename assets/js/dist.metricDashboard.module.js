@@ -33,7 +33,6 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     };
    
 
-
     $scope.changeOptions = function (element) {
         
         var options = element.chartOptions;
@@ -94,6 +93,8 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     $scope.changeCanvas = function (canvas) {
         $scope.currentCanvas = canvas;
         $scope.changeDataGroup(canvas.dataGroups[0]);
+        $scope.changeCanvasElement(canvas.canvasElements[0]);
+        
     };
     $scope.currentDataGroup = $scope.currentCanvas.dataGroups[0];
     $scope.changeDataGroup = function (dataGroup) {
@@ -111,6 +112,10 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
         $scope.currentSelectionLevel = selection;
         $scope.currentSelectionIndex = index;
     }
+    $scope.currentCanvasElement = $scope.currentCanvas.canvasElements[0];
+    $scope.changeCanvasElement = function (canvasElement) {
+        $scope.currentCanvasElement = canvasElement;
+    };
 
     //DATA CONTROLL SIDE NAVE FUNCTIONS
     $scope.moveDataSelectionUp = function (index) {

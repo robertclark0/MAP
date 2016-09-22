@@ -11,9 +11,9 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
-                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.group.data.result', element: '$parent.element'}"></directive-generator>
-                            <span>{{element.name}}</span>
+                            <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.currentCanvas.dataGroups[0]', element: '$parent.element'}"></directive-generator>
                             <!--<hc-chart canvas-element="element" data="chartData"></hc-chart>-->
+
                         </li>
                     </ul>
                 </div>
@@ -43,6 +43,13 @@
                                         {{dataGroup.name}}
                                     </md-button>
                                 </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item> 
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
@@ -53,6 +60,30 @@
                                         Level {{$index + 1}} ({{level}})
                                     </md-button>
                                 </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item> 
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Canvas Element: <span ng-show="true"><strong>{{currentCanvasElement.name}}</strong></span></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="element in currentCanvas.canvasElements">
+                                    <md-button ng-click="changeCanvasElement(element)">
+                                        {{element.name}}
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item>                                
                             </md-menu-content>
                         </md-menu>
                     </md-menu-bar>

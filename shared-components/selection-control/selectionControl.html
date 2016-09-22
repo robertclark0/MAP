@@ -1,3 +1,6 @@
-﻿<md-chips ng-model="FruitNames">
-
+﻿<md-chips ng-model="myChips" md-max-chips="{{drillDown.length}}">
+    <md-chip-template>
+        <em>{{drillDown[$index]}}: </em>
+        <strong>{{$chip}}</strong>
+    </md-chip-template>
 </md-chips>
