@@ -2,7 +2,6 @@
     return {
         restrict: 'E',
         scope: {
-            data: '=',
             element: '='
         },
         templateUrl: 'shared-components/selection-control/selectionControl.html',
@@ -12,7 +11,8 @@
     function link(scope, elem, attr) {
 
         scope.myChips = [];
-        console.log(scope.data);
-        scope.drillDown = scope.data.drillDown;
+        //console.log(scope.data);
+        scope.data = scope.element.dataGroup;
+
     };
 }]);

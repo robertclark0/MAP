@@ -171,6 +171,7 @@
         else {
             if (factory.componentProperties.editType === 'new') {
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+                console.log(factory.componentProperties.editObject instanceof SC.DataGroup);
             }
             else if (factory.componentProperties.editType === 'existing') {
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);

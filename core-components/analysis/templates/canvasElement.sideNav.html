@@ -44,13 +44,13 @@
             <md-list class="mdo-listitem-padding" ng-show="currentDataGroup">
                 <md-list-item>
                     <md-input-container>
-                        <input ng-model="currentCanvasElement.name"></input>
+                        <input ng-model="currentCanvasElement.name"/>
                     </md-input-container>
                 </md-list-item>
                 <md-list-item>
                     <md-input-container style="width: 100%">
                         <label>Data Group Association</label>
-                        <md-select ng-model="currentCanvasElement.dataGroup">
+                        <md-select ng-model="currentCanvasElement.dataGroup" ng-model-option="{trackBy: '$value.GUID' }">
                             <md-option ng-value="null"><em>None</em></md-option>
                             <md-option ng-repeat="dataGroup in currentCanvas.dataGroups" ng-value="dataGroup">
                                 {{dataGroup.name}}

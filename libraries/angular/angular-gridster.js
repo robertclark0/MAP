@@ -1134,7 +1134,7 @@
 						};
 
 						// IE pointer model
-						if (target.msSetPointerCapture) {
+						if (target.msSetPointerCapture && prevent) { //CUSTOM EDIT
 							target.msSetPointerCapture(pointerId);
 						} else if (theEvtObj.type === 'mousedown' && numberOfKeys(lastXYById) === 1) {
 							if (useSetReleaseCapture) {
@@ -1378,7 +1378,7 @@
 								}
 								var target = e.target;
 								for (var p = 0; p < 20; ++p) {
-									var parent = target.parentNode;
+								    var parent = e.target.parentNode;
 									if (parent === $el[0]) {
 										break;
 									}

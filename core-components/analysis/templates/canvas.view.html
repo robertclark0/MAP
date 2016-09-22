@@ -11,6 +11,9 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
+                            <div class="test-drag" style="position: absolute; right: 0; width: 25px; height: 25px;">
+                                <md-icon md-svg-src="assets/icons/md-move.svg" aria-label="action"></md-icon>
+                            </div>
                             <directive-generator name="{{$parent.element.type}}" attributes="{data: '$parent.currentCanvas.dataGroups[0]', element: '$parent.element'}"></directive-generator>
                             <!--<hc-chart canvas-element="element" data="chartData"></hc-chart>-->
 

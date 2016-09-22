@@ -1,9 +1,9 @@
-﻿metricDashboard.directive('hcChart', function () {
+﻿mapApp.directive('hcChart', function () {
     return {
         restrict: 'E',
         template: '<div></div>',
         scope: {
-            canvasElement: '=',
+            element: '=',
             data: '='
         },
         link: function (scope, element) {
@@ -32,7 +32,7 @@
                 series: []
             };
 
-            scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
+            scope.element.chartOptions = (typeof scope.element.chartOptions === 'undefined') ? defaultchartOptions : scope.element.chartOptions;
 
             loadChart();
             
@@ -49,7 +49,7 @@
             //}, true);
 
             function loadChart() {
-                chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
+                chart = Highcharts.chart(element[0], scope.element.chartOptions);
                 
 
                 scope.data.forEach(function (d) {
@@ -59,10 +59,10 @@
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             };
 
-            scope.canvasElement.destroyChart = function () {
+            scope.element.destroyChart = function () {
                 chart.destroy();
             };
-            scope.canvasElement.createChart = function () {
+            scope.element.createChart = function () {
                 loadChart();
             };
 

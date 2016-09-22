@@ -6,6 +6,8 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     var DO = appManager.data.DO;
     var SC = appManager.state.SC;
 
+    $scope.myChips = [];
+
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
     $scope.toggleSideNav = function (navID) {
@@ -15,20 +17,22 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     $scope.gridsterOpts = {
         columns: 36,
         resizable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            handles: ['s','se', 'sw']
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         },
         draggable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            handle: '.test-drag'
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         }
     };
    
@@ -532,77 +536,6 @@ metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', fu
     ];
 
 }]);
-metricDashboard.directive('hcChart', function () {
-    return {
-        restrict: 'E',
-        template: '<div></div>',
-        scope: {
-            canvasElement: '=',
-            data: '='
-        },
-        link: function (scope, element) {
-            var chart;
-
-            var defaultchartOptions = {
-                chart: {
-                    backgroundColor: 'transparent',
-                    animation: false
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                },
-                yAxis: {
-                    labels: {
-                        format: '{value:,.0f}'
-                    },
-                    title: {
-                        text: 'Patients',
-                        align: 'low'
-                    }
-                },
-                series: []
-            };
-
-            scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
-
-            loadChart();
-            
-
-            //scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
-            //    chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
-            //});
-
-            //scope.$watch('canvasElement.chartOptions', function (newValue, oldValue) {
-            //    if (newValue !== oldValue)
-            //    {
-            //        loadChart();
-            //    }
-            //}, true);
-
-            function loadChart() {
-                chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
-                
-
-                scope.data.forEach(function (d) {
-                    chart.addSeries(d);
-                });
-
-                chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
-            };
-
-            scope.canvasElement.destroyChart = function () {
-                chart.destroy();
-            };
-            scope.canvasElement.createChart = function () {
-                loadChart();
-            };
-
-        }
-    };
-})
 metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
@@ -776,6 +709,7 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
         else {
             if (factory.componentProperties.editType === 'new') {
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
+                console.log(factory.componentProperties.editObject instanceof SC.DataGroup);
             }
             else if (factory.componentProperties.editType === 'existing') {
                 var index = factory.componentProperties.editParent.map(function (obj) { return obj.GUID }).indexOf(factory.componentProperties.editObject.GUID);

@@ -5,6 +5,8 @@
     var DO = appManager.data.DO;
     var SC = appManager.state.SC;
 
+    $scope.myChips = [];
+
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
     $scope.toggleSideNav = function (navID) {
@@ -14,20 +16,22 @@
     $scope.gridsterOpts = {
         columns: 36,
         resizable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            handles: ['s','se', 'sw']
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         },
         draggable: {
-            start: function (event, $element, widget) {
-                widget.destroyChart();
-            },
-            stop: function (event, $element, widget) {
-                widget.createChart();
-            }
+            handle: '.test-drag'
+            //start: function (event, $element, widget) {
+            //    widget.destroyChart();
+            //},
+            //stop: function (event, $element, widget) {
+            //    widget.createChart();
+            //}
         }
     };
    

@@ -1,6 +1,6 @@
-﻿<md-chips ng-model="myChips" md-max-chips="{{drillDown.length}}">
+﻿<md-chips ng-model="myChips" md-max-chips="{{data.drillDown.length}}">
     <md-chip-template>
-        <em>{{drillDown[$index]}}: </em>
+        <em>{{data.drillDown[$index]}}: </em>
         <strong>{{$chip}}</strong>
     </md-chip-template>
 </md-chips>
