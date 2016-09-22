@@ -11,8 +11,8 @@
     $scope.componentProperties = componentViewFactory.componentProperties;
 
     //REMOVE BEFORE FLIGHT
-    //API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
-    API.dataSources().get().$promise.then(function (response) {
+    API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+    //API.dataSources().get().$promise.then(function (response) {
         DO.dataSource = response.result;
     }).catch(function (error) {
         logger.toast.error('Error Getting Data Sources', error);

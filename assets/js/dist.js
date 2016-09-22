@@ -114,9 +114,9 @@ applicationManager.factory('appManager', ['appStateManager', 'appLogger', 'appDa
 }]);
 applicationManager.factory('appDataManager', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
-    //var apiEndpoint = 'http://localhost:51880/api/';
+    var apiEndpoint = 'http://localhost:51880/api/';
     //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
-    var apiEndpoint = 'http://localhost:3000/';
+    //var apiEndpoint = 'http://localhost:3000/';
 
     //    DATA OBJECT
     //

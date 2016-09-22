@@ -357,8 +357,8 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
 
     if ($scope.componentProperties.editObject.source.type === 'T') {
         //REMOVE BEFORE FLIGHT
-        //API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
-        API.tableSchema().get().$promise.then(function (response) {
+        API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+        //API.tableSchema().get().$promise.then(function (response) {
             $scope.DO.tableSchema = response.result;
         }).catch(function (error) {
             logger.toast.error('Error Getting Table Schema', error);
@@ -483,8 +483,8 @@ metricDashboard.controller('DataSource', ['$scope', 'appManager', 'componentView
     $scope.componentProperties = componentViewFactory.componentProperties;
 
     //REMOVE BEFORE FLIGHT
-    //API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
-    API.dataSources().get().$promise.then(function (response) {
+    API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+    //API.dataSources().get().$promise.then(function (response) {
         DO.dataSource = response.result;
     }).catch(function (error) {
         logger.toast.error('Error Getting Data Sources', error);

@@ -11,8 +11,8 @@
 
     if ($scope.componentProperties.editObject.source.type === 'T') {
         //REMOVE BEFORE FLIGHT
-        //API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
-        API.tableSchema().get().$promise.then(function (response) {
+        API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+        //API.tableSchema().get().$promise.then(function (response) {
             $scope.DO.tableSchema = response.result;
         }).catch(function (error) {
             logger.toast.error('Error Getting Table Schema', error);
