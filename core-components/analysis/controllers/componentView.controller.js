@@ -3,6 +3,7 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     var SO = appManager.state.SO;
     var logger = appManager.logger;
+    var API = appManager.data.API;
     $scope.SF = appManager.state.SF;
     $scope.DSO = appManager.state.DSO;
     $scope.DO = appManager.data.DO;
@@ -50,8 +51,20 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
             targetEvent: ev,
             clickOutsideToClose: true,
             controller: 'DataSource'
-        });
+        }).then(function () { getTableSchema(); }, function () {  });
     };
+
+    function getTableSchema() {
+        if ($scope.componentProperties.editObject.source.type === 'T') {
+            //REMOVE BEFORE FLIGHT
+            API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+                //API.tableSchema().get().$promise.then(function (response) {
+                $scope.DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+    }
 
 
 }]);

@@ -23,7 +23,6 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
             //}
         },
         draggable: {
-            handle: '.my-class'
             //start: function (event, $element, widget) {
             //    widget.destroyChart();
             //},
@@ -144,6 +143,7 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     var SO = appManager.state.SO;
     var logger = appManager.logger;
+    var API = appManager.data.API;
     $scope.SF = appManager.state.SF;
     $scope.DSO = appManager.state.DSO;
     $scope.DO = appManager.data.DO;
@@ -191,8 +191,20 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
             targetEvent: ev,
             clickOutsideToClose: true,
             controller: 'DataSource'
-        });
+        }).then(function () { getTableSchema(); }, function () {  });
     };
+
+    function getTableSchema() {
+        if ($scope.componentProperties.editObject.source.type === 'T') {
+            //REMOVE BEFORE FLIGHT
+            API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+                //API.tableSchema().get().$promise.then(function (response) {
+                $scope.DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+    }
 
 
 }]);
@@ -356,23 +368,14 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
 
-    if ($scope.componentProperties.editObject.source.type === 'T') {
-        //REMOVE BEFORE FLIGHT
-        API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
-        //API.tableSchema().get().$promise.then(function (response) {
-            $scope.DO.tableSchema = response.result;
-        }).catch(function (error) {
-            logger.toast.error('Error Getting Table Schema', error);
-        });
-    }
 
     $scope.selected = [];
     $scope.selectionKey = { value: null };
     $scope.saveMode = false;
     $scope.saveIndex = null;
 
-    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (nv) {
-        $scope.selected = nv.map(function (column) {
+    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (newValue) {
+        $scope.selected = newValue.map(function (column) {
             return column.COLUMN_NAME;
         });
     }, true);
@@ -402,6 +405,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
             entry.selected = false;
         });
     };
+
 
     //UPDATE
     $scope.updateSelection = function () {
@@ -791,7 +795,13 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
                 //push new DO.dataGroup registry
                 if (factory.componentProperties.editObject instanceof SC.DataGroup) {
-                    DO.dataGroups.push({ GUID: factory.componentProperties.editObject.GUID, result: null })
+                    var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
+
+                    DO.dataGroups.push(newDataObject);
+                    //GET DISTINCT FOR SELECTION LEVELS
+                    factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
+                        newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                    });
                 }
             }
             else if (factory.componentProperties.editType === 'existing') {
@@ -812,7 +822,15 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
             controller: 'DataSelection'
         });
     };
-
+    function getColumnDistinct(entityCode , tableName, columnName) {
+        //REMOVE BEFORE FLIGHT
+        API.columnSchema().save(logger.logPostObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
+            //API.tableSchema().get().$promise.then(function (response) {
+            return response.result;
+        }).catch(function (error) {
+            logger.toast.error('Error Getting Table Schema', error);
+        });
+    }
 
     return factory;
 }]);

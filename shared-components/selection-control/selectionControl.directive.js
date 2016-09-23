@@ -10,12 +10,15 @@
 
     function link(scope, elem, attr) {
 
-        if (scope.element.dataGroup) {
-            scope.drillDown = scope.element.dataGroup.drillDown;
-        }
-        else {
-            scope.drillDown = { level: [], selection: [] };
-        }    
+        scope.$watch('element.dataGroup', function () {
+            if (scope.element.dataGroup) {
+                scope.drillDown = scope.element.dataGroup.drillDown;
+            }
+            else {
+                scope.drillDown = { level: [], selection: [] };
+            }
+        }, true);
+
 
         scope.autoList = ["one", "two", "three", "four"];
 
@@ -26,8 +29,8 @@
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
 
-            return function filterFn(vegetable) {
-                return (vegetable.indexOf(lowercaseQuery) === 0);
+            return function filterFn(value) {
+                return (value.indexOf(lowercaseQuery) === 0);
             };
 
         }

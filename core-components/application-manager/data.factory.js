@@ -38,13 +38,7 @@
     dataObject.canvasElements = [];
     // {element: , ChartDOM: }
 
-    dataObject.dataGroups = [{ //temp testing values
-        GUID: 0000, results: [], drillDown: [
-            { level: "ACV", disinct: ["RHV-C", "RHC-A", "RHC-P"] },
-            { level: "AGE", disinct: [0025, 0034, 0089, 1006] },
-            { level: "CHUP", disinct: ["BBGA", "BAFF", "DFFS", "BCBB"] },
-        ]
-    }];
+    dataObject.dataGroups = [];
     // {GUID: , result: }
 
 

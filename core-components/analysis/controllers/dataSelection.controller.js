@@ -9,23 +9,14 @@
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
 
-    if ($scope.componentProperties.editObject.source.type === 'T') {
-        //REMOVE BEFORE FLIGHT
-        API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
-        //API.tableSchema().get().$promise.then(function (response) {
-            $scope.DO.tableSchema = response.result;
-        }).catch(function (error) {
-            logger.toast.error('Error Getting Table Schema', error);
-        });
-    }
 
     $scope.selected = [];
     $scope.selectionKey = { value: null };
     $scope.saveMode = false;
     $scope.saveIndex = null;
 
-    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (nv) {
-        $scope.selected = nv.map(function (column) {
+    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (newValue) {
+        $scope.selected = newValue.map(function (column) {
             return column.COLUMN_NAME;
         });
     }, true);
@@ -55,6 +46,7 @@
             entry.selected = false;
         });
     };
+
 
     //UPDATE
     $scope.updateSelection = function () {

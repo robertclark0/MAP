@@ -152,13 +152,7 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     dataObject.canvasElements = [];
     // {element: , ChartDOM: }
 
-    dataObject.dataGroups = [{ //temp testing values
-        GUID: 0000, results: [], drillDown: [
-            { level: "ACV", disinct: ["RHV-C", "RHC-A", "RHC-P"] },
-            { level: "AGE", disinct: [0025, 0034, 0089, 1006] },
-            { level: "CHUP", disinct: ["BBGA", "BAFF", "DFFS", "BCBB"] },
-        ]
-    }];
+    dataObject.dataGroups = [];
     // {GUID: , result: }
 
 
@@ -280,12 +274,15 @@ mapApp.directive('selectionControl', [function () {
 
     function link(scope, elem, attr) {
 
-        if (scope.element.dataGroup) {
-            scope.drillDown = scope.element.dataGroup.drillDown;
-        }
-        else {
-            scope.drillDown = { level: [], selection: [] };
-        }    
+        scope.$watch('element.dataGroup', function () {
+            if (scope.element.dataGroup) {
+                scope.drillDown = scope.element.dataGroup.drillDown;
+            }
+            else {
+                scope.drillDown = { level: [], selection: [] };
+            }
+        }, true);
+
 
         scope.autoList = ["one", "two", "three", "four"];
 
@@ -296,8 +293,8 @@ mapApp.directive('selectionControl', [function () {
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
 
-            return function filterFn(vegetable) {
-                return (vegetable.indexOf(lowercaseQuery) === 0);
+            return function filterFn(value) {
+                return (value.indexOf(lowercaseQuery) === 0);
             };
 
         }

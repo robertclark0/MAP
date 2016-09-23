@@ -193,7 +193,16 @@
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
                 //push new DO.dataGroup registry
                 if (factory.componentProperties.editObject instanceof SC.DataGroup) {
-                    DO.dataGroups.push({ GUID: factory.componentProperties.editObject.GUID, result: null })
+                    var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
+
+                    DO.dataGroups.push(newDataObject);
+                    //GET DISTINCT FOR SELECTION LEVELS
+                    factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
+                        //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                        //THIS is actually not the rite place for this functionality
+                        //When the user selections a region, the next chip autocomplete needs to only show
+                        //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
+                    });
                 }
             }
             else if (factory.componentProperties.editType === 'existing') {
@@ -214,7 +223,16 @@
             controller: 'DataSelection'
         });
     };
-
+    // TO REVISE
+    //function getColumnDistinct(entityCode , tableName, columnName) {
+    //    //REMOVE BEFORE FLIGHT
+    //    API.columnSchema().save(logger.logPostObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
+    //        //API.tableSchema().get().$promise.then(function (response) {
+    //        return response.result;
+    //    }).catch(function (error) {
+    //        logger.toast.error('Error Getting Table Schema', error);
+    //    });
+    //}
 
     return factory;
 }]);
