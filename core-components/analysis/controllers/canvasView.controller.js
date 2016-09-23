@@ -22,6 +22,7 @@
             //}
         },
         draggable: {
+            handle: '.my-class'
             //start: function (event, $element, widget) {
             //    widget.destroyChart();
             //},

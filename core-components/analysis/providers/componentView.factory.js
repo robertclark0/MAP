@@ -3,6 +3,10 @@
     var SF = appManager.state.SF;
     var DO = appManager.data.DO;
     var factory = {};
+    var API = appManager.data.API;
+    var logger = appManager.logger;
+    var SO = appManager.state.SO;
+
 
 
     // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ----
@@ -163,6 +167,17 @@
         else {
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
         }
+
+        //LOAD DATA SOURCES IF DATAGROUP
+        if (editConfig.componentType === 'dataGroup') {
+            //REMOVE BEFORE FLIGHT
+            API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+                //API.dataSources().get().$promise.then(function (response) {
+                DO.dataSource = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Data Sources', error);
+            });
+        }
     }
     function saveEdit() {
         //console.log(factory.componentProperties);
@@ -176,7 +191,7 @@
         else {
             if (factory.componentProperties.editType === 'new') {
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
-                //psuh new DO.dataGroup registry
+                //push new DO.dataGroup registry
                 if (factory.componentProperties.editObject instanceof SC.DataGroup) {
                     DO.dataGroups.push({ GUID: factory.componentProperties.editObject.GUID, result: null })
                 }
