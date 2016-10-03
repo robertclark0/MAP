@@ -44,7 +44,10 @@
     $scope.productLineSelected = function (product) {
         logger.clientLog("productLineSelected", product);
         if (product.Active === 1) {
-            if (product.HasPII === 0) {
+            if (product.Restricted === 0) {
+                setProductLine(product);
+            }
+            else if (product.Restricted === 1 && product.RestrictionLevel === 2) {
                 setProductLine(product);
             }
             else {
