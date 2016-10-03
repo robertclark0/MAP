@@ -1,4 +1,4 @@
-﻿metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+﻿analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
     var DO = appManager.data.DO;

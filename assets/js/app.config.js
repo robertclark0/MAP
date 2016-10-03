@@ -33,35 +33,35 @@
 
 
         //  Module
-        //  Report Viewer
+        //  Reporting
         .state("reporting", {
             url: "/reporting",
             templateUrl: "core-components/reporting/templates/view.html",
-            controller: "ReportViewer",
+            controller: "Reporting",
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "reportViewer");
+                    appManager.logger.clientLog("route", "reporting");
                 }],
                 module: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load('assets/js/dist.reportViewer.module.js');
+                    return $ocLazyLoad.load('assets/js/dist.reporting.module.js');
                 }]
             }
         })
 
 
         //  Module
-        //  Metric Dashboard
+        //  Analysis
         .state("analysis", {
             url: "/analysis",
             templateUrl: "core-components/analysis/templates/view.html",
-            css: "assets/css/dist.metricDashboard.css",
-            controller: 'MetricDashboard',
+            css: "assets/css/dist.analysis.css",
+            controller: 'Analysis',
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "metricDashboard");
+                    appManager.logger.clientLog("route", "analysis");
                 }],
                 module: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load('assets/js/dist.metricDashboard.module.js');
+                    return $ocLazyLoad.load('assets/js/dist.analysis.module.js');
                 }]
             }
         })
@@ -72,10 +72,10 @@
             },
             templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
             controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
-            css: "assets/css/dist.metricDashboard.css",
+            css: "assets/css/dist.analysis.css",
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "metricDashboard");
+                    appManager.logger.clientLog("route", "analysis");
                 }],
                 waitOnParent: ['module', function () { }]
             }

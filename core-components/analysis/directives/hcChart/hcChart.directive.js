@@ -1,4 +1,4 @@
-﻿metricDashboard.directive('hcChart', function () {
+﻿analysis.directive('hcChart', function () {
     return {
         restrict: 'E',
         template: '<div></div>',

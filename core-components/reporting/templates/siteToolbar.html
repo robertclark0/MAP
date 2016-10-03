@@ -14,7 +14,7 @@
                     <md-menu-item ng-click="null" style="cursor: pointer">
                         <span class="md-toolbar-item md-breadcrumb md-headline">Reporting</span>
                     </md-menu-item>
-                    <md-menu-item ng-click="newState('analysis.view', { viewName: 'component'});" style="cursor: pointer">
+                    <md-menu-item ng-show="showAnalysis()" ng-click="newState('analysis.view', { viewName: 'component'});" style="cursor: pointer">
                         <span class="md-toolbar-item md-breadcrumb md-headline">Analysis</span>
                     </md-menu-item>
                 </md-menu-content>

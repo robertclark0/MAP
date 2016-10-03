@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
+﻿analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -19,7 +19,14 @@
         }
     };
 
+    $scope.showAnalysis = function () {
+        var modules = DSO.modules.map(function (obj) { return obj.Module });
 
+        if (modules.indexOf('analysis') > -1) {
+            return true;
+        }
+        return false;
+    };
 
     $scope.sendTestQuery = function () {
 

@@ -10,7 +10,7 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="gridsterOpts">
                     <ul>
-                        <li gridster-item="element" ng-repeat="element in currentCanvas.canvasElements" style="background-color: #ffffff;">
+                        <li gridster-item="element" ng-repeat="element in current.canvas.canvasElements" style="background-color: #ffffff;">
                             <directive-generator name="{{$parent.element.type}}" attributes="{ element: '$parent.element'}"></directive-generator>
                             <!--<hc-chart canvas-element="element" data="chartData"></hc-chart>-->
                         </li>
@@ -25,20 +25,20 @@
                 <div style="height:41px; border-top: 1px solid rgb(225,225,225);">
                     <md-menu-bar class="map-gray-1">
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Canvas: <strong>{{currentCanvas.name}}</strong></button>
+                            <button ng-click="$mdOpenMenu()">Canvas: <strong>{{current.canvas.name}}</strong></button>
                             <md-menu-content>
                                 <md-menu-item ng-repeat="canvas in canvases">
-                                    <md-button ng-click="changeCanvas(canvas)">
+                                    <md-button ng-click="current.canvas = canvas; changeCurrent(0);">
                                         {{canvas.name}}
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Group: <strong>{{currentDataGroup.name}}</strong></button>
+                            <button ng-click="$mdOpenMenu()">Data Group: <strong>{{current.dataGroup.name}}</strong></button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="dataGroup in currentCanvas.dataGroups">
-                                    <md-button ng-click="changeDataGroup(dataGroup)">
+                                <md-menu-item ng-repeat="dataGroup in current.canvas.dataGroups">
+                                    <md-button ng-click="current.dataGroup = dataGroup; changeCurrent(1);">
                                         {{dataGroup.name}}
                                     </md-button>
                                 </md-menu-item>
@@ -52,10 +52,10 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="currentSelectionLevel"><strong>Level {{currentSelectionIndex + 1}} ({{currentDataGroup.drillDown.level[currentSelectionIndex]}})</strong></span></button>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} ({{current.dataGroup.drillDown.level[current.selectionIndex]}})</strong></span></button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="level in currentDataGroup.drillDown.level track by $index">
-                                    <md-button ng-click="changeSelectionLevel(currentDataGroup.selections[$index], $index)">
+                                <md-menu-item ng-repeat="level in current.dataGroup.drillDown.level track by $index">
+                                    <md-button ng-click="current.selectionLevel = current.dataGroup.selections[$index]; current.selectionIndex = $index; changeCurrent(2)">
                                         Level {{$index + 1}} ({{level}})
                                     </md-button>
                                 </md-menu-item>
@@ -69,10 +69,10 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Canvas Element: <span ng-show="true"><strong>{{currentCanvasElement.name}}</strong></span></button>
+                            <button ng-click="$mdOpenMenu()">Canvas Element: <span ng-show="true"><strong>{{current.canvasElement.name}}</strong></span></button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="element in currentCanvas.canvasElements">
-                                    <md-button ng-click="changeCanvasElement(element)">
+                                <md-menu-item ng-repeat="element in current.canvas.canvasElements">
+                                    <md-button ng-click="current.canvasElement = element">
                                         {{element.name}}
                                     </md-button>
                                 </md-menu-item>

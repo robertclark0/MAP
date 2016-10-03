@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+﻿analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -82,39 +82,39 @@
     //MENU FUNCTIONS
     $scope.addCanvasElement = function (name, type) {
 
-       $scope.currentCanvas.canvasElements.push(new SC.CanvasElement(name, type));
+       $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
 
     };
 
 
     //CURRENT OBJECT CONTROLS
-    $scope.currentCanvas = DSO.canvases[0];
-    $scope.changeCanvas = function (canvas) {
-        $scope.currentCanvas = canvas;
-        $scope.changeDataGroup(canvas.dataGroups[0]);
-        $scope.changeCanvasElement(canvas.canvasElements[0]);
-        
+    $scope.current = {
+        canvas: DSO.canvases[0],
+        dataGroup: null,
+        selectionLevel: null,
+        selectionIndex: null,
+        canvasElement: null
     };
-    $scope.currentDataGroup = $scope.currentCanvas.dataGroups[0];
-    $scope.changeDataGroup = function (dataGroup) {
-        $scope.currentDataGroup = dataGroup;
-        if (dataGroup) {
-            $scope.changeSelectionLevel(dataGroup.selections[0], 0);
+    $scope.changeCurrent = function(enterIndex)
+    {
+        if(enterIndex < 1)
+        {
+            $scope.current.dataGroup = null;
+            if($scope.current.canvas.dataGroups[0]){ $scope.current.dataGroup = $scope.current.canvas.dataGroups[0]; }
+
+            $scope.current.canvasElement = null;
+            if($scope.current.canvas.canvasElements[0]){ $scope.current.canvasElement = $scope.current.canvas.canvasElements[0]; }
         }
-        else {
-            $scope.currentSelectionLevel = undefined;
-        }
-    }
-    $scope.currentSelectionLevel = $scope.currentDataGroup.selections[0];
-    $scope.currentSelectionIndex = 0;
-    $scope.changeSelectionLevel = function (selection, index) {
-        $scope.currentSelectionLevel = selection;
-        $scope.currentSelectionIndex = index;
-    }
-    $scope.currentCanvasElement = $scope.currentCanvas.canvasElements[0];
-    $scope.changeCanvasElement = function (canvasElement) {
-        $scope.currentCanvasElement = canvasElement;
+        if(enterIndex < 2)
+        {
+            $scope.current.selectionLevel = null;
+            if ($scope.current.dataGroup) {
+                $scope.current.selectionLevel = $scope.current.dataGroup.selections[0];
+                $scope.current.selectionIndex = 0;
+            }
+        }			
     };
+    $scope.changeCurrent(0);
 
     //DATA CONTROLL SIDE NAVE FUNCTIONS
     $scope.moveDataSelectionUp = function (index) {

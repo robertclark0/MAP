@@ -1,4 +1,5 @@
-﻿reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', function ($scope, appManager, $state, $mdDialog) {
+var reporting = angular.module('reporting', []);
+reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', function ($scope, appManager, $state, $mdDialog) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;

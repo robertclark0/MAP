@@ -10,8 +10,9 @@
             role: 0 //feature restiction based on role. May need to be expanded into more detailed security object.
         };
     };
-    stateClasses.ProductLine = function (name) {
+    stateClasses.ProductLine = function (name, modules) {
         this.name = name;
+        this.modules = modules;
         this.dashboard = {
             //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between reporting and analysis
             index: {
@@ -167,7 +168,7 @@
     };
     stateFunctions.setProduct = function (product, state) {
         session.StateObject.productLine.current = product.Code;
-        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name) : session.StateObject[product.Code];
+        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name, product.Modules) : session.StateObject[product.Code];
 
         session.DynamicStateObject = session.StateObject[product.Code];
         stateScope.DSO = session.DynamicStateObject;

@@ -1,1 +1,1 @@
-﻿var metricDashboard = angular.module('metricDashboard', ['gridster']);
+﻿var analysis = angular.module('analysis', ['gridster']);

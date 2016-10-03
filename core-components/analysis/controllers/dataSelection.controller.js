@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+﻿analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----      
     var API = appManager.data.API;

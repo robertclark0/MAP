@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+﻿analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;

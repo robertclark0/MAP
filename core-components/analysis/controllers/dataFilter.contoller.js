@@ -1,4 +1,4 @@
-﻿metricDashboard.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+﻿analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     //$scope.SF = appManager.state.SF;

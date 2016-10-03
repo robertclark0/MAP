@@ -46,35 +46,35 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
 
 
         //  Module
-        //  Report Viewer
+        //  Reporting
         .state("reporting", {
             url: "/reporting",
             templateUrl: "core-components/reporting/templates/view.html",
-            controller: "ReportViewer",
+            controller: "Reporting",
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "reportViewer");
+                    appManager.logger.clientLog("route", "reporting");
                 }],
                 module: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load('assets/js/dist.reportViewer.module.js');
+                    return $ocLazyLoad.load('assets/js/dist.reporting.module.js');
                 }]
             }
         })
 
 
         //  Module
-        //  Metric Dashboard
+        //  Analysis
         .state("analysis", {
             url: "/analysis",
             templateUrl: "core-components/analysis/templates/view.html",
-            css: "assets/css/dist.metricDashboard.css",
-            controller: 'MetricDashboard',
+            css: "assets/css/dist.analysis.css",
+            controller: 'Analysis',
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "metricDashboard");
+                    appManager.logger.clientLog("route", "analysis");
                 }],
                 module: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load('assets/js/dist.metricDashboard.module.js');
+                    return $ocLazyLoad.load('assets/js/dist.analysis.module.js');
                 }]
             }
         })
@@ -85,10 +85,10 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
             },
             templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
             controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
-            css: "assets/css/dist.metricDashboard.css",
+            css: "assets/css/dist.analysis.css",
             resolve: {
                 log: ['appManager', function (appManager) {
-                    appManager.logger.clientLog("route", "metricDashboard");
+                    appManager.logger.clientLog("route", "analysis");
                 }],
                 waitOnParent: ['module', function () { }]
             }
@@ -312,8 +312,9 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             role: 0 //feature restiction based on role. May need to be expanded into more detailed security object.
         };
     };
-    stateClasses.ProductLine = function (name) {
+    stateClasses.ProductLine = function (name, modules) {
         this.name = name;
+        this.modules = modules;
         this.dashboard = {
             //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between reporting and analysis
             index: {
@@ -469,7 +470,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     };
     stateFunctions.setProduct = function (product, state) {
         session.StateObject.productLine.current = product.Code;
-        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name) : session.StateObject[product.Code];
+        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name, product.Modules) : session.StateObject[product.Code];
 
         session.DynamicStateObject = session.StateObject[product.Code];
         stateScope.DSO = session.DynamicStateObject;

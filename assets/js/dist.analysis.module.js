@@ -1,5 +1,5 @@
-var metricDashboard = angular.module('metricDashboard', ['gridster']);
-metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+var analysis = angular.module('analysis', ['gridster']);
+analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -83,39 +83,39 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     //MENU FUNCTIONS
     $scope.addCanvasElement = function (name, type) {
 
-       $scope.currentCanvas.canvasElements.push(new SC.CanvasElement(name, type));
+       $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
 
     };
 
 
     //CURRENT OBJECT CONTROLS
-    $scope.currentCanvas = DSO.canvases[0];
-    $scope.changeCanvas = function (canvas) {
-        $scope.currentCanvas = canvas;
-        $scope.changeDataGroup(canvas.dataGroups[0]);
-        $scope.changeCanvasElement(canvas.canvasElements[0]);
-        
+    $scope.current = {
+        canvas: DSO.canvases[0],
+        dataGroup: null,
+        selectionLevel: null,
+        selectionIndex: null,
+        canvasElement: null
     };
-    $scope.currentDataGroup = $scope.currentCanvas.dataGroups[0];
-    $scope.changeDataGroup = function (dataGroup) {
-        $scope.currentDataGroup = dataGroup;
-        if (dataGroup) {
-            $scope.changeSelectionLevel(dataGroup.selections[0], 0);
+    $scope.changeCurrent = function(enterIndex)
+    {
+        if(enterIndex < 1)
+        {
+            $scope.current.dataGroup = null;
+            if($scope.current.canvas.dataGroups[0]){ $scope.current.dataGroup = $scope.current.canvas.dataGroups[0]; }
+
+            $scope.current.canvasElement = null;
+            if($scope.current.canvas.canvasElements[0]){ $scope.current.canvasElement = $scope.current.canvas.canvasElements[0]; }
         }
-        else {
-            $scope.currentSelectionLevel = undefined;
-        }
-    }
-    $scope.currentSelectionLevel = $scope.currentDataGroup.selections[0];
-    $scope.currentSelectionIndex = 0;
-    $scope.changeSelectionLevel = function (selection, index) {
-        $scope.currentSelectionLevel = selection;
-        $scope.currentSelectionIndex = index;
-    }
-    $scope.currentCanvasElement = $scope.currentCanvas.canvasElements[0];
-    $scope.changeCanvasElement = function (canvasElement) {
-        $scope.currentCanvasElement = canvasElement;
+        if(enterIndex < 2)
+        {
+            $scope.current.selectionLevel = null;
+            if ($scope.current.dataGroup) {
+                $scope.current.selectionLevel = $scope.current.dataGroup.selections[0];
+                $scope.current.selectionIndex = 0;
+            }
+        }			
     };
+    $scope.changeCurrent(0);
 
     //DATA CONTROLL SIDE NAVE FUNCTIONS
     $scope.moveDataSelectionUp = function (index) {
@@ -138,7 +138,7 @@ metricDashboard.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', 
     };
 
 }]);
-metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     var SO = appManager.state.SO;
@@ -208,7 +208,7 @@ metricDashboard.controller('ComponentView', ['$scope', 'appManager', 'componentV
 
 
 }]);
-metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
+analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -229,7 +229,14 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
         }
     };
 
+    $scope.showAnalysis = function () {
+        var modules = DSO.modules.map(function (obj) { return obj.Module });
 
+        if (modules.indexOf('analysis') > -1) {
+            return true;
+        }
+        return false;
+    };
 
     $scope.sendTestQuery = function () {
 
@@ -345,7 +352,7 @@ metricDashboard.controller('MetricDashboard', ['$scope', 'appManager', '$state',
     };
 
 }]);
-metricDashboard.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     //$scope.SF = appManager.state.SF;
@@ -357,7 +364,7 @@ metricDashboard.controller('DataFilter', ['$scope', 'appManager', 'componentView
 
 
 }]);
-metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----      
     var API = appManager.data.API;
@@ -475,7 +482,7 @@ metricDashboard.controller('DataSelection', ['$scope', 'appManager', 'componentV
     };
 
 }]);
-metricDashboard.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
+analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
     var SO = appManager.state.SO;
@@ -500,7 +507,7 @@ metricDashboard.controller('DataSource', ['$scope', 'appManager', 'componentView
     }
 
 }]);
-metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -529,7 +536,7 @@ metricDashboard.controller('DataView', ['$scope', 'appManager', '$mdSidenav', fu
     ];
 
 }]);
-metricDashboard.directive('hcChart', function () {
+analysis.directive('hcChart', function () {
     return {
         restrict: 'E',
         template: '<div></div>',
@@ -600,7 +607,7 @@ metricDashboard.directive('hcChart', function () {
         }
     };
 })
-metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
     var DO = appManager.data.DO;
@@ -800,7 +807,10 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
                     DO.dataGroups.push(newDataObject);
                     //GET DISTINCT FOR SELECTION LEVELS
                     factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
-                        newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                        //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                        //THIS is actually not the rite place for this functionality
+                        //When the user selections a region, the next chip autocomplete needs to only show
+                        //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
                     });
                 }
             }
@@ -822,15 +832,16 @@ metricDashboard.factory('componentViewFactory', ['appManager', '$mdDialog', func
             controller: 'DataSelection'
         });
     };
-    function getColumnDistinct(entityCode , tableName, columnName) {
-        //REMOVE BEFORE FLIGHT
-        API.columnSchema().save(logger.logPostObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
-            //API.tableSchema().get().$promise.then(function (response) {
-            return response.result;
-        }).catch(function (error) {
-            logger.toast.error('Error Getting Table Schema', error);
-        });
-    }
+    // TO REVISE
+    //function getColumnDistinct(entityCode , tableName, columnName) {
+    //    //REMOVE BEFORE FLIGHT
+    //    API.columnSchema().save(logger.logPostObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
+    //        //API.tableSchema().get().$promise.then(function (response) {
+    //        return response.result;
+    //    }).catch(function (error) {
+    //        logger.toast.error('Error Getting Table Schema', error);
+    //    });
+    //}
 
     return factory;
 }]);

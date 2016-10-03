@@ -81,42 +81,42 @@ gulp.task('platformHome.module.css', function () {
 
 //  Module
 //  Analysis
-gulp.task('metricDashboard.module.js', function () {
+gulp.task('analysis.module.js', function () {
     return gulp.src([
         'core-components/analysis/**/*.js',
     ])
       .pipe(order([
           '**/module.js'
       ]))
-      .pipe(concat('dist.metricDashboard.module.js'))
+      .pipe(concat('dist.analysis.module.js'))
       .pipe(gulp.dest('assets/js'));
 });
-gulp.task('metricDashboard.module.css', function () {
+gulp.task('analysis.module.css', function () {
     return gulp.src([
         'core-components/analysis/**/*.css',
     ])
-      .pipe(concat('dist.metricDashboard.css'))
+      .pipe(concat('dist.analysis.css'))
       .pipe(gulp.dest('assets/css'));
 });
 
 
 //  Module
 //  Reporting
-gulp.task('reportViewer.module.js', function () {
+gulp.task('reporting.module.js', function () {
     return gulp.src([
         'core-components/reporting/**/*.js',
     ])
       .pipe(order([
           '**/module.js'
       ]))
-      .pipe(concat('dist.reportViewer.module.js'))
+      .pipe(concat('dist.reporting.module.js'))
       .pipe(gulp.dest('assets/js'));
 });
-gulp.task('reportViewer.module.css', function () {
+gulp.task('reporting.module.css', function () {
     return gulp.src([
         'core-components/reporting/**/*.css',
     ])
-      .pipe(concat('dist.reportViewer.css'))
+      .pipe(concat('dist.reporting.css'))
       .pipe(gulp.dest('assets/css'));
 });
 
@@ -128,8 +128,8 @@ gulp.task('default', [
     'mapApp.module.css',
     'platformHome.module.js',
     'platformHome.module.css',
-    'metricDashboard.module.js',
-    'metricDashboard.module.css',
-    'reportViewer.module.js',
-    'reportViewer.module.css',
+    'analysis.module.js',
+    'analysis.module.css',
+    'reporting.module.js',
+    'reporting.module.css',
     ]);

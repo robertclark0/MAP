@@ -33,6 +33,7 @@
     //API.productLines().get().$promise.then(function (response) {
         DO.productLines = new DO.ProductLines(response.result);
         $scope.products = DO.productLines.value;
+
     }).catch(function (error) {
         logger.toast.error('Error Getting Product Lines', error);
         $scope.productLoadFailure = true;
@@ -81,7 +82,8 @@
     }
     function setProductLine(product) {
         SF.setProduct(product);
-        $state.go('analysis.view', { viewName: 'component'});
+        //$state.go('analysis.view', { viewName: 'component'});
+        $state.go('reporting');
     }
 
 

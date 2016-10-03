@@ -1,1 +1,1 @@
-﻿var reportViewer = angular.module('reportViewer', []);
+﻿var reporting = angular.module('reporting', []);
