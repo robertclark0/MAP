@@ -4,7 +4,7 @@
         scope: {
             element: '='
         },
-        templateUrl: 'shared-components/selection-control/selectionControl.html',
+        templateUrl: 'shared-components/canvas-elements/selection-control/selectionControl.html',
         link: link
     };
 

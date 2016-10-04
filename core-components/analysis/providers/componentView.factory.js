@@ -1,12 +1,12 @@
 ﻿analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
-    var DO = appManager.data.DO;
-    var factory = {};
+    var DO = appManager.data.DO;  
     var API = appManager.data.API;
     var logger = appManager.logger;
     var SO = appManager.state.SO;
-
+    var factory = {};
 
 
     // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ----

@@ -469,8 +469,11 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         return GUID;
     };
     stateFunctions.setProduct = function (product, state) {
+        console.log(product);
         session.StateObject.productLine.current = product.Code;
+        console.log(session.StateObject.productLine.current);
         session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name, product.Modules) : session.StateObject[product.Code];
+        console.log(session.StateObject[product.Code]);
 
         session.DynamicStateObject = session.StateObject[product.Code];
         stateScope.DSO = session.DynamicStateObject;

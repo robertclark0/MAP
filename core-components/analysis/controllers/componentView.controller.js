@@ -7,7 +7,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     $scope.SF = appManager.state.SF;
     $scope.DSO = appManager.state.DSO;
     $scope.DO = appManager.data.DO;
-
+    $scope.SO = appManager.state.SO;
 
 
     // ---- ---- ---- ---- Dashboard Components ---- ---- ---- ----

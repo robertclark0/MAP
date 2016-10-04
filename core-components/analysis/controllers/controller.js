@@ -7,6 +7,7 @@
     var logger = appManager.logger;
     var DO = appManager.data.DO;
 
+
     $scope.name = DSO.name;
     $scope.controlPanels = DSO.dashboard.controlPanels;
     $scope.canvases = DSO.canvases; //used in children scopes
