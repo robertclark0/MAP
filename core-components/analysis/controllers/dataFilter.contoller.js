@@ -4,9 +4,8 @@
     //$scope.SF = appManager.state.SF;
     //$scope.DSO = appManager.state.DSO;
     //$scope.DO = appManager.data.DO;
-    //var SO = appManager.state.SO;
+    var SF = appManager.state.SF;
 
-
-
+    $scope.filters = SF.availableDataFilters();
 
 }]);

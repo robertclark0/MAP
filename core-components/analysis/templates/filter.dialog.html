@@ -1,0 +1,35 @@
+﻿<md-dialog aria-label="List dialog" style="width: 1000px;">
+
+    <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">Data Filters</div>
+    </md-toolbar>
+    <md-dialog-content>
+
+        <section layout="row">
+            <div layout="column" flex="45" style="max-height: 450px;">
+                <md-subheader class="md-primary" style="background-color: transparent">Data Filters</md-subheader>
+                <md-select ng-model="funny" placeholder="Filter Type" class="md-no-underline" style="padding-left: 15px;">
+                    <md-option ng-repeat="filter in filters" ng-value="">{{filter.name}}</md-option>
+                </md-select>
+            </div>
+            <div flex></div>
+            <div layout="column" flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
+                <md-content class="inset">
+                    
+                </md-content>
+
+            </div>
+
+        </section>
+
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+
+        <span flex></span>
+        <md-button ng-click="closeDialog()">
+            Close
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

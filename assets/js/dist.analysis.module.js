@@ -194,6 +194,16 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }).then(function () { getTableSchema(); }, function () {  });
     };
 
+    $scope.showConfigureFilters = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'DataFilter'
+        });
+    };
+
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT
@@ -359,10 +369,9 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     //$scope.SF = appManager.state.SF;
     //$scope.DSO = appManager.state.DSO;
     //$scope.DO = appManager.data.DO;
-    //var SO = appManager.state.SO;
+    var SF = appManager.state.SF;
 
-
-
+    $scope.filters = SF.availableDataFilters();
 
 }]);
 analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {

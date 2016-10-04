@@ -54,6 +54,16 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }).then(function () { getTableSchema(); }, function () {  });
     };
 
+    $scope.showConfigureFilters = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'DataFilter'
+        });
+    };
+
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT

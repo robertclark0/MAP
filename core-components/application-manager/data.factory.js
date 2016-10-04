@@ -47,6 +47,15 @@
     //
     var dataFunctions = {};
 
+    dataFunctions.getDataGroup = function (GUID) {
+        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID });
+        var index = GUIDList.indexOf(GUID);
+        if (index > -1) {
+            return dataObject.dataGroups[index];
+        }
+        return null;
+    };
+
 
 
     //    API RESOURCE

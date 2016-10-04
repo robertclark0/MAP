@@ -50,6 +50,7 @@
         this.roleType = 'user'; //user, admin
         this.dataGroups = [];
         this.canvasElements = [];
+        this.availableFilters = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
@@ -92,13 +93,21 @@
         this.valueType = null; // string | int
     };
 
-    stateClasses.DataFilter = function (name) {
+    stateClasses.DataFilter = function (name, type, GUID) {
         this.name = name || 'New Data Filter';
-        this.GUID = GUID;
+        this.type = type,
+        this.GUID = null;
         this.visibleInReport = true;
-        //this.selectedValue = []; this should probably be extracted out to the data side.
+        this.selectedValue = []; //this should probably be extracted out to the data side.
 
-        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
+        var _constructor = function (obj) {
+            if (GUID) {
+                obj.GUID = GUID;
+            }
+            else {
+                obj.GUID = stateFunctions.generateGUID();
+            }
+        }(this);
     };
     stateClasses.CanvasElement = function (name, type) {
         this.name = name || 'New Canvas Element';
@@ -176,6 +185,14 @@
         if (state) {
             $state.go(state);
         }
+    };
+    stateFunctions.availableDataFilters = function () {
+        var availableFilters = [
+            { type: 'custom', name: 'Custom Filter', productLine: null },
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }
+        ];
+
+        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.productLine.current });
     };
 
 

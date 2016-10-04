@@ -199,6 +199,15 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     //
     var dataFunctions = {};
 
+    dataFunctions.getDataGroup = function (GUID) {
+        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID });
+        var index = GUIDList.indexOf(GUID);
+        if (index > -1) {
+            return dataObject.dataGroups[index];
+        }
+        return null;
+    };
+
 
 
     //    API RESOURCE
@@ -281,6 +290,7 @@ mapApp.directive('cohortSelection', [function () {
         scope: {
             element: '='
         },
+        replace: true,
         templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
         link: link
     };
@@ -367,6 +377,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.roleType = 'user'; //user, admin
         this.dataGroups = [];
         this.canvasElements = [];
+        this.availableFilters = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
@@ -409,13 +420,21 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.valueType = null; // string | int
     };
 
-    stateClasses.DataFilter = function (name) {
+    stateClasses.DataFilter = function (name, type, GUID) {
         this.name = name || 'New Data Filter';
-        this.GUID = GUID;
+        this.type = type,
+        this.GUID = null;
         this.visibleInReport = true;
-        //this.selectedValue = []; this should probably be extracted out to the data side.
+        this.selectedValue = []; //this should probably be extracted out to the data side.
 
-        var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
+        var _constructor = function (obj) {
+            if (GUID) {
+                obj.GUID = GUID;
+            }
+            else {
+                obj.GUID = stateFunctions.generateGUID();
+            }
+        }(this);
     };
     stateClasses.CanvasElement = function (name, type) {
         this.name = name || 'New Canvas Element';
@@ -493,6 +512,14 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         if (state) {
             $state.go(state);
         }
+    };
+    stateFunctions.availableDataFilters = function () {
+        var availableFilters = [
+            { type: 'custom', name: 'Custom Filter', productLine: null },
+            { type: 'cohort-selection', name: 'Cohort Selection', productLine: 'CHUP' }
+        ];
+
+        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.productLine.current });
     };
 
 
