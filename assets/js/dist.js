@@ -112,6 +112,44 @@ applicationManager.factory('appManager', ['appStateManager', 'appLogger', 'appDa
     };
 
 }]);
+mapApp.directive('selectionControl', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            element: '='
+        },
+        templateUrl: 'shared-components/canvas-elements/selection-control/selectionControl.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        scope.$watch('element.dataGroup', function () {
+            if (scope.element.dataGroup) {
+                scope.drillDown = scope.element.dataGroup.drillDown;
+            }
+            else {
+                scope.drillDown = { level: [], selection: [] };
+            }
+        }, true);
+
+
+        scope.autoList = ["one", "two", "three", "four"];
+
+        scope.querySearch = function(query) {
+            var results = query ? scope.autoList.filter(createFilterFor(query)) : [];
+            return results;
+        }
+        function createFilterFor(query) {
+            var lowercaseQuery = angular.lowercase(query);
+
+            return function filterFn(value) {
+                return (value.indexOf(lowercaseQuery) === 0);
+            };
+
+        }
+    };
+}]);
 applicationManager.factory('appDataManager', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
@@ -237,6 +275,21 @@ mapApp.directive('directiveGenerator', ['$compile', function ($compile) {
 //        console.log(exception, cause);
 //    }
 //})
+mapApp.directive('cohortSelection', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            element: '='
+        },
+        templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+
+    };
+}]);
 applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appDataManager', function ($mdToast, appStateManager, appDataManager) {
     var SO = appStateManager.SO;    var DO = appDataManager.DO;    var clientLog = [];    var logger = {};    logger.toast = {
         success: function (message) {
@@ -261,44 +314,6 @@ applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appData
             post: object,            log: logger.serverLog()
         };
     };    return logger;
-}]);
-mapApp.directive('selectionControl', [function () {
-    return {
-        restrict: 'E',
-        scope: {
-            element: '='
-        },
-        templateUrl: 'shared-components/selection-control/selectionControl.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-        scope.$watch('element.dataGroup', function () {
-            if (scope.element.dataGroup) {
-                scope.drillDown = scope.element.dataGroup.drillDown;
-            }
-            else {
-                scope.drillDown = { level: [], selection: [] };
-            }
-        }, true);
-
-
-        scope.autoList = ["one", "two", "three", "four"];
-
-        scope.querySearch = function(query) {
-            var results = query ? scope.autoList.filter(createFilterFor(query)) : [];
-            return results;
-        }
-        function createFilterFor(query) {
-            var lowercaseQuery = angular.lowercase(query);
-
-            return function filterFn(value) {
-                return (value.indexOf(lowercaseQuery) === 0);
-            };
-
-        }
-    };
 }]);
 applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', '$state', function ($rootScope, $sessionStorage, $state) {
 
@@ -469,11 +484,8 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         return GUID;
     };
     stateFunctions.setProduct = function (product, state) {
-        console.log(product);
         session.StateObject.productLine.current = product.Code;
-        console.log(session.StateObject.productLine.current);
         session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name, product.Modules) : session.StateObject[product.Code];
-        console.log(session.StateObject[product.Code]);
 
         session.DynamicStateObject = session.StateObject[product.Code];
         stateScope.DSO = session.DynamicStateObject;

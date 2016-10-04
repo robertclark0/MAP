@@ -217,12 +217,8 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
     var logger = appManager.logger;
     var DO = appManager.data.DO;
 
-    $scope.currentProductLine = SO.productLine.current;
+
     $scope.name = DSO.name;
-
-    console.log($scope.name);
-    console.log($scope.currentProductLine);
-
     $scope.controlPanels = DSO.dashboard.controlPanels;
     $scope.canvases = DSO.canvases; //used in children scopes
 
@@ -613,7 +609,6 @@ analysis.directive('hcChart', function () {
     };
 })
 analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
-    console.log(JSON.stringify(appManager));
 
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
