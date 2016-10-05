@@ -7,5 +7,6 @@
     var SF = appManager.state.SF;
 
     $scope.filters = SF.availableDataFilters();
+    $scope.canvasFilters = SF.canvasDataFilters();
 
 }]);

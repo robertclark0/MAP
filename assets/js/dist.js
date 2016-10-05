@@ -516,10 +516,19 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
             { type: 'custom', name: 'Custom Filter', productLine: null },
-            { type: 'cohort-selection', name: 'Cohort Selection', productLine: 'CHUP' }
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }
         ];
-
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.productLine.current });
+    };
+    stateFunctions.canvasDataFilters = function () {
+        var rawFilterArray = [];
+        session.DynamicStateObject.canvases.forEach(function (canvas) {
+            canvas.availableFilters.forEach(function (filter) {
+                if (rawFilterArray.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
+                    rawFilterArray.push(filter);
+                }
+            });
+        });
     };
 
 

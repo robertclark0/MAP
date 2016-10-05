@@ -818,7 +818,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
                     //GET DISTINCT FOR SELECTION LEVELS
                     factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
                         //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
-                        //THIS is actually not the rite place for this functionality
+                        //THIS is actually not the right place for this functionality
                         //When the user selections a region, the next chip autocomplete needs to only show
                         //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
                     });
