@@ -8,9 +8,26 @@
         <section layout="row">
             <div layout="column" flex="45" style="max-height: 450px;">
                 <md-subheader class="md-primary" style="background-color: transparent">Available Filters</md-subheader>
-                <md-select ng-model="funny" placeholder="Filter Type" class="md-no-underline" style="padding-left: 15px;">
-                    <md-option ng-repeat="filter in filters" ng-value="">{{filter.name}}</md-option>
+                <md-select md-on-close="checkSelection()" ng-model="selectedModel" placeholder="Filter Type" class="md-no-underline" style="padding-left: 15px;">
+                    <md-header>New</md-header>
+                    <md-option ng-repeat="filter in filters" ng-value="filter">{{filter.name}}</md-option>
+                    <md-header>Existing</md-header>
+                    <!--{{{{filterName(filter)}}}-->
                 </md-select>
+                <md-list>
+                    <md-list-item>
+                        <md-select ng-show="selectedModel.type === 'custom'" ng-model="funny" style="padding-left: 15px;">
+                            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
+                        </md-select>
+                    </md-list-item>
+                </md-list>
+                <md-list-item>
+                    <md-input-container><input type="text" /></md-input-container>
+                </md-list-item>
+                
+                <div layout="column">
+                    <md-button ng-disabled="disabled" ng-click="updateSelection()">Create Filter</md-button>
+                </div>
             </div>
             <div flex></div>
             <div layout="column" flex="50">
