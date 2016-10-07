@@ -4,36 +4,77 @@
         <div class="md-toolbar-tools">Data Filters</div>
     </md-toolbar>
     <md-dialog-content>
-
         <section layout="row">
-            <div layout="column" flex="45" style="max-height: 450px;">
-                <md-subheader class="md-primary" style="background-color: transparent">Available Filters</md-subheader>
-                <md-select md-on-close="checkSelection()" ng-model="selectedModel" placeholder="Filter Type" class="md-no-underline" style="padding-left: 15px;">
-                    <md-header>New</md-header>
-                    <md-option ng-repeat="filter in filters" ng-value="filter">{{filter.name}}</md-option>
-                    <md-header>Existing</md-header>
-                    <!--{{{{filterName(filter)}}}-->
-                </md-select>
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Filter Settings</md-subheader>
+            </div>
+            
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Filters</md-subheader>
+            </div>
+            
+        </section>
+        <section layout="row">
+            <div flex="5"></div>
+            <div layout="column" flex="45" style="min-height: 350px; max-height: 550px;">
+
+                <md-input-container>
+                    <label>Filter Type</label>
+                    <md-select md-on-close="checkTypeSelection()" ng-model="selectedModel" placeholder="Filter Type" class="md-no-underline">
+                        <md-subheader>New</md-subheader>
+                        <md-option ng-repeat="filter in filters" ng-value="filter">{{filter.name}}</md-option>
+                        <md-subheader>Existing</md-subheader>
+                    </md-select>
+                </md-input-container>
+                <md-input-container ng-show="selectedModel.type === 'custom'">
+                    <label>Data Value</label>
+                    <md-select md-on-close="checkDataSelection()" ng-model="selectedData">
+                        <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}} <span style="font-style: italic">{{column.DATA_TYPE}}</span></md-option>
+                    </md-select>
+                </md-input-container>
+                <span>Operations</span>
+                <md-content>
+                    <md-list><!--FIX ME! GET ME FULL WIDTH!!!!-->
+                        <md-list-item ng-repeat="operation in selectedOperations">
+                            <div layout="row">
+                                <div flex="50">{{operation.operation}}</div>
+                                <div flex="25">Use Dataset Values</div>
+                                <div flex="25">
+                                    <md-checkbox ng-model="operation.useData"></md-checkbox>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+                <div layout="row" ng-show="selectedModel.type === 'custom'">
+                    <md-input-container flex="85">
+                        <label>Operation</label>
+                        <md-select md-on-close="" ng-model="selectedOperation">
+                            <md-option ng-repeat="operation in operations" ng-value="operation">{{operation}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                </div>
+                <md-input-container ng-show="selectedModel !== null">
+                    <label>Alias</label>
+                    <input type="text" ng-model="allias" />
+                </md-input-container>
                 <md-list>
                     <md-list-item>
-                        <md-select ng-show="selectedModel.type === 'custom'" ng-model="funny" style="padding-left: 15px;">
-                            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
-                        </md-select>
+
                     </md-list-item>
                 </md-list>
-                <md-list-item>
-                    <md-input-container><input type="text" /></md-input-container>
-                </md-list-item>
-                
+
+
                 <div layout="column">
                     <md-button ng-disabled="disabled" ng-click="updateSelection()">Create Filter</md-button>
                 </div>
             </div>
             <div flex></div>
-            <div layout="column" flex="50">
-                <md-subheader class="md-primary" style="background-color: transparent">Filters</md-subheader>
+            <div layout="column" flex="45">
+
                 <md-content class="inset">
-                    
+
                 </md-content>
 
             </div>
