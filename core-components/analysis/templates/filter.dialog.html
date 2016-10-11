@@ -26,44 +26,49 @@
                         <md-subheader>Existing</md-subheader>
                     </md-select>
                 </md-input-container>
-                <md-input-container ng-show="selectedModel.type === 'custom'">
-                    <label>Data Value</label>
-                    <md-select md-on-close="checkDataSelection()" ng-model="selectedData">
-                        <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}} <span style="font-style: italic">{{column.DATA_TYPE}}</span></md-option>
-                    </md-select>
-                </md-input-container>
-                <span>Operations</span>
-                <md-content>
-                    <md-list><!--FIX ME! GET ME FULL WIDTH!!!!-->
-                        <md-list-item ng-repeat="operation in selectedOperations">
-                            <div layout="row">
-                                <div flex="50">{{operation.operation}}</div>
-                                <div flex="25">Use Dataset Values</div>
-                                <div flex="25">
-                                    <md-checkbox ng-model="operation.useData"></md-checkbox>
-                                </div>
-                            </div>
-                        </md-list-item>
-                    </md-list>
-                </md-content>
-                <div layout="row" ng-show="selectedModel.type === 'custom'">
-                    <md-input-container flex="85">
-                        <label>Operation</label>
-                        <md-select md-on-close="" ng-model="selectedOperation">
-                            <md-option ng-repeat="operation in operations" ng-value="operation">{{operation}}</md-option>
+                <div layout="column" ng-show="selectedModel.type === 'custom'">
+                    <md-input-container>
+                        <label>Data Value</label>
+                        <md-select md-on-close="checkDataSelection()" ng-model="selectedData">
+                            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}} <span style="font-style: italic">{{column.DATA_TYPE}}</span></md-option>
                         </md-select>
                     </md-input-container>
-                    <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                    <p style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                    <md-content>
+                        <md-list>
+                            <!--FIX ME! GET ME FULL WIDTH!!!!-->
+                            <md-list-item ng-repeat="operation in selectedOperations">
+                                <!--<div layout="row">
+                        <div flex="50">{{operation.operation}}</div>
+                        <div flex="25">Use Dataset Values</div>
+                        <div flex="25">
+                            <md-checkbox ng-model="operation.useData"></md-checkbox>
+                        </div>
+                    </div>-->
+                                <p>{{operation.operation}}</p>
+                                <md-switch class="md-secondary" ng-model="operation.useData">Use Dataset Values</md-switch>
+                                <!--<md-button class="md-secondary md-icon-button">
+                        <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                        <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                    </md-button>-->
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                    <div layout="row">
+                        <md-input-container flex="85">
+                            <label>Operation</label>
+                            <md-select md-on-close="" ng-model="selectedOperation">
+                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                    </div>
                 </div>
                 <md-input-container ng-show="selectedModel !== null">
                     <label>Alias</label>
                     <input type="text" ng-model="allias" />
                 </md-input-container>
-                <md-list>
-                    <md-list-item>
 
-                    </md-list-item>
-                </md-list>
 
 
                 <div layout="column">

@@ -396,7 +396,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         $scope.allias = $scope.selectedData.COLUMN_NAME;
     };
     $scope.addOperation = function () {
-        $scope.selectedOperations.push({ operation: $scope.selectedOperation, useData: false });
+        $scope.selectedOperations.push({ operation: $scope.selectedOperation, useData: true });
         $scope.selectedOperation = null
     }
 
