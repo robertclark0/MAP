@@ -38,7 +38,7 @@
                             <h4>{{childComponent.type}}</h4>
                             <p class="md-primary">{{childComponent.GUID}}</p>
                         </div>
-                        <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button md-seconday-icon-override" ng-click="componentAction.action(childComponent, component.children)">
+                        <md-button ng-repeat="componentAction in componentList.actions track by $index" class="md-secondary md-icon-button md-seconday-icon-override" ng-click="componentAction.action(childComponent, component.children, component.parentObject)">
                             <md-tooltip md-direction="bottom">{{componentAction.tooltip}}</md-tooltip>
                             <md-icon md-svg-src="{{componentAction.icon}}" aria-label="action"></md-icon>
                         </md-button>

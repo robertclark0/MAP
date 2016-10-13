@@ -1,7 +1,8 @@
 ﻿<md-dialog aria-label="List dialog" style="width: 1000px;">
 
     <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">Data Selection</div>
+        <div ng-show="componentProperties.editType === 'new'" class="md-toolbar-tools">Data Selection</div>
+        <div ng-show="componentProperties.editType === 'existing'" class="md-toolbar-tools" style="background-color: rgb(68, 138, 255);">Data Selection</div>
     </md-toolbar>
     <md-dialog-content>
 

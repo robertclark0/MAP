@@ -22,12 +22,17 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
     $scope.componentProperties = componentViewFactory.componentProperties;
     
-    $scope.closeDialog = function () {
-        $mdDialog.hide();
-    }
 
+    $scope.showConfigureDataSource = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/dataSource.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'DataSource'
+        }).then(function () { getTableSchema(); }, function () { });
+    };
     $scope.showConfigureDataSelections = function (ev) {
-
         if ($scope.componentProperties.editObject.source.name !== null) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/dataSelection.dialog.html',
@@ -40,28 +45,20 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         else {
             logger.toast.warning('Please Select A Data Source First.');
         }
-
-
     };
-
-    $scope.showConfigureDataSource = function (ev) {
-        $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/dataSource.dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            controller: 'DataSource'
-        }).then(function () { getTableSchema(); }, function () {  });
-    };
-
     $scope.showConfigureFilters = function (ev) {
-        $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/filter.dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            controller: 'DataFilter'
-        });
+        if ($scope.componentProperties.editObject.source.name !== null) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataFilter'
+            });
+        }
+        else {
+            logger.toast.warning('Please Select A Data Source First.');
+        }
     };
 
     function getTableSchema() {
@@ -74,6 +71,11 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
                 logger.toast.error('Error Getting Table Schema', error);
             });
         }
+    }
+
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
     }
 
 

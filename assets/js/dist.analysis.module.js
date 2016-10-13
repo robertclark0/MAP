@@ -162,12 +162,17 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
     $scope.componentProperties = componentViewFactory.componentProperties;
     
-    $scope.closeDialog = function () {
-        $mdDialog.hide();
-    }
 
+    $scope.showConfigureDataSource = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/dataSource.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'DataSource'
+        }).then(function () { getTableSchema(); }, function () { });
+    };
     $scope.showConfigureDataSelections = function (ev) {
-
         if ($scope.componentProperties.editObject.source.name !== null) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/dataSelection.dialog.html',
@@ -180,28 +185,20 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         else {
             logger.toast.warning('Please Select A Data Source First.');
         }
-
-
     };
-
-    $scope.showConfigureDataSource = function (ev) {
-        $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/dataSource.dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            controller: 'DataSource'
-        }).then(function () { getTableSchema(); }, function () {  });
-    };
-
     $scope.showConfigureFilters = function (ev) {
-        $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/filter.dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            controller: 'DataFilter'
-        });
+        if ($scope.componentProperties.editObject.source.name !== null) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataFilter'
+            });
+        }
+        else {
+            logger.toast.warning('Please Select A Data Source First.');
+        }
     };
 
     function getTableSchema() {
@@ -214,6 +211,11 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
                 logger.toast.error('Error Getting Table Schema', error);
             });
         }
+    }
+
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
     }
 
 
@@ -402,6 +404,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
             var filter = angular.copy($scope.newFilter);
             filter.GUID = newGUID;
 
+            $scope.componentProperties.parentTemp.push(filter);
             $scope.componentProperties.editObject.filters.push(dataGroupReference);
         }
         else {
@@ -722,7 +725,8 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             var listItem = {
                 header: 'Canvas: ' + canvas.name,
                 parent: canvas.dataGroups,
-                children: canvas.dataGroups
+                children: canvas.dataGroups,
+                parentObject: canvas
             };
             list.push(listItem);
         });
@@ -781,7 +785,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         factory.componentList.components = list;
     }
     function newComponent(component) {
-        newEdit({ editType: 'new', componentType: component, editParent: null });
+        newEdit({ editType: 'new', componentType: component, editParent: null, parentObject: null });
     }
 
 
@@ -794,8 +798,8 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             { icon: 'assets/icons/md-delete.svg', tooltip: 'Delete', action: deleteComponent },
         ]
     };
-    function editComponent(component, parent) {
-        newEdit({ editType: 'existing', editObject: component, editParent: parent });
+    function editComponent(component, parent, parentObject) {
+        newEdit({ editType: 'existing', editObject: component, editParent: parent, parentObject: parentObject });
     }
     function duplicateComponent(component, parent) {
         var newComponent = angular.copy(component);
@@ -819,12 +823,15 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         editType: null,
         editObject: null,
         editParent: null,
+        parentObject: null,
+        parentTemp: [],
         closeEdit: closeEdit,
         saveEdit: saveEdit,
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
         factory.componentProperties.editParent = editConfig.editParent;
+        factory.componentProperties.parentObject = editConfig.parentObject;
         if (editConfig.editType === 'new') {
             var editObject;
 

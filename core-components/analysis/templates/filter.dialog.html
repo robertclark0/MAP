@@ -1,12 +1,13 @@
 ﻿<md-dialog aria-label="List dialog" style="width: 1000px;">
 
     <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">Data Filters</div>
+        <div ng-show="componentProperties.editType === 'new'" class="md-toolbar-tools">Data Filters</div>
+        <div ng-show="componentProperties.editType === 'existing'" class="md-toolbar-tools" style="background-color: rgb(68, 138, 255);">Data Filters</div>
     </md-toolbar>
     <md-dialog-content>
 
         <section layout="row">
-            <div layout="column" flex="45" style="min-height: 350px; max-height: 550px; padding-left: 15px;">
+            <div layout="column" flex="45" style="min-height: 350px; padding-left: 15px;">
                 <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Filter Settings</md-subheader>
                 <md-input-container>
                     <label>Filter Type</label>
@@ -24,7 +25,7 @@
                         </md-select>
                     </md-input-container>
                     <p style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
-                    <md-content>
+                    <md-content style="max-height: 200px;">
                         <md-list>
                             <md-list-item ng-repeat="operation in newFilter.operations">
                                 <p>{{operation.operation}}</p>

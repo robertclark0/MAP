@@ -45,7 +45,8 @@
             var listItem = {
                 header: 'Canvas: ' + canvas.name,
                 parent: canvas.dataGroups,
-                children: canvas.dataGroups
+                children: canvas.dataGroups,
+                parentObject: canvas
             };
             list.push(listItem);
         });
@@ -104,7 +105,7 @@
         factory.componentList.components = list;
     }
     function newComponent(component) {
-        newEdit({ editType: 'new', componentType: component, editParent: null });
+        newEdit({ editType: 'new', componentType: component, editParent: null, parentObject: null });
     }
 
 
@@ -117,8 +118,8 @@
             { icon: 'assets/icons/md-delete.svg', tooltip: 'Delete', action: deleteComponent },
         ]
     };
-    function editComponent(component, parent) {
-        newEdit({ editType: 'existing', editObject: component, editParent: parent });
+    function editComponent(component, parent, parentObject) {
+        newEdit({ editType: 'existing', editObject: component, editParent: parent, parentObject: parentObject });
     }
     function duplicateComponent(component, parent) {
         var newComponent = angular.copy(component);
@@ -142,12 +143,15 @@
         editType: null,
         editObject: null,
         editParent: null,
+        parentObject: null,
+        parentTemp: [],
         closeEdit: closeEdit,
         saveEdit: saveEdit,
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
         factory.componentProperties.editParent = editConfig.editParent;
+        factory.componentProperties.parentObject = editConfig.parentObject;
         if (editConfig.editType === 'new') {
             var editObject;
 

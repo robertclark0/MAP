@@ -37,6 +37,7 @@
             var filter = angular.copy($scope.newFilter);
             filter.GUID = newGUID;
 
+            $scope.componentProperties.parentTemp.push(filter);
             $scope.componentProperties.editObject.filters.push(dataGroupReference);
         }
         else {
