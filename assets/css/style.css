@@ -67,11 +67,11 @@ body {
 }
 
     .listItem-active svg {
-        fill: rgba(108, 157, 52, 1)
+        fill: rgba(108, 157, 52, 1);
     }
 
     .listItem-active p {
-        color: rgba(108, 157, 52, 1)
+        color: rgba(108, 157, 52, 1);
     }
 
 .listItem-active-accent {
@@ -146,3 +146,11 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
         .edit-animation-top.ng-leave.ng-leave-active {
             top: -100%;
         }
+
+
+/*Report Menu*/
+.popout-menu {
+    background: white;
+    width: 400px;
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
+}
