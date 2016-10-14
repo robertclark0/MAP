@@ -204,7 +204,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT
-            API.tableSchema().save(logger.logPostObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+            API.tableSchema().save(logger.postObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
                 //API.tableSchema().get().$promise.then(function (response) {
                 $scope.DO.tableSchema = response.result;
             }).catch(function (error) {
@@ -855,7 +855,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         //LOAD DATA SOURCES IF DATAGROUP
         if (editConfig.componentType === 'dataGroup') {
             //REMOVE BEFORE FLIGHT
-            API.dataSources().save(logger.logPostObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+            API.dataSources().save(logger.postObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
                 //API.dataSources().get().$promise.then(function (response) {
                 DO.dataSource = response.result;
             }).catch(function (error) {
@@ -910,7 +910,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
     // TO REVISE
     //function getColumnDistinct(entityCode , tableName, columnName) {
     //    //REMOVE BEFORE FLIGHT
-    //    API.columnSchema().save(logger.logPostObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
+    //    API.columnSchema().save(logger.postObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
     //        //API.tableSchema().get().$promise.then(function (response) {
     //        return response.result;
     //    }).catch(function (error) {

@@ -246,6 +246,20 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var columnSchemaAPI = apiEndpoint + 'schema/column';
     apiResource.columnSchema = function () { return $resource(columnSchemaAPI); };
 
+    var getReportAPI = apiEndpoint + 'report';
+    apiResource.getReport = function () { return $resource(getReportAPI); };
+
+    var updateReportAPI = apiEndpoint + 'report/update';
+    apiResource.updateReport = function () { return $resource(updateReportAPI); };
+
+    var createReportAPI = apiEndpoint + 'report/create';
+    apiResource.createReport = function () { return $resource(createReportAPI); };
+
+    var deleteReportAPI = apiEndpoint + 'deport/delete';
+    apiResource.deleteReport = function () { return $resource(deleteReportAPI); };
+
+    var getReportListAPI = apiEndpoint + 'report/list';
+    apiResource.getReportList = function () { return $resource(getReportListAPI); };
 
     //    STRUCTURE
     //
@@ -319,7 +333,7 @@ applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appData
         };        clientLog.length = 0;        return log;
     };    logger.clientLog = function (type, value) {
         clientLog.push({ recordType: type, recordValue: value, clientTime: new Date() });
-    };    logger.logPostObject = function (object) {
+    };    logger.postObject = function (object) {
         return {
             post: object,            log: logger.serverLog()
         };

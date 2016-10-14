@@ -13,7 +13,7 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
 
     // Get user data
     //REMOVE BEFORE FLIGHT
-    API.userInfo().save(logger.logPostObject()).$promise.then(function (response) {
+    API.userInfo().save(logger.postObject()).$promise.then(function (response) {
     //API.userInfo().get().$promise.then(function (response) {
         if (response.result) {
             DO.user = new DO.User(response.result);
@@ -30,7 +30,7 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     //Get product lines
     $scope.productLoadFailure = false;
     //REMOVE BEFORE FLIGHT
-    API.productLines().save(logger.logPostObject()).$promise.then(function (response) {
+    API.productLines().save(logger.postObject()).$promise.then(function (response) {
     //API.productLines().get().$promise.then(function (response) {
         DO.productLines = new DO.ProductLines(response.result);
         $scope.products = DO.productLines.value;
@@ -51,7 +51,7 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
             else {
                 //get user permission
                 //REMOVE BEFORE FLIGHT
-                API.userActive().save(logger.logPostObject()).$promise.then(function (response) {
+                API.userActive().save(logger.postObject()).$promise.then(function (response) {
                 //API.userActive().get().$promise.then(function (response) {
                     if (response.result) {
                         DO.user.productLines.userActive = response.result;
