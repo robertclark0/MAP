@@ -7,7 +7,16 @@
     $scope.canvasFilters = SF.canvasDataFilters();
     $scope.componentProperties = componentViewFactory.componentProperties;
 
-    $scope.operations = ["Range", "Equal", "Toggle", "Between", "Greater", "Less", "Greater or Equal", "Less or Equal"]
+    $scope.operations = [
+        { name: "Range", type: 'op-checklist' },
+        { name: "Equal", type: 'op-select' },
+        { name: "Toggle", type: 'op-toggle' },
+        { name: "Between", type: 'op-between' },
+        { name: "Greater", type: 'op-select' },
+        { name: "Less", type: 'op-select' },
+        { name: "Greater or Equal", type: 'op-select' },
+        { name: "Less or Equal", type: 'op-select' }
+    ]
 
     $scope.disabled = true;
     $scope.selectedOperation = null
@@ -16,7 +25,8 @@
         model: null,
         allias: null,
         dataValue: null,
-        operations: []
+        operations: [],
+        selectedValues: []
     };
 
 
@@ -31,23 +41,33 @@
         $scope.selectedOperation = null
     }
     $scope.saveFilter = function () {
-        if ($scope.newFilter.model.type === 'custom') {
-            var newGUID = SF.generateGUID();
-            var dataGroupReference = { GUID: newGUID, selectedValues: [] };
-            var filter = angular.copy($scope.newFilter);
-            filter.GUID = newGUID;
+        if ($scope.newFilter.model.type === 'custom-filter') { 
 
-            $scope.componentProperties.parentTemp.push(filter);
-            $scope.componentProperties.editObject.filters.push(dataGroupReference);
+            var filter = angular.copy($scope.newFilter);
+            filter.GUID = SF.generateGUID();
+
+            $scope.componentProperties.editObject.filters.push(filter);
         }
         else {
+            var filter = angular.copy($scope.newFilter);
+            filter.allias = filter.model.name;
+            filter.GUID = SF.generateGUID();
 
+            $scope.componentProperties.editObject.filters.push(filter);
         }
+        $scope.clearFilter();
+    };
+    $scope.clearFilter = function () {
+        $scope.newFilter.model = null;
+        $scope.newFilter.allias = null;
+        $scope.newFilter.operations.length = 0;
+        $scope.newFilter.selectedValues.length = 0;
+        $scope.selectedOperation = null
     };
 
     $scope.$watch('newFilter', function (nv) {
         if (nv.model) {
-            if (nv.model.type === 'custom') {
+            if (nv.model.type === 'custom-filter') {
                 if (nv.dataValue !== null && nv.operations.length > 0) {
                     $scope.disabled = false;
                 }
@@ -59,7 +79,6 @@
                 $scope.disabled = false;
             }
         }
-
     }, true);
 
 

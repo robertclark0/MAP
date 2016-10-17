@@ -2,7 +2,8 @@
 
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
-    var DO = appManager.data.DO;  
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
     var API = appManager.data.API;
     var logger = appManager.logger;
     var SO = appManager.state.SO;
@@ -197,16 +198,17 @@
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
                 //push new DO.dataGroup registry
                 if (factory.componentProperties.editObject instanceof SC.DataGroup) {
-                    var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
 
-                    DO.dataGroups.push(newDataObject);
+                    // var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
+                    // DO.dataGroups.push(newDataObject);
+
                     //GET DISTINCT FOR SELECTION LEVELS
-                    factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
-                        //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
-                        //THIS is actually not the right place for this functionality
-                        //When the user selections a region, the next chip autocomplete needs to only show
-                        //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
-                    });
+                    //factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
+                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                    //    //THIS is actually not the right place for this functionality
+                    //    //When the user selections a region, the next chip autocomplete needs to only show
+                    //    //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
+                    //});
                 }
             }
             else if (factory.componentProperties.editType === 'existing') {
@@ -215,6 +217,7 @@
             }
             closeEdit();
         }
+        DF.populateAppData();
     }
     function closeEdit() {
         factory.componentProperties.editObject = null;
@@ -227,16 +230,7 @@
             controller: 'DataSelection'
         });
     };
-    // TO REVISE
-    //function getColumnDistinct(entityCode , tableName, columnName) {
-    //    //REMOVE BEFORE FLIGHT
-    //    API.columnSchema().save(logger.postObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
-    //        //API.tableSchema().get().$promise.then(function (response) {
-    //        return response.result;
-    //    }).catch(function (error) {
-    //        logger.toast.error('Error Getting Table Schema', error);
-    //    });
-    //}
+
 
     return factory;
 }]);

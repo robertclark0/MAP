@@ -3,8 +3,8 @@
 
     <!--DASHBOARD COMPONENTS-->
     <div layout="column" flex="20">
-        <md-subheader>Dashboard Components</md-subheader>
-        <md-content>
+        <md-subheader style="background-color: rgb(245,245,245)">Dashboard Components</md-subheader>
+        <md-content style="background-color: white;">
             <md-list flex>
                 <md-list-item ng-repeat="dashboardComponent in dashboardComponents.components" ng-class="{'listItem-active' : dashboardComponent.component === dashboardComponents.selection}" ng-click="dashboardComponent.action(dashboardComponent.component, DSO); currentDashboardComponent = $index;">
                     <md-icon md-svg-src="{{dashboardComponent.icon}}" aria-label="component"></md-icon>
@@ -25,8 +25,8 @@
 
     <!--COMPONENT LIST-->
     <div layout="column" flex="35">
-        <md-subheader>Component List</md-subheader>
-        <md-content>
+        <md-subheader style="background-color: rgb(245,245,245)">Component List</md-subheader>
+        <md-content style="background-color: white;">
             <section ng-repeat="component in componentList.components track by $index">
                 <md-subheader class="md-accent" style="background-color: transparent">{{component.header}}</md-subheader>
                 <md-list flex class="mdo-listitem-padding">
@@ -51,7 +51,7 @@
 
     <!--COMPONENT PROPERTIES-->
     <div layout="column" flex="45" style="background-color: rgb(245,245,245)">
-        <md-subheader>Component Properties</md-subheader>
+        <md-subheader style="background-color: rgb(245,245,245)">Component Properties</md-subheader>
         <md-subheader ng-show="componentProperties.editType === 'new'" style="background-color: rgb(139, 195, 74); color: white;">New</md-subheader>
         <md-subheader ng-show="componentProperties.editType === 'existing'" style="background-color: rgb(68, 138, 255); color: white;">Edit</md-subheader>
         <md-content layout-padding style="background-color: transparent; padding: 0 50px;">

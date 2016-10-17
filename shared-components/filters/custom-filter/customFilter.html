@@ -1,7 +1,7 @@
 ﻿<md-card>
     <md-toolbar style="background-color: transparent;">
         <div class="md-toolbar-tools">
-            <h5>Patient Cohort</h5>
+            <h5>{{filter.allias}}</h5>
             <span flex></span>
             <md-menu>
                 <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -24,10 +24,11 @@
             </md-menu>
         </div>
     </md-toolbar>
-    <md-card-content>
-        <md-checkbox aria-label="CHUP" ng-model="chup" ng-change="checkAll()"><em>CHUP</em></md-checkbox><br />
-        <md-checkbox aria-label="Poly" ng-model="poly" ng-change="allChecked()">PolyPharm</md-checkbox>
-        <md-checkbox aria-label="High" ng-model="hu" ng-change="allChecked()">High Utilizer</md-checkbox>
-        <md-checkbox aria-label="Pain" ng-model="pain" ng-change="allChecked()">Pain</md-checkbox>
+    <md-card-content style="padding: 0">
+        <md-list style="padding: 0;" class="md-dense">
+            <md-list-item ng-repeat="op in filter.operations">
+                <directive-generator name="{{op.operation.type}}" attributes="{ filter: '$parent.filter', operation: '$parent.op'}"></directive-generator>
+            </md-list-item>
+        </md-list>
     </md-card-content>
 </md-card>

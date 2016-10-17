@@ -11,13 +11,13 @@
                 <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Filter Settings</md-subheader>
                 <md-input-container>
                     <label>Filter Type</label>
-                    <md-select md-on-close="checkTypeSelection()" ng-model="newFilter.model" placeholder="Filter Type" class="md-no-underline">
+                    <md-select md-on-close="checkTypeSelection()" ng-model="newFilter.model" placeholder="Filter Type">
                         <md-subheader>New</md-subheader>
                         <md-option ng-repeat="filter in filters" ng-value="filter">{{filter.name}}</md-option>
                         <md-subheader>Existing</md-subheader>
                     </md-select>
                 </md-input-container>
-                <div layout="column" ng-show="newFilter.model.type === 'custom'">
+                <div layout="column" ng-show="newFilter.model.type === 'custom-filter'">
                     <md-input-container>
                         <label>Data Value</label>
                         <md-select md-on-close="checkDataSelection()" ng-model="newFilter.dataValue">
@@ -28,7 +28,7 @@
                     <md-content style="max-height: 200px;">
                         <md-list>
                             <md-list-item ng-repeat="operation in newFilter.operations">
-                                <p>{{operation.operation}}</p>
+                                <p>{{operation.operation.name}}</p>
                                 <md-switch class="md-secondary" ng-model="operation.useData">Use Dataset Values</md-switch>
                             </md-list-item>
                         </md-list>
@@ -37,7 +37,7 @@
                         <md-input-container flex="85">
                             <label>Operation</label>
                             <md-select md-on-close="" ng-model="selectedOperation">
-                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation}}</md-option>
+                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
@@ -62,8 +62,8 @@
 
                         <md-list-item class="md-2-line" ng-click="null" ng-repeat="filter in componentProperties.editObject.filters">
                             <div class="md-list-item-text" layout="column">
-                                <h3>Primary: {{filter.GUID}}</h3>
-                                <p class="md-primary">{{filter.GUID}}</p>
+                                <h3>{{filter.allias}}</h3>
+                                <p class="md-primary">{{filter.dataValue.COLUMN_NAME}} [ <span ng-repeat="op in filter.operations">{{op.operation.name}} </span>]</p>
                             </div>
                             <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
                                 <md-tooltip md-direction="bottom">Edit</md-tooltip>

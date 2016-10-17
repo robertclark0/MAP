@@ -150,7 +150,7 @@ mapApp.directive('selectionControl', [function () {
         }
     };
 }]);
-applicationManager.factory('appDataManager', ['$rootScope', '$resource', function ($rootScope, $resource) {
+applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appStateManager', function ($rootScope, $resource, appStateManager) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
     //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
@@ -191,7 +191,10 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     // {element: , ChartDOM: }
 
     dataObject.dataGroups = [];
-    // {GUID: , result: }
+    // { GUID: , result: , drillDown: [] }
+
+    dataObject.filters = [];
+    // { GUID: , dataValues: [] }
 
 
 
@@ -200,14 +203,47 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var dataFunctions = {};
 
     dataFunctions.getDataGroup = function (GUID) {
-        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID });
+        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID; });
         var index = GUIDList.indexOf(GUID);
         if (index > -1) {
             return dataObject.dataGroups[index];
         }
         return null;
     };
+    dataFunctions.getFilter = function (GUID) {
+        var GUIDList = dataObject.filters.map(function (obj) { return obj.GUID; });
+        var index = GUIDList.indexOf(GUID);
+        if (index > -1) {
+            return dataObject.filters[index];
+        }
+        return null;
+    };
 
+    dataFunctions.populateAppData = function () {
+        appStateManager.DSO.canvases.forEach(function (canvas) {
+            canvas.dataGroups.forEach(function (dataGroup) {
+                if (dataObject.dataGroups.map(function(obj){ return obj.GUID;}).indexOf(dataGroup.GUID) < 0){
+                    dataObject.dataGroups.push({ GUID: dataGroup.GUID, result: null, drillDown: [] });
+                    //dataGroup.query.execute();
+                }
+
+                dataGroup.filters.forEach(function (filter) {
+                    if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
+                        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+                        dataObject.filters.push(newFilterDataObject);
+                        dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
+                    }
+                });
+            });
+        });
+    };
+
+    dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
+        apiResource.columnSchema().save({ post: { entityCode: dataGroup.source.product, tableName: dataGroup.source.name, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+            filterDataObject.dataValues = response.result;
+            console.log(response.result);
+        });
+    };
 
 
     //    API RESOURCE
@@ -261,6 +297,7 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', functio
     var getReportListAPI = apiEndpoint + 'report/list';
     apiResource.getReportList = function () { return $resource(getReportListAPI); };
 
+
     //    STRUCTURE
     //
     var dataScope = $rootScope.$new(true);
@@ -298,6 +335,42 @@ mapApp.directive('directiveGenerator', ['$compile', function ($compile) {
 //        console.log(exception, cause);
 //    }
 //})
+mapApp.directive('opChecklist', ['appManager', function (appManager) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            operation: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/filter-operations/opChecklist.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+        
+    };
+}]);
+mapApp.directive('opSelect', ['appManager', function (appManager) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            operation: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/filter-operations/opSelect.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+
+    };
+}]);
 mapApp.directive('cohortSelection', [function () {
     return {
         restrict: 'E',
@@ -306,6 +379,22 @@ mapApp.directive('cohortSelection', [function () {
         },
         replace: true,
         templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+
+    };
+}]);
+mapApp.directive('customFilter', [ function () {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/filters/custom-filter/customFilter.html',
         link: link
     };
 
@@ -530,7 +619,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
             { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
-            { type: 'custom', name: 'Custom Filter', productLine: null }
+            { type: 'custom-filter', name: 'Custom Filter', productLine: null }
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.productLine.current });
     };

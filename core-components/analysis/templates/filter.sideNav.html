@@ -11,55 +11,31 @@
         <md-toolbar>
             <md-fab-actions class="md-toolbar-tools">
                 <md-button aria-label="dock" class="md-icon-button" ng-click="panel.lock = !panel.lock">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Panel
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-lock-outline.svg"></md-icon>
                 </md-button>
                 <md-button aria-label="right" class="md-icon-button" ng-click="panel.side = 'right'">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Right
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-arrow-right.svg"></md-icon>
                 </md-button>
                 <md-button aria-label="left" class="md-icon-button" ng-click="panel.side = 'left'">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Left
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-arrow-left.svg"></md-icon>
                 </md-button>
             </md-fab-actions>
         </md-toolbar>
     </md-fab-toolbar>
 
-    <md-subheader class="md-primary">Data Group Name</md-subheader>
 
     <md-content class="map-gray-1">
-        <md-card>
-            <md-card-title>
-                <md-card-title-text>
-                    <div class="md-headline">Fiscal Year</div>
-                </md-card-title-text>
 
-                <md-button class="md-icon-button" aria-label="Delete">
-                    <md-tooltip md-direction="bottom">
-                        Delete
-                    </md-tooltip>
-                    <md-icon md-svg-src="assets/icons/md-clear.svg"></md-icon>
-                </md-button>
-            </md-card-title>
-            <md-card-actions layout="row" layout-align="end center">
-                <md-button>On</md-button>
-                <md-button>Off</md-button>
-            </md-card-actions>
-        </md-card>
+        <div ng-repeat="filter in current.dataGroup.filters">
+            <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter'}"></directive-generator>
+        </div>
 
-        <div layout="row">
+        <!--<div layout="row">
             <span flex></span>
             <md-button class="md-fab md-mini" aria-label="Add">
                 <md-icon md-svg-src="assets/icons/md-add.svg"></md-icon>
             </md-button>
-        </div>
+        </div>-->
 
     </md-content>
 </md-sidenav>

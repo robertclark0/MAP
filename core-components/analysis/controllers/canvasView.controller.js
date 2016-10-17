@@ -4,9 +4,12 @@
     var DSO = appManager.state.DSO;
     var DO = appManager.data.DO;
     var SC = appManager.state.SC;
+    var DF = appManager.data.DF;
+
+    DF.populateAppData();
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
-
+    
     $scope.toggleSideNav = function (navID) {
         $mdSidenav(navID).toggle();
     };
@@ -83,7 +86,6 @@
     $scope.addCanvasElement = function (name, type) {
 
        $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
-
     };
 
 
@@ -115,6 +117,7 @@
         }			
     };
     $scope.changeCurrent(0);
+
 
     //DATA CONTROLL SIDE NAVE FUNCTIONS
     $scope.moveDataSelectionUp = function (index) {

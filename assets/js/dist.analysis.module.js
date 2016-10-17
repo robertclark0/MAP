@@ -5,9 +5,12 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
     var DSO = appManager.state.DSO;
     var DO = appManager.data.DO;
     var SC = appManager.state.SC;
+    var DF = appManager.data.DF;
+
+    DF.populateAppData();
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
-
+    
     $scope.toggleSideNav = function (navID) {
         $mdSidenav(navID).toggle();
     };
@@ -84,7 +87,6 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
     $scope.addCanvasElement = function (name, type) {
 
        $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
-
     };
 
 
@@ -116,6 +118,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
         }			
     };
     $scope.changeCurrent(0);
+
 
     //DATA CONTROLL SIDE NAVE FUNCTIONS
     $scope.moveDataSelectionUp = function (index) {
@@ -228,7 +231,6 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
     var API = appManager.data.API;
     var logger = appManager.logger;
     var DO = appManager.data.DO;
-
 
     $scope.name = DSO.name;
     $scope.controlPanels = DSO.dashboard.controlPanels;
@@ -374,7 +376,16 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     $scope.canvasFilters = SF.canvasDataFilters();
     $scope.componentProperties = componentViewFactory.componentProperties;
 
-    $scope.operations = ["Range", "Equal", "Toggle", "Between", "Greater", "Less", "Greater or Equal", "Less or Equal"]
+    $scope.operations = [
+        { name: "Range", type: 'op-checklist' },
+        { name: "Equal", type: 'op-select' },
+        { name: "Toggle", type: 'op-toggle' },
+        { name: "Between", type: 'op-between' },
+        { name: "Greater", type: 'op-select' },
+        { name: "Less", type: 'op-select' },
+        { name: "Greater or Equal", type: 'op-select' },
+        { name: "Less or Equal", type: 'op-select' }
+    ]
 
     $scope.disabled = true;
     $scope.selectedOperation = null
@@ -383,7 +394,8 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         model: null,
         allias: null,
         dataValue: null,
-        operations: []
+        operations: [],
+        selectedValues: []
     };
 
 
@@ -398,23 +410,33 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         $scope.selectedOperation = null
     }
     $scope.saveFilter = function () {
-        if ($scope.newFilter.model.type === 'custom') {
-            var newGUID = SF.generateGUID();
-            var dataGroupReference = { GUID: newGUID, selectedValues: [] };
-            var filter = angular.copy($scope.newFilter);
-            filter.GUID = newGUID;
+        if ($scope.newFilter.model.type === 'custom-filter') { 
 
-            $scope.componentProperties.parentTemp.push(filter);
-            $scope.componentProperties.editObject.filters.push(dataGroupReference);
+            var filter = angular.copy($scope.newFilter);
+            filter.GUID = SF.generateGUID();
+
+            $scope.componentProperties.editObject.filters.push(filter);
         }
         else {
+            var filter = angular.copy($scope.newFilter);
+            filter.allias = filter.model.name;
+            filter.GUID = SF.generateGUID();
 
+            $scope.componentProperties.editObject.filters.push(filter);
         }
+        $scope.clearFilter();
+    };
+    $scope.clearFilter = function () {
+        $scope.newFilter.model = null;
+        $scope.newFilter.allias = null;
+        $scope.newFilter.operations.length = 0;
+        $scope.newFilter.selectedValues.length = 0;
+        $scope.selectedOperation = null
     };
 
     $scope.$watch('newFilter', function (nv) {
         if (nv.model) {
-            if (nv.model.type === 'custom') {
+            if (nv.model.type === 'custom-filter') {
                 if (nv.dataValue !== null && nv.operations.length > 0) {
                     $scope.disabled = false;
                 }
@@ -426,7 +448,6 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
                 $scope.disabled = false;
             }
         }
-
     }, true);
 
 
@@ -682,7 +703,8 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
 
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
-    var DO = appManager.data.DO;  
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
     var API = appManager.data.API;
     var logger = appManager.logger;
     var SO = appManager.state.SO;
@@ -877,16 +899,17 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
                 factory.componentProperties.editParent.push(factory.componentProperties.editObject);
                 //push new DO.dataGroup registry
                 if (factory.componentProperties.editObject instanceof SC.DataGroup) {
-                    var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
 
-                    DO.dataGroups.push(newDataObject);
+                    // var newDataObject = { GUID: factory.componentProperties.editObject.GUID, result: null, drillDown: [] }
+                    // DO.dataGroups.push(newDataObject);
+
                     //GET DISTINCT FOR SELECTION LEVELS
-                    factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
-                        //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
-                        //THIS is actually not the right place for this functionality
-                        //When the user selections a region, the next chip autocomplete needs to only show
-                        //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
-                    });
+                    //factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
+                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                    //    //THIS is actually not the right place for this functionality
+                    //    //When the user selections a region, the next chip autocomplete needs to only show
+                    //    //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
+                    //});
                 }
             }
             else if (factory.componentProperties.editType === 'existing') {
@@ -895,6 +918,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             }
             closeEdit();
         }
+        DF.populateAppData();
     }
     function closeEdit() {
         factory.componentProperties.editObject = null;
@@ -907,16 +931,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             controller: 'DataSelection'
         });
     };
-    // TO REVISE
-    //function getColumnDistinct(entityCode , tableName, columnName) {
-    //    //REMOVE BEFORE FLIGHT
-    //    API.columnSchema().save(logger.postObject({ entityCode: entityCode, tableName: tableName, columnName: columnName })).$promise.then(function (response) {
-    //        //API.tableSchema().get().$promise.then(function (response) {
-    //        return response.result;
-    //    }).catch(function (error) {
-    //        logger.toast.error('Error Getting Table Schema', error);
-    //    });
-    //}
+
 
     return factory;
 }]);

@@ -4,10 +4,6 @@
             <h2>
                 <span>Data Controls</span>
             </h2>
-            <span flex></span>
-            <!--<md-button class="md-icon-button" aria-label="Menu">
-                <md-icon md-svg-icon="assets/icons/lock2.svg"></md-icon>
-            </md-button>-->
         </div>
     </md-toolbar>
     <md-fab-toolbar md-direction="left" style="margin-top:-67px;">
@@ -19,49 +15,39 @@
         <md-toolbar>
             <md-fab-actions class="md-toolbar-tools">
                 <md-button aria-label="dock" class="md-icon-button" ng-click="panel.lock = !panel.lock">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Panel
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-lock-outline.svg"></md-icon>
                 </md-button>
                 <md-button aria-label="right" class="md-icon-button" ng-click="panel.side = 'right'">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Right
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-arrow-right.svg"></md-icon>
                 </md-button>
                 <md-button aria-label="left" class="md-icon-button" ng-click="panel.side = 'left'">
-                    <!--<md-tooltip md-direction="bottom">
-                        Dock Left
-                    </md-tooltip>-->
                     <md-icon md-svg-icon="assets/icons/md-arrow-left.svg"></md-icon>
                 </md-button>
             </md-fab-actions>
         </md-toolbar>
     </md-fab-toolbar>
 
+
     <md-content class="map-gray-1">
-        <md-list class="mdo-listitem-padding" ng-show="currentDataGroup">
+        <md-list class="md-dense" ng-show="current.dataGroup">
             <md-list-item>
                 <p> Auto Query </p>
                 <md-checkbox class="md-secondary" ng-model="autoQuery"></md-checkbox>
             </md-list-item>
             <md-list-item>
                 <p> Aggregate Query </p>
-                <md-checkbox class="md-secondary" ng-model="currentDataGroup.aggregation.enabled"></md-checkbox>
+                <md-checkbox class="md-secondary" ng-model="current.dataGroup.aggregation.enabled"></md-checkbox>
             </md-list-item>
             <md-list-item>
                 <p> Paginate Query </p>
-                <md-checkbox class="md-secondary" ng-model="currentDataGroup.pagination.enabled"></md-checkbox>
+                <md-checkbox class="md-secondary" ng-model="current.dataGroup.pagination.enabled"></md-checkbox>
             </md-list-item>
         </md-list>
 
-        <md-card ng-repeat="selection in currentSelectionLevel">
+        <md-card ng-repeat="selection in current.selectionLevel">
             <md-toolbar style="background-color: transparent;">
                 <div class="md-toolbar-tools">
-                    <h5>
-                        <span>{{selection.name}}</span>
-                    </h5>
+                    <h5>{{selection.name}}</h5>
                     <span flex></span>
                     <md-menu>
                         <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -86,29 +72,10 @@
                                     Aggregate Functions
                                 </md-button>
                             </md-menu-item>
-                            <!--<md-divider></md-divider>
-                            <md-menu-item>
-                                <md-button ng-click="null">
-                                    <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
-                                    Delete Data Selection
-                                </md-button>
-                            </md-menu-item>-->
                         </md-menu-content>
                     </md-menu>
                 </div>
             </md-toolbar>
-            <!--<md-card-content>
-
-            <md-list>
-                <md-list-item>
-                    <md-switch ng-model="selection.order" aria-label="Order Switch" ng-true-value="'desc'" ng-false-value="'asc'">
-                        Order: {{ selection.order }}
-                    </md-switch>
-                </md-list-item>
-                <md-list-item>Aggregate Functions</md-list-item>
-            </md-list>
-
-        </md-card-content>-->
         </md-card>
 
     </md-content>

@@ -1,4 +1,4 @@
-﻿applicationManager.factory('appDataManager', ['$rootScope', '$resource', function ($rootScope, $resource) {
+﻿applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appStateManager', function ($rootScope, $resource, appStateManager) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
     //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
@@ -39,7 +39,10 @@
     // {element: , ChartDOM: }
 
     dataObject.dataGroups = [];
-    // {GUID: , result: }
+    // { GUID: , result: , drillDown: [] }
+
+    dataObject.filters = [];
+    // { GUID: , dataValues: [] }
 
 
 
@@ -48,14 +51,47 @@
     var dataFunctions = {};
 
     dataFunctions.getDataGroup = function (GUID) {
-        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID });
+        var GUIDList = dataObject.dataGroups.map(function (obj) { return obj.GUID; });
         var index = GUIDList.indexOf(GUID);
         if (index > -1) {
             return dataObject.dataGroups[index];
         }
         return null;
     };
+    dataFunctions.getFilter = function (GUID) {
+        var GUIDList = dataObject.filters.map(function (obj) { return obj.GUID; });
+        var index = GUIDList.indexOf(GUID);
+        if (index > -1) {
+            return dataObject.filters[index];
+        }
+        return null;
+    };
 
+    dataFunctions.populateAppData = function () {
+        appStateManager.DSO.canvases.forEach(function (canvas) {
+            canvas.dataGroups.forEach(function (dataGroup) {
+                if (dataObject.dataGroups.map(function(obj){ return obj.GUID;}).indexOf(dataGroup.GUID) < 0){
+                    dataObject.dataGroups.push({ GUID: dataGroup.GUID, result: null, drillDown: [] });
+                    //dataGroup.query.execute();
+                }
+
+                dataGroup.filters.forEach(function (filter) {
+                    if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
+                        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+                        dataObject.filters.push(newFilterDataObject);
+                        dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
+                    }
+                });
+            });
+        });
+    };
+
+    dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
+        apiResource.columnSchema().save({ post: { entityCode: dataGroup.source.product, tableName: dataGroup.source.name, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+            filterDataObject.dataValues = response.result;
+            console.log(response.result);
+        });
+    };
 
 
     //    API RESOURCE
@@ -108,6 +144,7 @@
 
     var getReportListAPI = apiEndpoint + 'report/list';
     apiResource.getReportList = function () { return $resource(getReportListAPI); };
+
 
     //    STRUCTURE
     //
