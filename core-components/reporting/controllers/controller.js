@@ -52,8 +52,9 @@
         };
 
         $mdPanel.open(config);
-
     };
+
+
 
     $scope.reports = [
 

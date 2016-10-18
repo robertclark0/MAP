@@ -160,7 +160,6 @@
                             }
                     }
             }
-
         }
     };
     stateFunctions.generateGUID = function () {

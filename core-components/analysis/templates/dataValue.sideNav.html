@@ -42,12 +42,23 @@
                 <p> Paginate Query </p>
                 <md-checkbox class="md-secondary" ng-model="current.dataGroup.pagination.enabled"></md-checkbox>
             </md-list-item>
+            <md-list-item ng-show="current.dataGroup.pagination.enabled">
+                <md-slider-container flex>
+                    <span>Range</span>
+                    <md-slider flex min="10" max="500" ng-model="current.dataGroup.pagination.range">
+                    </md-slider>
+                    <md-input-container style="max-width: 50px;">
+                        <input flex type="number" ng-model="current.dataGroup.pagination.range">
+                    </md-input-container>
+                </md-slider-container>
+            </md-list-item>
         </md-list>
 
         <md-card ng-repeat="selection in current.selectionLevel">
             <md-toolbar style="background-color: transparent;">
                 <div class="md-toolbar-tools">
-                    <h5>{{selection.name}}</h5>
+                    <h5 ng-show="selection.aggregation.allias">{{selection.aggregation.allias}} <span style="color: gray; font-weight: 400; font-size: 14px; font-style: italic;"> [{{selection.name}}]</span></h5>
+                    <h5 ng-show="!selection.aggregation.allias">{{selection.name}}</h5>
                     <span flex></span>
                     <md-menu>
                         <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -67,15 +78,23 @@
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="null">
+                                <md-button ng-click="showAggregateFunctions($event, selection)">
                                     <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
-                                    Aggregate Functions
+                                    Data Functions
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </div>
             </md-toolbar>
+            <md-card-content style="padding: 0">
+                <md-list style="padding: 0;" class="md-dense">
+                    <md-list-item>
+
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+            <!--<p ng-repeat="op in selection.aggregation.operators">{{op.name}}</p>-->
         </md-card>
 
     </md-content>

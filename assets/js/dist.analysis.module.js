@@ -1,5 +1,5 @@
 var analysis = angular.module('analysis', ['gridster']);
-analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', function ($scope, appManager, $mdSidenav, $mdDialog) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -83,6 +83,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
         }
     });
 
+
     //MENU FUNCTIONS
     $scope.addCanvasElement = function (name, type) {
 
@@ -96,6 +97,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
         dataGroup: null,
         selectionLevel: null,
         selectionIndex: null,
+        selectionValue: null,
         canvasElement: null
     };
     $scope.changeCurrent = function(enterIndex)
@@ -138,6 +140,30 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', functio
             $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
             $scope.currentSelectionLevel[index] = tempSelection;
         }
+    };
+
+
+    //DATA CONTROLL - AGGREGATE FUNCTIONS
+    $scope.showAggregateFunctions = function (ev, selection) {
+        $scope.current.selectionValue = selection;
+        console.log($scope.current.selectionValue);
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/aggregateFunctions.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'CanvasView'
+        });
+    };
+    $scope.selectedOperation = null;
+    $scope.operations = [
+        { name: "Count", type: 'count' },
+        { name: "Sum", type: 'sum' },
+        { name: "Pivot Count", type: 'case-count' },
+        { name: "Pivot Sum", type: 'case-sum' }
+    ];
+    $scope.addOperation = function () {
+        $scope.current.selectionValue.aggregation.operators.push($scope.selectedOperation);
     };
 
 }]);
@@ -426,9 +452,12 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         }
         $scope.clearFilter();
     };
-    $scope.clearFilter = function () {
-        $scope.newFilter.model = null;
+    $scope.clearFilter = function (clearTypeBool) {
+        if (clearTypeBool) {
+            $scope.newFilter.model = null;
+        }       
         $scope.newFilter.allias = null;
+        $scope.newFilter.dataValue = null;
         $scope.newFilter.operations.length = 0;
         $scope.newFilter.selectedValues.length = 0;
         $scope.selectedOperation = null

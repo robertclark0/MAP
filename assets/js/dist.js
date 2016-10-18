@@ -150,6 +150,24 @@ mapApp.directive('selectionControl', [function () {
         }
     };
 }]);
+mapApp.directive('dopOrder', ['appManager', function (appManager) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            operation: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-operations/dopOrder.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        
+
+    };
+}]);
 applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appStateManager', function ($rootScope, $resource, appStateManager) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
@@ -590,7 +608,6 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                             }
                     }
             }
-
         }
     };
     stateFunctions.generateGUID = function () {

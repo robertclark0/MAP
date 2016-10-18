@@ -57,9 +57,12 @@
         }
         $scope.clearFilter();
     };
-    $scope.clearFilter = function () {
-        $scope.newFilter.model = null;
+    $scope.clearFilter = function (clearTypeBool) {
+        if (clearTypeBool) {
+            $scope.newFilter.model = null;
+        }       
         $scope.newFilter.allias = null;
+        $scope.newFilter.dataValue = null;
         $scope.newFilter.operations.length = 0;
         $scope.newFilter.selectedValues.length = 0;
         $scope.selectedOperation = null

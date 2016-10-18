@@ -53,8 +53,9 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
         };
 
         $mdPanel.open(config);
-
     };
+
+
 
     $scope.reports = [
 

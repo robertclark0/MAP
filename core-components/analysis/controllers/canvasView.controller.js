@@ -1,4 +1,4 @@
-﻿analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+﻿analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', function ($scope, appManager, $mdSidenav, $mdDialog) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -82,6 +82,7 @@
         }
     });
 
+
     //MENU FUNCTIONS
     $scope.addCanvasElement = function (name, type) {
 
@@ -95,6 +96,7 @@
         dataGroup: null,
         selectionLevel: null,
         selectionIndex: null,
+        selectionValue: null,
         canvasElement: null
     };
     $scope.changeCurrent = function(enterIndex)
@@ -137,6 +139,30 @@
             $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
             $scope.currentSelectionLevel[index] = tempSelection;
         }
+    };
+
+
+    //DATA CONTROLL - AGGREGATE FUNCTIONS
+    $scope.showAggregateFunctions = function (ev, selection) {
+        $scope.current.selectionValue = selection;
+        console.log($scope.current.selectionValue);
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/aggregateFunctions.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'CanvasView'
+        });
+    };
+    $scope.selectedOperation = null;
+    $scope.operations = [
+        { name: "Count", type: 'count' },
+        { name: "Sum", type: 'sum' },
+        { name: "Pivot Count", type: 'case-count' },
+        { name: "Pivot Sum", type: 'case-sum' }
+    ];
+    $scope.addOperation = function () {
+        $scope.current.selectionValue.aggregation.operators.push($scope.selectedOperation);
     };
 
 }]);

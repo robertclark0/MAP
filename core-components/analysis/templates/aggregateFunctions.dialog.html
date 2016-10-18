@@ -1,0 +1,50 @@
+﻿<md-dialog aria-label="List dialog" style="width: 500px;">
+
+    <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">Aggregate Functions</div>
+    </md-toolbar>
+    <md-dialog-content>
+
+        <section layout="row">
+            <div layout="column" flex style="min-height: 350px; padding-left: 15px;">
+                <md-input-container>
+                    <label>Data Selection</label>
+                    <md-select ng-model="current.selectionValue">
+                        <md-option ng-repeat="selection in current.selectionLevel" ng-value="selection">{{selection.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Allias</label>
+                    <input type="text" ng-model="current.selectionValue.aggregation.allias" />
+                </md-input-container>
+                <p style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                <md-content style="max-height: 200px;">
+                    <md-list>
+                        <md-list-item ng-repeat="operator in current.selectionValue.aggregation.operators">
+                            <p>{{operator.name}}</p>
+                            <md-button class="md-secondary" ng-click="null">X</md-button>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+                <div layout="row">
+                    <md-input-container flex="85">
+                        <label>Operation</label>
+                        <md-select ng-model="selectedOperation">
+                            <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                </div>
+            </div>
+        </section>
+
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="closeDialog()">
+            Close
+        </md-button>
+    </md-dialog-actions>
+
+</md-dialog>
