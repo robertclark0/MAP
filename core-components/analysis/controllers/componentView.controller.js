@@ -47,7 +47,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }
     };
     $scope.showConfigureFilters = function (ev) {
-        if ($scope.componentProperties.editObject.source.name !== null) {
+        if ($scope.componentProperties.editObject.selections.length > 0) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/filter.dialog.html',
                 parent: angular.element(document.body),
@@ -57,7 +57,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
             });
         }
         else {
-            logger.toast.warning('Please Select A Data Source First.');
+            logger.toast.warning('Please Create Data Selections First.');
         }
     };
 

@@ -6,56 +6,68 @@
     </md-toolbar>
     <md-dialog-content>
 
-        <section layout="row">
-            <div layout="column" flex="45" style="max-height: 450px;">
-                <md-subheader class="md-primary" style="background-color: transparent">Available Data</md-subheader>
-                <md-select ng-model="selectionKey.value" placeholder="Data Selection Key" class="md-no-underline" style="padding-left: 15px;">
-                    <md-option ng-repeat="selection in selected" ng-value="selection">{{selection}}</md-option>
-                </md-select>
-                <md-content>
-                    <md-list class="mdo-listitem-padding">
-                        <md-list-item ng-repeat="column in DO.tableSchema">
-                            <p>{{column.COLUMN_NAME}}</p>
-                            <md-checkbox class="md-secondary" ng-model="column.selected"></md-checkbox>
-                        </md-list-item>
-                    </md-list>
-                </md-content>
-                <div layout="column">
-                    <md-button ng-hide="saveMode" ng-disabled="selected.length === 0 || selectionKey.value === null" ng-click="saveSelection()">Create Selection</md-button>
-                    <md-button ng-show="saveMode" ng-click="updateSelection()">Save Selection</md-button>
-                </div>
-            </div>
-            <div flex></div>
-            <div layout="column" flex="50">
-                <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
-                <md-content class="inset">
-                    <md-list class="mdo-listitem-padding">
+        <md-tabs md-center-tabs md-dynamic-height class="dense-tabs">
+            <md-tab label="Basic">
 
-                        <md-list-item class="md-2-line" ng-click="null" ng-repeat="selectionLevel in componentProperties.editObject.selections">
-                            <div class="md-list-item-text" layout="column">
-                                <h3>Primary: {{componentProperties.editObject.drillDown.level[$index]}}</h3>
-                                <p class="md-primary">{{selectionPreview(selectionLevel)}}</p>
-                            </div>
-                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
-                                <md-tooltip md-direction="bottom">Edit</md-tooltip>
-                                <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
-                            </md-button>
-                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
-                                <md-tooltip md-direction="bottom">Move Up</md-tooltip>
-                                <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
-                            </md-button>
-                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelectionLevel($index)">
-                                <md-tooltip md-direction="bottom">Delete</md-tooltip>
-                                <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
-                            </md-button>
-                            <md-divider></md-divider>
-                        </md-list-item>
-                    </md-list>
-                </md-content>
+                <section layout="row">
+                    <div layout="column" flex="45" style="max-height: 450px;">
+                        <md-subheader class="md-primary" style="background-color: transparent">Available Data</md-subheader>
+                        <md-select ng-model="selectionKey.value" placeholder="Data Selection Key" style="padding-left: 15px;">
+                            <md-option ng-repeat="selection in selected" ng-value="selection">{{selection}}</md-option>
+                        </md-select>
+                        <md-content style="background-color: white;">
 
-            </div>
+                            <md-virtual-repeat-container style="height: 250px">
+                                <md-list-item md-virtual-repeat="column in DO.tableSchema">
+                                    <p>{{column.COLUMN_NAME}}</p>
+                                    <md-checkbox class="md-secondary" ng-model="column.selected"></md-checkbox>
+                                </md-list-item>
+                            </md-virtual-repeat-container>
 
-        </section>
+                        </md-content>
+                        <div layout="column">
+                            <md-button ng-hide="saveMode" ng-disabled="selected.length === 0 || selectionKey.value === null" ng-click="saveSelection()">Create Selection</md-button>
+                            <md-button ng-show="saveMode" ng-click="updateSelection()">Save Selection</md-button>
+                        </div>
+                    </div>
+                    <div flex></div>
+                    <div layout="column" flex="50">
+                        <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
+                        <md-content class="inset" style="background-color: white;">
+                            <md-list class="mdo-listitem-padding">
+
+                                <md-list-item class="md-2-line" ng-click="null" ng-repeat="selectionLevel in componentProperties.editObject.selections">
+                                    <div class="md-list-item-text" layout="column">
+                                        <h3>Data Selection Level {{index}}: {{componentProperties.editObject.drillDown.level[$index]}}</h3>
+                                        <p class="md-primary">{{selectionPreview(selectionLevel)}}</p>
+                                    </div>
+                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
+                                        <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                                        <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
+                                        <md-tooltip md-direction="bottom">Move Up</md-tooltip>
+                                        <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelectionLevel($index)">
+                                        <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                                        <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                                    </md-button>
+                                    <md-divider></md-divider>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+
+                    </div>
+
+                </section>
+            </md-tab>
+            <md-tab label="Advanced">
+                <md-contentent>more tab stuff</md-contentent>
+            </md-tab>
+        </md-tabs>
+
+
 
     </md-dialog-content>
 

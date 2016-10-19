@@ -154,3 +154,16 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
     width: 400px;
     box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
 }
+
+
+/*DENSE TAB MENU*/
+.dense-tabs md-tabs-wrapper{
+    background-color: rgb(245,245,245);
+    height: 30px;
+}
+.dense-tabs md-tab-item{
+    padding: 2px 24px;
+}
+.dense-tabs md-pagination-wrapper{
+    height: 30px;
+}
