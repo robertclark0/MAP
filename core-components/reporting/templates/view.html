@@ -71,12 +71,12 @@
     <div flex style="background-color: white">
         <div layout="column" layout-fill>
 
-            <!--<ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>-->
+            <ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>
 
             <div ng-show="currentReport.Report_Name === 'CHUP Aggregate'" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
-                <div>
-                    <md-chips readonly="false" md-removable="true" ng-model="drillDownSelection" md-max-chips="5">
+                <div layout="row">
+                    <md-chips flex="90" readonly="false" md-removable="true" ng-model="drillDownSelection" md-max-chips="5">
 
                         <md-chip-template>
                             <span>
@@ -85,6 +85,10 @@
                             </span>
                         </md-chip-template>
                     </md-chips>
+                    <div flex>
+                        <md-button ng-click="next()">Next</md-button>
+                        <md-button ng-click="prev()" ng-show="queryObjects[drillDownIndex].pagination.page >= 11">Prev</md-button>
+                    </div>
                 </div>
                 <div ng-show="drillDownSelection.length >= 5">
                     <table class="table table-striped">

@@ -1,5 +1,5 @@
 var reporting = angular.module('reporting', []);
-reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', '$mdPanel', function ($scope, appManager, $state, $mdDialog, $mdPanel) {
+reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', '$mdPanel', '$interval', function ($scope, appManager, $state, $mdDialog, $mdPanel, $interval) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -75,7 +75,6 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
     $scope.commaToCR = function (value, index) {
 
         if ($scope.result[0][index] === 'PRODNAME') {
-            console.log(value);
 
             if (value !== null) {
                 return value.split(',');
@@ -85,17 +84,31 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     };
 
+    $scope.next = function () {
+        $scope.queryObjects[$scope.drillDownIndex].pagination.page += 10;
+        $scope.queryObjects[$scope.drillDownIndex].pagination.range += 10;
+        console.log($scope.queryObjects[$scope.drillDownIndex].pagination)
+        $scope.sendQuery();
+
+    };
+    $scope.prev = function () {
+        $scope.queryObjects[$scope.drillDownIndex].pagination.page -= 10;
+        $scope.queryObjects[$scope.drillDownIndex].pagination.range -= 10;
+        $scope.sendQuery();
+    };
+
     ///============================= DRILL DOWN ===========================
 
-    $scope.drillDownLevels = ["Region", "PARENT_DMISID", "DMISID", "MED_HOME_MEPRS", "PCMNPI"];
+    $scope.drillDownLevels = ["Region", "PARENT_DMISID", "DMISID", "MED_HOME_MEPRS", "PCMNAME"];
     $scope.drillDownSelection = [];
     $scope.drillDownIndex = 0;
 
     $scope.updateQueryObject = function () {
         $scope.queryObjects.forEach(function (query) {
-            var index = query.filters.map(function (obj) { return obj.name }).indexOf($scope.drillDownLevels[$scope.drillDownIndex - 1]);
+
+            var index = query.filters.map(function (obj) { return obj.name }).indexOf($scope.drillDownLevels[$scope.drillDownIndex]);
             if (index > -1) {
-                query.filters[index].operators[0].values[0] = $scope.drillDownSelection[$scope.drillDownIndex - 1];
+                query.filters[index].operators[0].values[0] = $scope.drillDownSelection[$scope.drillDownIndex];
             }
         });
     };
@@ -608,11 +621,6 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     aggregate: false
                 },
                 {
-                    name: 'PCMNPI',
-                    order: 'asc',
-                    aggregate: false
-                },
-                {
                     name: 'PCMNAME',
                     order: 'asc',
                     aggregate: false
@@ -772,15 +780,20 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     aggregate: false
                 },
                 {
-                    name: 'GENDER',
-                    order: 'asc',
-                    aggregate: false
-                },
-                {
                     name: 'EDIPN',
                     order: 'asc',
                     aggregate: false
                 },
+                {
+                    name: 'GENDER',
+                    order: 'asc',
+                    aggregate: false
+                },
+                //{
+                //    name: 'DOB',
+                //    order: 'asc',
+                //    aggregate: false
+                //},
                 {
                     name: 'NAME',
                     order: 'asc',
@@ -901,7 +914,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 ]
             },
             {
-                name: 'PCMNPI',
+                name: 'PCMNAME',
                 operators:
                 [
                     {
@@ -916,20 +929,19 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     ];
 
-    $scope.sendQuery = function () {
-
-
-
+    $scope.sendQuery = function (drill) {
+        if (drill) { $scope.drillDownIndex++; };
 
         API.query().save({ query: $scope.queryObjects[$scope.drillDownIndex] }).$promise.then(function (response) {
-            console.log(response.result);
+
             $scope.result = response.result;
             $scope.updatedResult = $scope.updateAggregate(response.result);
 
             aggregateChart.xAxis[0].setCategories($scope.updatedResult[$scope.drillDownLevels[$scope.drillDownIndex]]);
             aggregateChart.series[0].setData($scope.updatedResult.CNT);
 
-            $scope.drillDownIndex++;
+
+
         }).catch(function (error) { console.log(error); });
 
     };
@@ -937,35 +949,44 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     ///============================= GENERATE DOWNLOAD ===========================
 
-    //API.download().save({ query: queryObject }).$promise
-    //    .then(function (response)
-    //    {
-    //        if (response.GUID) {
-    //            var downloadGUID = response.GUID;
-    //            var check;
+    $scope.download = function () {
 
-    //            check = $interval(function () {
-    //                API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-    //                    if (response.Status === 'complete') {
-    //                        $interval.cancel(check);
-    //                        window.location(API.endpoint + "download?GUID=" + downloadGUID);
-    //                    }
-    //                    else if (response.Status === 'started') {
+        var query = $scope.queryObjects[$scope.drillDownIndex];
+        query.aggregation.enabled = false;
+        query.pagination.enabled = false;
 
-    //                    }
-    //                    else {
-    //                        $interval.cancel(check);
-    //                    }
-    //                }).catch(function (response) {
-    //                    console.log(response);
-    //                });
-    //            }, 3000, 600);
-    //        }
-    //    })
-    //    .catch(function (response)
-    //    {
-    //        console.log(response);
-    //    });
+
+        API.download().save({ query: query }).$promise.then(function (response)
+        {
+            if (response.GUID) {
+                var downloadGUID = response.GUID;
+                var check;
+
+                check = $interval(function () {
+                    API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
+                        if (response.Status === 'complete') {
+                            $interval.cancel(check);
+                            window.location(API.endpoint + "download?GUID=" + downloadGUID);
+                        }
+                        else if (response.Status === 'started') {
+
+                        }
+                        else {
+                            $interval.cancel(check);
+                        }
+                    }).catch(function (response) {
+                        console.log(response);
+                    });
+                }, 3000, 600);
+            }
+        })
+        .catch(function (response)
+        {
+            console.log(response);
+        });
+    };
+
+
 
 
     ///============================= AGGREGATE CHART ===========================
@@ -1009,9 +1030,11 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 cursor: 'pointer',
                 events: {
                     click: function (event) {
-                        $scope.drillDownSelection[$scope.drillDownIndex - 1] = event.point.category;
+                        $scope.drillDownSelection[$scope.drillDownIndex] = event.point.category;
+                        console.log($scope.drillDownSelection);
                         $scope.updateQueryObject();
                         console.log($scope.queryObjects);
+                        $scope.sendQuery(true);
 
                     }
                 }
@@ -1051,8 +1074,8 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
             x: -20 //center
         },
         xAxis: {
-            categories: ['May', 'Jun',
-                'Jul']
+            categories: ['April','May','June', 'July',
+                'August', 'September']
         },
         yAxis: {
             labels: {
@@ -1094,59 +1117,56 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
             }
         },
         series: [
-        { name: 'AHC FOX-REDSTONE ARSENAL', data: [1305, 1360, 1421] },
-        { name: 'AHC LYSTER-RUCKER', data: [1170, 1267, 1265] },
-        { name: 'AMC EISENHOWER-GORDON', data: [1899, 2017, 2008] },
-        { name: 'ACH MARTIN-BENNING', data: [2263, 2358, 2305] },
-        { name: 'ACH WINN-STEWART', data: [1383, 1462, 1438] },
-        { name: 'ACH BLANCHFIELD-CAMPBELL', data: [1673, 1747, 1741] },
-        { name: 'ACH IRELAND- KNOX', data: [2330, 2468, 2466] },
-        { name: 'KIMBROUGH AMB CAR CEN-MEADE', data: [1139, 1246, 1247] },
-        { name: 'ACH KELLER-WEST POINT', data: [228, 249, 260] },
-        { name: 'AMC WOMACK-BRAGG', data: [1049, 1084, 1084] },
-        { name: 'ACH MONCRIEF-JACKSON', data: [1292, 1334, 1296] },
-        { name: 'AHC MCDONALD-EUSTIS', data: [1209, 1308, 1302] },
-        { name: 'AHC KENNER-LEE', data: [1635, 1771, 1799] },
-        { name: 'AHC MCNAIR-MYER-HENDERSON HALL', data: [19, 24, 26] },
-        { name: 'AHC TUTTLE-HUNTER ARMY AIRFLD', data: [762, 812, 785] },
-        { name: 'AHC ROCK ISLAND ARSENAL', data: [149, 163, 168] },
-        { name: 'AHC KIRK-ABERDEEN PRVNG GD', data: [581, 626, 631] },
-        { name: 'AHC BARQUIST-DETRICK', data: [385, 404, 425] },
-        { name: 'AHC GUTHRIE-DRUM', data: [753, 781, 793] },
-        { name: 'AHC DUNHAM-CARLISLE BARRACKS', data: [360, 393, 379] },
-        { name: 'AHC ANDREW RADER-MYER-HENDERSN', data: [261, 277, 291] },
-        { name: 'AHC FILLMORE-NEW CUMBERLAND', data: [119, 129, 134] },
-        { name: 'AHC-STORY', data: [70, 77, 81] },
-        { name: 'OHC EDGEWOOD ARS', data: [39, 42, 46] },
-        { name: 'TMC-1-EUSTIS', data: [7, 11, 17] },
-        { name: 'TMC-2-EUSTIS', data: [370, 395, 411] },
-        { name: 'CTMC-BENNING', data: [392, 402, 389] },
-        { name: 'CTMC 2-HARMONY CHURCH-BENNING', data: [353, 353, 357] },
-        { name: 'TMC 9-7TH SPECIAL FORCES-EGLIN', data: [152, 178, 188] },
-        { name: 'AVIATION MEDICINE C-CAMPBELL', data: [414, 442, 435] },
-        { name: 'TMC-4-GORDON', data: [809, 873, 855] },
-        { name: 'CTMC SLEDGEHAMMER-BENNING', data: [128, 172, 228] },
-        { name: 'TMC-5-BENNING', data: [163, 167, 160] },
-        { name: 'TMC MOLOGNE-WEST POINT', data: [54, 62, 74] },
-        { name: 'TROOP & FAMILY MED CL-BRAGG', data: [865, 931, 923] },
-        { name: 'CBMH FAYETTEVILLE-BRAGG', data: [308, 305, 313] },
-        { name: 'CBMH HOPE MILLS-BRAGG', data: [459, 466, 461] },
-        { name: 'CBMH LINDEN OAKS-BRAGG', data: [299, 307, 299] },
-        { name: 'CBMH SCREAMING EAGLE-CAMPBELL', data: [660, 678, 663] },
-        { name: 'CBMH MONCRIEF-JACKSON', data: [562, 595, 585] },
-        { name: 'CBMH RICHMOND HILL-STEWART', data: [517, 554, 547] },
-        { name: 'CBMH NORTH COLUMBUS-BENNING', data: [427, 449, 446] },
-        { name: 'CTMC CONNER-DRUM', data: [690, 733, 738] },
-        { name: 'ROBINSON CLINIC-BRAGG', data: [1355, 1391, 1358] },
-        { name: 'CONNELLY HLTH CLIN-GORDON', data: [12, 12, 11] },
-        { name: 'SOUTHCOM CLINIC-GORDON', data: [317, 345, 341] },
-        { name: 'JOEL CLINIC-BRAGG', data: [1037, 1136, 1105] },
-        { name: 'CLARK CLINIC-BRAGG', data: [1219, 1286, 1276] },
-        { name: 'LA POINTE HLTH CLINIC-CAMPBELL', data: [560, 579, 585] },
-        { name: 'BYRD HEALTH CLINIC-CAMPBELL', data: [871, 919, 937] },
-        { name: 'TMC-STEWART', data: [220, 256, 263] },
-        { name: 'TMC LLOYD C HAWKS-STEWART', data: [963, 1039, 1068] },
-        { name: 'AHC RODRIGUEZ-BUCHANAN', data: [145, 155, 157] },
+            { name: 'ACH BASSETT-WAINWRIGHT', data: [599, 648, 701, 705, 687] },
+{ name: 'ACH BAYNE-JONES-POLK', data: [988, 1062, 1157, 1128, 1161] },
+{ name: 'ACH BLANCHFIELD-CAMPBELL', data: [2177, 2282, 2402, 2404, 2309] },
+{ name: 'ACH BRIAN ALLGOOD-SEOUL', data: [265, 299, 329, 339, 365] },
+{ name: 'ACH EVANS-CARSON', data: [2308, 2489, 2708, 2731, 2659] },
+{ name: 'ACH IRELAND- KNOX', data: [2773, 2918, 3156, 3172, 3099] },
+{ name: 'ACH IRWIN-RILEY', data: [745, 782, 822, 828, 790] },
+{ name: 'ACH KELLER-WEST POINT', data: [333, 347, 373, 382, 344] },
+{ name: 'ACH LEONARD WOOD', data: [1744, 1779, 1969, 2077, 2129] },
+{ name: 'ACH MARTIN-BENNING', data: [2653, 2750, 2854, 2830, 2946] },
+{ name: 'ACH MONCRIEF-JACKSON', data: [1479, 1592, 1677, 1655, 1641] },
+{ name: 'ACH REYNOLDS-SILL', data: [2669, 2768, 2949, 2993, 3013] },
+{ name: 'ACH WEED-IRWIN', data: [428, 462, 486, 525, 515] },
+{ name: 'ACH WINN-STEWART', data: [1747, 1817, 1926, 1887, 1914] },
+{ name: 'AHC ANDREW RADER-MYER-HENDERSN', data: [382, 383, 403, 404, 380] },
+{ name: 'AHC ANSBACH', data: [126, 138, 161, 162, 178] },
+{ name: 'AHC BARQUIST-DETRICK', data: [499, 504, 543, 567, 521] },
+{ name: 'AHC BAUMHOLDER', data: [314, 318, 342, 364, 387] },
+{ name: 'AHC BG CRAWFORD SAMS-CAMP ZAMA', data: [125, 126, 156, 132, 153] },
+{ name: 'AHC BRUSSELS', data: [27, 28, 29, 38, 29] },
+{ name: 'AHC CAMP CASEY-TONGDUCHON', data: [148, 180, 204, 212, 326] },
+{ name: 'AHC CAMP HUMPHREYS-PYONGTAEK', data: [488, 507, 530, 520, 642] },
+{ name: 'AHC CAMP STANLEY', data: [75, 74, 68, 70, 70] },
+{ name: 'AHC DUNHAM-CARLISLE BARRACKS', data: [467, 506, 551, 534, 498] },
+{ name: 'AHC FILLMORE-NEW CUMBERLAND', data: [157, 149, 162, 171, 160] },
+{ name: 'AHC FOX-REDSTONE ARSENAL', data: [1449, 1568, 1664, 1727, 1570] },
+{ name: 'AHC GRAFENWOEHR', data: [474, 422, 429, 470, 483] },
+{ name: 'AHC GUTHRIE-DRUM', data: [982, 1051, 1132, 1151, 1117] },
+{ name: 'AHC HOHENFELS', data: [119, 134, 143, 148, 139] },
+{ name: 'AHC KAISERSLAUTERN', data: [262, 268, 301, 299, 311] },
+{ name: 'AHC KENNER-LEE', data: [1853, 2022, 2206, 2260, 2268] },
+{ name: 'AHC KIRK-ABERDEEN PRVNG GD', data: [681, 745, 826, 817, 807] },
+{ name: 'AHC LYSTER-RUCKER', data: [1430, 1510, 1655, 1674, 1688] },
+{ name: 'AHC MCAFEE-WHITE SANDS MSL RAN', data: [108, 116, 118, 121, 116] },
+{ name: 'AHC MCDONALD-EUSTIS', data: [1451, 1559, 1675, 1680, 1536] },
+{ name: 'AHC MCNAIR-MYER-HENDERSON HALL', data: [18, 30, 34, 34, 33] },
+{ name: 'AHC MONTEREY', data: [442, 478, 531, 528, 574] },
+{ name: 'AHC MUNSON-LEAVENWORTH', data: [1231, 1339, 1497, 1517, 1489] },
+{ name: 'AHC PATCH BKS-STUTTGART', data: [349, 379, 409, 416, 416] },
+{ name: 'AHC R W BLISS-HUACHUCA', data: [976, 1080, 1215, 1207, 1175] },
+{ name: 'AHC ROCK ISLAND ARSENAL', data: [195, 199, 230, 242, 212] },
+{ name: 'AHC RODRIGUEZ-BUCHANAN', data: [164, 159, 174, 181, 192] },
+{ name: 'AHC SCHOFIELD BARRACKS', data: [823, 849, 934, 932, 950] },
+{ name: 'AHC SHAPE', data: [133, 132, 149, 135, 140] },
+{ name: 'AHC TUTTLE-HUNTER ARMY AIRFLD', data: [883, 914, 991, 968, 1007] },
+{ name: 'AHC VILSECK', data: [395, 411, 434, 402, 397] },
+{ name: 'AHC WIESBADEN', data: [377, 381, 395, 418, 452] },
+{ name: 'AHC YUMA PROVING GROUND', data: [20, 22, 18, 17, 17] },
+{ name: 'AHC-CAMP CARROLL-KOREA', data: [171, 177, 182, 193, 242] },
+
 
         ]
     }
@@ -1158,6 +1178,13 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     $scope.goReport(0);
     $scope.sendQuery();
+
+    //Chart Globals
+    Highcharts.setOptions({
+        lang: {
+            thousandsSep: ','
+        }
+    });
 
 
 }]);

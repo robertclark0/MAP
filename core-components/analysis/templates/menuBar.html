@@ -1,6 +1,6 @@
 ﻿<div style="height:41px; border-top: 1px solid rgb(225,225,225);">
     <md-menu-bar class="map-gray-1">
-        <md-menu>
+        <!--<md-menu>
             <button ng-click="$mdOpenMenu()">
                 Canvas
             </button>
@@ -92,6 +92,18 @@
                         </md-menu-content>
                     </md-menu>
 
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>-->
+        <md-menu>
+            <button ng-click="$mdOpenMenu()">
+                Export
+            </button>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button ng-click="download()">
+                        CSV
+                    </md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
