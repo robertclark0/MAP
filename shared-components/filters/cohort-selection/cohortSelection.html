@@ -3,7 +3,7 @@
         <div class="md-toolbar-tools">
             <h5>Patient Cohort</h5>
             <span flex></span>
-            <md-menu>
+            <!--<md-menu>
                 <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                     <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
                 </md-button>
@@ -21,13 +21,13 @@
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
-            </md-menu>
+            </md-menu>-->
         </div>
     </md-toolbar>
     <md-card-content>
-        <md-checkbox aria-label="CHUP" ng-model="chup" ng-change="checkAll()"><em>CHUP</em></md-checkbox><br />
-        <md-checkbox aria-label="Poly" ng-model="poly" ng-change="allChecked()">PolyPharm</md-checkbox>
-        <md-checkbox aria-label="High" ng-model="hu" ng-change="allChecked()">High Utilizer</md-checkbox>
-        <md-checkbox aria-label="Pain" ng-model="pain" ng-change="allChecked()">Pain</md-checkbox>
+        <md-checkbox aria-label="CHUP" ng-model="chup" ng-change="checkedCHUP()"><em>CHUP</em></md-checkbox><br />
+        <md-checkbox aria-label="Poly" ng-model="poly" ng-change="checkedPoly()">PolyPharm</md-checkbox>
+        <md-checkbox aria-label="High" ng-model="hu" ng-change="checkedHU()">High Utilizer</md-checkbox>
+        <md-checkbox aria-label="Pain" ng-model="pain" ng-change="checkedPain()">Pain</md-checkbox>
     </md-card-content>
 </md-card>

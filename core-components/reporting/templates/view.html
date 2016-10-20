@@ -4,17 +4,67 @@
 
     <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
         <md-subheader class="md-primary">Report</md-subheader>
-        <md-list style="padding:0">
-            <md-list-item class="md-2-line" ng-click="showReport($event)">
-                <div class="md-list-item-text" style="padding-top: 4px;">
-                    <span class="md-headline">{{currentReport.Report_Name}}</span>
-                    <p class="md-primary">{{currentReport.Category}}</p>
+
+        <md-list class="md-dense" style="background-color:white;">
+            <md-list-item ng-click="goReport(0)">
+                <div>
+                    <p>{{reports[0][0].Report_Name}}</p>
                 </div>
             </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-click="goReport(1)">
+                <div>
+                    <p>{{reports[0][1].Report_Name}}</p>
+                </div>
+            </md-list-item>
+
         </md-list>
         <md-subheader class="md-primary">Data Filters</md-subheader>
         <md-content class="map-gray-1">
-            <cohort-selection></cohort-selection>
+            <cohort-selection query="queryObjects[drillDownIndex]"></cohort-selection>
+
+
+
+            <md-card>
+                <md-toolbar style="background-color: transparent;">
+                    <div class="md-toolbar-tools">
+                        <h5>Fiscal Month</h5>
+                        <span flex></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content style="padding: 0">
+                    <md-list style="padding: 0;" class="md-dense">
+                        <md-list-item>
+                            <md-input-container flex>
+                                <md-select ng-model="selectedMonth" md-on-close="checkMonth()" ng-model-options="{trackBy: '$value.name'}">
+                                    <md-option ng-repeat="value in months" ng-value="value">{{value.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+
+            <!--<md-card>
+                <md-toolbar style="background-color: transparent;">
+                    <div class="md-toolbar-tools">
+                        <h5>MEPRS Code</h5>
+                        <span flex></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content style="padding: 0">
+                    <md-list style="padding: 0;" class="md-dense">
+                        <md-list-item>
+                            <md-input-container flex>
+                                <md-select ng-model="selectedMonth">
+                                    <md-option ng-repeat="value in months" ng-value="value.number">{{value.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>-->
+
         </md-content>
     </md-sidenav>
 
@@ -23,9 +73,44 @@
 
             <!--<ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>-->
 
-            <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+            <div ng-show="currentReport.Report_Name === 'CHUP Aggregate'" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
+                <div>
+                    <md-chips readonly="false" md-removable="true" ng-model="drillDownSelection" md-max-chips="5">
 
+                        <md-chip-template>
+                            <span>
+                                <em>{{drillDownLevels[$index]}}</em>
+                                <strong>{{$chip}}</strong>
+                            </span>
+                        </md-chip-template>
+                    </md-chips>
+                </div>
+                <div ng-show="drillDownSelection.length >= 5">
+                    <table class="table table-striped">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <td ng-repeat="cell in result[0] track by $index"><span style="font-weight:500">{{cell}}</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in result track by $index" ng-hide="$first">
+                                <td ng-repeat="cell in row track by $index"><div ng-hide="$last">{{cell}}</div><div ng-show="$last"><div ng-repeat="value in commaToCR(cell, $index) track by $index">{{value}}<br /></div></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-show="drillDownSelection.length < 5" id="aggregateChart" style="width: 75%; height: 80vh">
+
+                </div>
+
+            </div>
+
+            <div ng-show="currentReport.Report_Name === 'CHUP Trending'" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
+                <selectioncontrol element=""></selectioncontrol>
+                <div id="trendingChart" style="width: 75%; height: 80vh">
+
+                </div>
             </div>
 
         </div>
