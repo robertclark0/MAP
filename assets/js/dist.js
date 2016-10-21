@@ -393,7 +393,8 @@ mapApp.directive('cohortSelection', [function () {
     return {
         restrict: 'E',
         scope: {
-            query: '='
+            query: '=',
+            run: '='
         },
         replace: true,
         templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
@@ -422,6 +423,7 @@ mapApp.directive('cohortSelection', [function () {
                 scope.poly = true;
                 scope.hu = true;
                 scope.pain = true;
+
             }
             else {
                 scope.query.filters[0].operators[0].values[0] = 0;
@@ -432,7 +434,9 @@ mapApp.directive('cohortSelection', [function () {
                 scope.poly = false;
                 scope.hu = false;
                 scope.pain = false;
+
             }
+            scope.run();
         };
         scope.checkedHU = function(){
             if (scope.hu) {
@@ -441,6 +445,7 @@ mapApp.directive('cohortSelection', [function () {
             else {
                 scope.query.filters[0].operators[0].values[0] = 0;
             }
+            scope.run();
         };
         scope.checkedPain = function(){
             if (scope.pain) {
@@ -449,6 +454,7 @@ mapApp.directive('cohortSelection', [function () {
             else {
                 scope.query.filters[1].operators[0].values[0] = 0;
             }
+            scope.run();
         };
         scope.checkedPoly = function(){        
             if (scope.poly) {
@@ -457,6 +463,7 @@ mapApp.directive('cohortSelection', [function () {
             else {
                 scope.query.filters[2].operators[0].values[0] = 0;
             }
+            scope.run();
         };
 
 

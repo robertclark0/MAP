@@ -21,7 +21,7 @@
         </md-list>
         <md-subheader class="md-primary">Data Filters</md-subheader>
         <md-content class="map-gray-1">
-            <cohort-selection query="queryObjects[drillDownIndex]"></cohort-selection>
+            <cohort-selection query="queryObjects[drillDownIndex]" run="sendQuery"></cohort-selection>
 
 
 
@@ -76,18 +76,23 @@
             <div ng-show="currentReport.Report_Name === 'CHUP Aggregate'" flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div layout="row">
-                    <md-chips flex="90" readonly="false" md-removable="true" ng-model="drillDownSelection" md-max-chips="5">
+                    <md-chips flex="85" readonly="true" md-removable="false" ng-model="chipLevels" md-max-chips="5">
 
                         <md-chip-template>
-                            <span>
+                            <span style="position: relative; top: -3px;">
                                 <em>{{drillDownLevels[$index]}}</em>
                                 <strong>{{$chip}}</strong>
                             </span>
+                            <md-button style="position: relative; top: -4px;" class="md-icon-button" ng-click="drillUp($index)">
+                                <md-icon md-svg-src="assets/icons/md-clear.svg"></md-icon>
+                            </md-button>
                         </md-chip-template>
+
                     </md-chips>
-                    <div flex>
-                        <md-button ng-click="next()">Next</md-button>
+                    <div flex></div>
+                    <div>                      
                         <md-button ng-click="prev()" ng-show="queryObjects[drillDownIndex].pagination.page >= 11">Prev</md-button>
+                        <md-button ng-click="next()">Next</md-button>
                     </div>
                 </div>
                 <div ng-show="drillDownSelection.length >= 5">

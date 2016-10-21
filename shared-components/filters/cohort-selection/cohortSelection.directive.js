@@ -2,7 +2,8 @@
     return {
         restrict: 'E',
         scope: {
-            query: '='
+            query: '=',
+            run: '='
         },
         replace: true,
         templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
@@ -31,6 +32,7 @@
                 scope.poly = true;
                 scope.hu = true;
                 scope.pain = true;
+
             }
             else {
                 scope.query.filters[0].operators[0].values[0] = 0;
@@ -41,7 +43,9 @@
                 scope.poly = false;
                 scope.hu = false;
                 scope.pain = false;
+
             }
+            scope.run();
         };
         scope.checkedHU = function(){
             if (scope.hu) {
@@ -50,6 +54,7 @@
             else {
                 scope.query.filters[0].operators[0].values[0] = 0;
             }
+            scope.run();
         };
         scope.checkedPain = function(){
             if (scope.pain) {
@@ -58,6 +63,7 @@
             else {
                 scope.query.filters[1].operators[0].values[0] = 0;
             }
+            scope.run();
         };
         scope.checkedPoly = function(){        
             if (scope.poly) {
@@ -66,6 +72,7 @@
             else {
                 scope.query.filters[2].operators[0].values[0] = 0;
             }
+            scope.run();
         };
 
 
