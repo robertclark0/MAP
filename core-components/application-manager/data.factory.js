@@ -3,6 +3,7 @@
     var apiEndpoint = 'http://localhost:51880/api/';
     //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
     //var apiEndpoint = 'http://localhost:3000/';
+    //var apiEndpoint = 'https://pasbastageweb.amedd.army.mil/map/api/';
 
     //    DATA OBJECT
     //
@@ -26,6 +27,8 @@
         this.region = userInfoAPIResponse.RHCName;
         this.email = userInfoAPIResponse.userEmail;
     };
+
+    dataObject.userProduct = null;
 
     dataObject.productLines = null;
     dataObject.ProductLines = function (productLinesAPIResponse) {
@@ -102,6 +105,9 @@
 
     var userInfoAPI = apiEndpoint + 'user-info';
     apiResource.userInfo = function () { return $resource(userInfoAPI); };
+
+    var userProductAPI = apiEndpoint + 'user-product';
+    apiResource.userProduct = function () { return $resource(userProductAPI); };
 
     var userActiveAPI = apiEndpoint + 'user-active';
     apiResource.userActive = function () { return $resource(userActiveAPI); };

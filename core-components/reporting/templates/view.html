@@ -28,7 +28,7 @@
             <md-card>
                 <md-toolbar style="background-color: transparent;">
                     <div class="md-toolbar-tools">
-                        <h5>Fiscal Month</h5>
+                        <h5>Month</h5>
                         <span flex></span>
                     </div>
                 </md-toolbar>
@@ -90,7 +90,7 @@
 
                     </md-chips>
                     <div flex></div>
-                    <div>                      
+                    <div ng-show="drillDownSelection.length >= 5">
                         <md-button ng-click="prev()" ng-show="queryObjects[drillDownIndex].pagination.page >= 11">Prev</md-button>
                         <md-button ng-click="next()">Next</md-button>
                     </div>

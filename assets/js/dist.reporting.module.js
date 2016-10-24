@@ -10,23 +10,8 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     $scope.result = null;
     $scope.updatedResult = null;
-
-    if (DO.user === null) {
-        API.userInfo().save(logger.postObject()).$promise.then(function (response) {
-            //API.userInfo().get().$promise.then(function (response) {
-            if (response.result) {
-                DO.user = new DO.User(response.result);
-                $scope.user = appManager.data.DO.user;
-
-                $scope.goReport(0);
-                $scope.sendQuery();
-            }
-        }).catch(function (error) {
-            logger.toast.error('Error Getting User Data', error);
-        });
-    }
-
-
+    $scope.user = appManager.data.DO.user;
+    $scope.role = 0;
     $scope.name = DSO.name;
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
@@ -70,7 +55,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
     $scope.checkMonth = function () {
 
         $scope.queryObjects.forEach(function (query) {
-            query.filters[query.filters.map(function (obj) { return obj.name }).indexOf("FM")].operators[0].values[0] = $scope.selectedMonth.number;
+            query.filters[query.filters.map(function (obj) { return obj.name }).indexOf("CM")].operators[0].values[0] = $scope.selectedMonth.number;
         });
 
         $scope.sendQuery();
@@ -227,7 +212,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FY',
+                    name: 'CY',
                     operators:
                     [
                         {
@@ -238,12 +223,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FM',
+                    name: 'CM',
                     operators:
                     [
                         {
                             type: 'equal',
-                            values: [4],
+                            values: [9],
                             valueType: 'int'
                         }
                     ]
@@ -338,7 +323,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FY',
+                    name: 'CY',
                     operators:
                     [
                         {
@@ -349,12 +334,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FM',
+                    name: 'CM',
                     operators:
                     [
                         {
                             type: 'equal',
-                            values: [4],
+                            values: [9],
                             valueType: 'int'
                         }
                     ]
@@ -449,7 +434,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FY',
+                    name: 'CY',
                     operators:
                     [
                         {
@@ -460,12 +445,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FM',
+                    name: 'CM',
                     operators:
                     [
                         {
                             type: 'equal',
-                            values: [4],
+                            values: [9],
                             valueType: 'int'
                         }
                     ]
@@ -576,7 +561,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FY',
+                    name: 'CY',
                     operators:
                     [
                         {
@@ -587,12 +572,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                     ]
                 },
                 {
-                    name: 'FM',
+                    name: 'CM',
                     operators:
                     [
                         {
                             type: 'equal',
-                            values: [4],
+                            values: [9],
                             valueType: 'int'
                         }
                     ]
@@ -709,7 +694,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 ]
             },
             {
-                name: 'FY',
+                name: 'CY',
                 operators:
                 [
                     {
@@ -720,12 +705,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 ]
             },
             {
-                name: 'FM',
+                name: 'CM',
                 operators:
                 [
                     {
                         type: 'equal',
-                        values: [4],
+                        values: [9],
                         valueType: 'int'
                     }
                 ]
@@ -884,7 +869,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 ]
             },
             {
-                name: 'FY',
+                name: 'CY',
                 operators:
                 [
                     {
@@ -895,12 +880,12 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 ]
             },
             {
-                name: 'FM',
+                name: 'CM',
                 operators:
                 [
                     {
                         type: 'equal',
-                        values: [4],
+                        values: [9],
                         valueType: 'int'
                     }
                 ]
@@ -971,9 +956,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
             if (drill) { $scope.drillDownIndex++; };
 
             var query = $scope.queryObjects[$scope.drillDownIndex];
-
-            query.filters.push({ name: 'DMISID', operators: [{ type: 'equal', values: [DO.user.DMIS], valueType: 'int' }] });
-
+            console.log(query);
             API.query().save({ query: query }).$promise.then(function (response) {
 
                 $scope.result = response.result;
@@ -982,7 +965,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
                 aggregateChart.xAxis[0].setCategories($scope.updatedResult[$scope.drillDownLevels[$scope.drillDownIndex]]);
                 aggregateChart.series[0].setData($scope.updatedResult.CNT);
 
-
+                
 
             }).catch(function (error) { console.log(error); });
         }
@@ -995,51 +978,59 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     ///============================= GENERATE DOWNLOAD ===========================
 
-    $scope.download = function () {
+    $scope.download = function (ev) {
 
-        if (DO.user && DO.user.DMIS) {
-            var query = $scope.queryObjects[$scope.drillDownIndex];
+            var confirm = $mdDialog.confirm()
+                  .title('HIPAA Data Warning')
+                  .textContent('Saving information contained in this application to your computer may put you at risk for Protected Health Information (PHI) or Personally Indentifiable Information (PII) violations.  Information downloaded from this application is tracked and should not be disseminated to personnel without a need to know.')
+                  .ariaLabel('HIPPA')
+                  .targetEvent(ev)
+                  .ok('Proceed To Download')
+                  .cancel('Cancel');
 
-            query.aggregation.enabled = false;
-            query.pagination.enabled = false;
-            query.filters.push({ name: 'DMISID', operators: [{ type: 'equal', values: [DO.user.DMIS], valueType: 'int' }] });
+            $mdDialog.show(confirm).then(function () {
+                if (DO.user && DO.user.DMIS) {
+                    var query = $scope.queryObjects[$scope.drillDownIndex];
 
+                    query.aggregation.enabled = false;
+                    query.pagination.enabled = false;
 
-            API.download().save({ query: query }).$promise.then(function (response) {
-                if (response.GUID) {
-                    var downloadGUID = response.GUID;
-                    var check;
+                    console.log(query);
 
-                    check = $interval(function () {
-                        API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-                            if (response.Status === 'complete') {
-                                $interval.cancel(check);
-                                window.location(API.endpoint + "download?GUID=" + downloadGUID);
-                            }
-                            else if (response.Status === 'started') {
+                    API.download().save({ query: query }).$promise.then(function (response) {
+                        if (response.GUID) {
+                            var downloadGUID = response.GUID;
+                            var check;
 
-                            }
-                            else {
-                                $interval.cancel(check);
-                            }
-                        }).catch(function (response) {
-                            console.log(response);
-                        });
-                    }, 3000, 600);
+                            check = $interval(function () {
+                                API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
+                                    if (response.Status === 'complete') {
+                                        $interval.cancel(check);
+                                        window.location(API.endpoint + "download?GUID=" + downloadGUID);
+                                    }
+                                    else if (response.Status === 'started') {
+
+                                    }
+                                    else {
+                                        $interval.cancel(check);
+                                    }
+                                }).catch(function (response) {
+                                    console.log(response);
+                                });
+                            }, 3000, 600);
+                        }
+                    })
+                    .catch(function (response) {
+                        console.log(response);
+                    });
                 }
-            })
-            .catch(function (response) {
-                console.log(response);
-            });
-        }
-        else {
-            logger.toast.error('Unable To Determine User Location For Query');
-        }
-
-        
+                else {
+                    logger.toast.error('Unable To Determine User Location For Query');
+                }
+            }, function () {
+                console.log('Cancelled Download');
+            });  
     };
-
-
 
 
     ///============================= AGGREGATE CHART ===========================
@@ -1211,18 +1202,50 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     angular.element('#trendingChart').highcharts(trending)
 
-
-    //ON LOAD
-
-    //$scope.goReport(0);
-    //$scope.sendQuery();
-
     //Chart Globals
     Highcharts.setOptions({
         lang: {
             thousandsSep: ','
         }
     });
+
+
+    // ON LOAD
+    //============================================================================================================================
+    if (DO.user === null) {
+        API.userInfo().save(logger.postObject()).$promise.then(function (response) {
+            //API.userInfo().get().$promise.then(function (response) {
+            if (response.result) {
+                DO.user = new DO.User(response.result);
+                $scope.user = appManager.data.DO.user;
+            }
+        }).catch(function (error) {
+            logger.toast.error('Error Getting User Data', error);
+        });
+    }
+
+    if (DO.userProduct === null) {
+        API.userProduct().save(logger.postObject()).$promise.then(function (response) {
+            //API.userProduct().get().$promise.then(function (response) {
+            if (response.result) {
+
+                DO.userProduct = response.result;
+               
+                if (response.result.DmisInfo.length > 0) {
+                    var DmisList = response.result.DmisInfo.map(function (obj) { return obj.dmisID; });
+
+                    $scope.queryObjects.forEach(function (query) {
+                        query.filters.push({ name: 'DMISID', operators: [{ type: 'in', values: DmisList, valueType: 'string' }] });                      
+                    });
+                }
+
+                $scope.goReport(0);
+                $scope.sendQuery();
+            }
+        }).catch(function (error) {
+            logger.toast.error('Error Getting User Authorization', error);
+        });
+    }
 
 
 }]);
