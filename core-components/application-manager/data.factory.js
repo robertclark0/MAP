@@ -9,28 +9,7 @@
     var dataObject = {};
 
     dataObject.user = null;
-    dataObject.User = function (userInfoAPIResponse) {
-        this.id = {
-            PACT: userInfoAPIResponse.UID,
-            EDIPI: userInfoAPIResponse.EDIPN,
-            AKO: userInfoAPIResponse.akoUserID
-        };
-        this.productLines = {
-            userActive: []
-        };
-        this.name = {
-            first: userInfoAPIResponse.fName,
-            last: userInfoAPIResponse.lName
-        };
-        this.DMIS = userInfoAPIResponse.dmisID;
-        this.region = userInfoAPIResponse.RHCName;
-        this.email = userInfoAPIResponse.userEmail;
-    };
-
-    dataObject.productLines = null;
-    dataObject.ProductLines = function (productLinesAPIResponse) {
-        this.value = productLinesAPIResponse;
-    };
+    dataObject.products = null;
 
     dataObject.dataSource = [];
     dataObject.tableSchema = [];
@@ -98,22 +77,15 @@
     //
     var apiResource = {};
 
-    apiResource.endpoint =  apiEndpoint;
+    apiResource.endpoint = apiEndpoint;
 
-    //var userInfoAPI = apiEndpoint + 'user-info';
-    //apiResource.userInfo = function () { return $resource(userInfoAPI); };
+    var userAPI = apiEndpoint + 'user';
+    apiResource.user = function () { return $resource(userAPI); };
 
-    //var userActiveAPI = apiEndpoint + 'user-active';
-    //apiResource.userActive = function () { return $resource(userActiveAPI); };
+    var productAPI = apiEndpoint + 'products';
+    apiResource.products = function () { return $resource(productAPI); };
 
-    //var productLinesAPI = apiEndpoint + 'product-lines';
-    //apiResource.productLines = function () { return $resource(productLinesAPI); };
-
-    //var dataSourcesAPI = apiEndpoint + 'data-sources';
-    //apiResource.dataSources = function () { return $resource(dataSourcesAPI); };
-
-    //var dataSourceParametersAPI = apiEndpoint + 'data-source-parameters';
-    //apiResource.dataSourceParameters = function () { return $resource(dataSourceParametersAPI); };
+    //==================
 
     var queryAPI = apiEndpoint + 'query';
     apiResource.query = function () { return $resource(queryAPI); };
