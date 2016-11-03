@@ -20,10 +20,14 @@
 
         logger.toast.success('Welcome ' + DO.user.fName + '!');
 
-        return API.products().get();
+        return API.products().get().$promise;
 
     }).then(function (productResponse) {
 
+        console.log(productResponse);
+
+        DO.products = productResponse.result;
+        $scope.products = productResponse.result;
 
     }).catch(function (error) {
         logger.toast.error('Error Getting User Product Data', error);
