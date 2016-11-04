@@ -259,6 +259,7 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
     var DO = appManager.data.DO;
 
     $scope.name = DSO.name;
+    $scope.user = SO.user;
     $scope.controlPanels = DSO.dashboard.controlPanels;
     $scope.canvases = DSO.canvases; //used in children scopes
 
@@ -271,12 +272,12 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
     };
 
     $scope.showAnalysis = function () {
-        var modules = DSO.modules.map(function (obj) { return obj.Module });
+        //var modules = DSO.modules.map(function (obj) { return obj.Module });
 
-        if (modules.indexOf('analysis') > -1) {
+        //if (modules.indexOf('analysis') > -1) {
             return true;
-        }
-        return false;
+        //}
+        //return false;
     };
 
     $scope.sendTestQuery = function () {
@@ -390,6 +391,17 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
         //    });
         API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
+    };
+
+    //Show User Info
+    $scope.showUserInfo = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'shared-components/user/user.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'User'
+        });
     };
 
 }]);

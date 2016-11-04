@@ -70,4 +70,16 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
 
     ];
 
+
+    //Show User Info
+    $scope.showUserInfo = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'shared-components/user/user.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'User'
+        });
+    };
+
 }]);
