@@ -7,8 +7,10 @@
     var logger = appManager.logger;
 
     $scope.name = DSO.name;
+    $scope.user = SO.user;
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
-    //
+    
+
     $scope.currentReport = 'Summary Report';
     //$scope.reportList = [];
 
@@ -17,15 +19,15 @@
     };
 
     $scope.showAnalysis = function () {
-        var modules = DSO.modules.map(function (obj) { return obj.Module });
-        if (modules.indexOf('analysis') > -1) {
+        //var modules = DSO.modules.map(function (obj) { return obj.Module });
+        //if (modules.indexOf('analysis') > -1) {
             return true;
-        }
-        return false;
+        //}
+        //return false;
     };
 
     //GET REPORT LIST
-    API.getReportList().save(logger.postObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+    API.getReportList().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
         console.log(JSON.stringify(response.result));
         if (response.result.length > 0) {
             //$scope.reportList = response.result;

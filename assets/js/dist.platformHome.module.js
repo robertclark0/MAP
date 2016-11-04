@@ -1,5 +1,5 @@
 var platformHome = angular.module('platformHome', []);
-platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', function ($scope, appManager, $state) {
+platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', '$mdDialog', function ($scope, appManager, $state, $mdDialog) {
 
     // Dependancies
     var SF = appManager.state.SF;
@@ -16,16 +16,13 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
     //Get User Data, then Get Products
     API.user().get().$promise.then(function (userResponse) {
 
-        DO.user = userResponse.result;
-        $scope.user = DO.user;
-
-        logger.toast.success('Welcome ' + DO.user.fName + '!');
+        SO.user = userResponse.result;
+        $scope.user = SO.user;
+        logger.toast.success('Welcome ' + SO.user.fName + '!');
 
         return API.products().get().$promise;
 
     }).then(function (productResponse) {
-
-        console.log(productResponse);
 
         DO.products = productResponse.result;
         $scope.products = productResponse.result;
@@ -34,5 +31,41 @@ platformHome.controller('PlatformHome', ['$scope', 'appManager', '$state', funct
         logger.toast.error('Error Getting User Product Data', error);
     });
 
+
+    //Click on product
+    $scope.productSelected = function (product) {
+        if (product.Active !== 1) {
+            logger.toast.warning("Product Not Yet Active!");
+        }
+        else {
+            if (product.FeatureProfile.DataQuery === "res") {
+                var authorizedProducts = SO.user.AuthorizedProducts.map(function (obj) { return obj.productName; });
+
+                if (authorizedProducts.indexOf(product.Code) >= 0) {
+                    SF.setProduct(product);
+                    $state.go('reporting');
+                }
+                else {
+                    logger.toast.warning("Not Authorized for CHUP!");
+                }
+            }
+            else {
+                SF.setProduct(product);
+                $state.go('reporting');
+            }
+        }
+    };
+
+
+    //Show User Info
+    $scope.showUserInfo = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'shared-components/user/user.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            controller: 'User'
+        });
+    };
 
 }]);

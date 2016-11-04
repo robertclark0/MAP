@@ -408,7 +408,7 @@ applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appData
         }
     };    logger.serverLog = function () {
         var log = {
-            clientSessionID: SO.sessionID,            user: DO.user,            clientLog: angular.copy(clientLog)
+            clientSessionID: SO.sessionID,            user: SO.user,            clientLog: angular.copy(clientLog)
         };        clientLog.length = 0;        return log;
     };    logger.clientLog = function (type, value) {
         clientLog.push({ recordType: type, recordValue: value, clientTime: new Date() });
@@ -424,25 +424,11 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     //
     var stateClasses = {};
 
-    stateClasses.StateObject = function () {
-        this.productLine = {
-            current: "none", //product line name
-            role: 0 //feature restiction based on role. May need to be expanded into more detailed security object.
-        };
-    };
-    stateClasses.ProductLine = function (name, modules) {
+    stateClasses.Product = function (name, modules) {
         this.name = name;
         this.modules = modules;
         this.dashboard = {
             //viewName: 'component', //canvas, data, component ---- This can be added later to help maintain which view you are on when swithching between reporting and analysis
-            index: {
-                adminReport: 0,
-                userReport: 0,
-                canvas: 0,
-                dataGroup: 0,
-                canvasElement: 0,
-                dataFilter: 0,
-            },
             controlPanels: [
                 {
                     side: 'left', // left, right | this sets the default value
@@ -594,23 +580,19 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         });
         return GUID;
     };
-    stateFunctions.setProduct = function (product, state) {
-        session.StateObject.productLine.current = product.Code;
-        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.ProductLine(product.Name, product.Modules) : session.StateObject[product.Code];
+    stateFunctions.setProduct = function (product) {
+        session.StateObject.product = product;
+        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.Product(product.Name) : session.StateObject[product.Code];
 
         session.DynamicStateObject = session.StateObject[product.Code];
         stateScope.DSO = session.DynamicStateObject;
-
-        if (state) {
-            $state.go(state);
-        }
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
             { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
             { type: 'custom-filter', name: 'Custom Filter', productLine: null }
         ];
-        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.productLine.current });
+        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
     };
     stateFunctions.canvasDataFilters = function () {
         var rawFilterArray = [];
@@ -629,7 +611,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     var stateScope = $rootScope.$new(true);
 
     var session = $sessionStorage;
-    session.StateObject = (typeof session.StateObject === 'undefined') ? new stateClasses.StateObject() : session.StateObject;
+    session.StateObject = (typeof session.StateObject === 'undefined') ? {} : session.StateObject;
     session.DynamicStateObject = (typeof session.DynamicStateObject === 'undefined') ? {} : session.DynamicStateObject;
 
     stateScope.DSO = session.DynamicStateObject;
@@ -638,5 +620,31 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateScope.SC = stateClasses;
 
     return stateScope;
+
+}]);
+mapApp.controller('User', ['$scope', 'appManager', '$mdDialog', function ($scope, appManager, $mdDialog) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    var SO = appManager.state.SO;
+
+    $scope.user = SO.user;
+
+    $scope.authorizations = [];
+
+    if (SO.user.UID >= 0) {
+        $scope.authorizations.push({ title: "Assigned DMIS", value: SO.user.dmisID });
+        SO.user.AuthorizedProducts.forEach(function (authProduct) {
+            authProduct.Authorizations.forEach(function (authorization) {
+                $scope.authorizations.push({ title: authProduct.productName, value: authorization.roleName});
+            });
+        });
+    }
+    else {
+        $scope.authorizations.push({title: "No Authorizations", value: ""});
+    }
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
 
 }]);

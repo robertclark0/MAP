@@ -233,7 +233,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT
-            API.tableSchema().save(logger.postObject({ entityCode: SO.productLine.current, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+            API.tableSchema().save(logger.postObject({ entityCode: SO.product.Code, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
                 //API.tableSchema().get().$promise.then(function (response) {
                 $scope.DO.tableSchema = response.result;
             }).catch(function (error) {
@@ -617,7 +617,7 @@ analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory
 
 
     $scope.setDataSource = function (dataSourceObject) {
-        $scope.componentProperties.editObject.source.product = SO.productLine.current;
+        $scope.componentProperties.editObject.source.product = SO.product.Code;
         $scope.componentProperties.editObject.source.type = dataSourceObject.SourceType;
         $scope.componentProperties.editObject.source.name = dataSourceObject.SourceName;
         $scope.closeDialog();
@@ -906,7 +906,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         //LOAD DATA SOURCES IF DATAGROUP
         if (editConfig.componentType === 'dataGroup') {
             //REMOVE BEFORE FLIGHT
-            API.dataSources().save(logger.postObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+            API.dataSources().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
                 //API.dataSources().get().$promise.then(function (response) {
                 DO.dataSource = response.result;
             }).catch(function (error) {

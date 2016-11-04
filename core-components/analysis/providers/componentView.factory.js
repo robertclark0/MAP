@@ -176,7 +176,7 @@
         //LOAD DATA SOURCES IF DATAGROUP
         if (editConfig.componentType === 'dataGroup') {
             //REMOVE BEFORE FLIGHT
-            API.dataSources().save(logger.postObject({ entityCode: SO.productLine.current })).$promise.then(function (response) {
+            API.dataSources().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
                 //API.dataSources().get().$promise.then(function (response) {
                 DO.dataSource = response.result;
             }).catch(function (error) {

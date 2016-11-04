@@ -12,7 +12,7 @@
 
 
     $scope.setDataSource = function (dataSourceObject) {
-        $scope.componentProperties.editObject.source.product = SO.productLine.current;
+        $scope.componentProperties.editObject.source.product = SO.product.Code;
         $scope.componentProperties.editObject.source.type = dataSourceObject.SourceType;
         $scope.componentProperties.editObject.source.name = dataSourceObject.SourceName;
         $scope.closeDialog();

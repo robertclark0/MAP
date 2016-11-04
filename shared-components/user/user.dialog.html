@@ -1,0 +1,26 @@
+﻿<md-dialog aria-label="List dialog" style="width: 600px;">
+
+    <md-dialog-content>
+        <div layout="row">
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">User Info</md-subheader>
+                <md-list class="md-dense">
+                    <md-list-item>User: {{user.akoUserID}}</md-list-item>
+                    <md-list-item>ID: {{user.EDIPN}}</md-list-item>
+                </md-list>
+            </div>
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Authorizations</md-subheader>
+                <md-list>
+                    <md-list-item ng-repeat="authorization in authorizations">{{authorization.title}}: {{authorization.value}}</md-list-item>
+            </div>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="closeDialog()">
+            Close
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
