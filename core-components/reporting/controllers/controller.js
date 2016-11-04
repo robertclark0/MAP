@@ -1,5 +1,8 @@
 ﻿reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', '$mdPanel', function ($scope, appManager, $state, $mdDialog, $mdPanel) {
 
+    console.log('Reporting Loaded');
+    console.log(appManager.state.SO);
+
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
     var API = appManager.data.API;

@@ -580,12 +580,16 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         });
         return GUID;
     };
-    stateFunctions.setProduct = function (product) {
-        session.StateObject.product = product;
-        session.StateObject[product.Code] = (typeof session.StateObject[product.Code] === 'undefined') ? new stateClasses.Product(product.Name) : session.StateObject[product.Code];
+    stateFunctions.setProduct = function (product, state) {
+        stateScope.SO.product = product;
+        stateScope.SO[product.Code] = (typeof stateScope.SO[product.Code] === 'undefined') ? new stateClasses.Product(product.Name) : stateScope.SO[product.Code];
 
-        session.DynamicStateObject = session.StateObject[product.Code];
+        session.DynamicStateObject = stateScope.SO[product.Code];
         stateScope.DSO = session.DynamicStateObject;
+
+        if (state) {
+            $state.go(state);
+        }
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [

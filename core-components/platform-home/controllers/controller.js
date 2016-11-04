@@ -11,7 +11,6 @@
     //Set Session GUID
     SO.sessionID = (typeof SO.sessionID === 'undefined') ? SF.generateGUID() : SO.sessionID;
 
-
     //Get User Data, then Get Products
     API.user().get().$promise.then(function (userResponse) {
 
@@ -41,16 +40,14 @@
                 var authorizedProducts = SO.user.AuthorizedProducts.map(function (obj) { return obj.productName; });
 
                 if (authorizedProducts.indexOf(product.Code) >= 0) {
-                    SF.setProduct(product);
-                    $state.go('reporting');
+                    SF.setProduct(product, "reporting");
                 }
                 else {
                     logger.toast.warning("Not Authorized for CHUP!");
                 }
             }
             else {
-                SF.setProduct(product);
-                $state.go('reporting');
+                SF.setProduct(product, "reporting");
             }
         }
     };
