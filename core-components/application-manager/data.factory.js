@@ -66,7 +66,7 @@
     };
 
     dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
-        apiResource.columnSchema().save({ post: { entityCode: dataGroup.source.product, tableName: dataGroup.source.name, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+        apiResource.schema().save({ post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
             filterDataObject.dataValues = response.result;
             console.log(response.result);
         });
@@ -85,6 +85,9 @@
     var productAPI = apiEndpoint + 'products';
     apiResource.products = function () { return $resource(productAPI); };
 
+    var schemaAPI = apiEndpoint + 'schema';
+    apiResource.schema = function () { return $resource(schemaAPI); };
+
     //==================
 
     var queryAPI = apiEndpoint + 'query';
@@ -95,12 +98,6 @@
 
     var downloadUpdateAPI = apiEndpoint + 'download-update';
     apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
-
-    var tableSchemaAPI = apiEndpoint + 'schema/table';
-    apiResource.tableSchema = function () { return $resource(tableSchemaAPI); };
-
-    var columnSchemaAPI = apiEndpoint + 'schema/column';
-    apiResource.columnSchema = function () { return $resource(columnSchemaAPI); };
 
     var getReportAPI = apiEndpoint + 'report';
     apiResource.getReport = function () { return $resource(getReportAPI); };

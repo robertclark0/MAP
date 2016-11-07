@@ -44,9 +44,8 @@
         this.name = name || 'New Data Group';
         this.GUID = null;
         this.source = {
-            product: null,
             type: null,
-            name: null
+            alias: null
         };
         this.pagination = {
             enabled: true,
@@ -69,7 +68,7 @@
         this.aggregation = {
             type: null, // count | sum | case-count | case-sum
             round: 2,
-            allias: null,
+            alias: null,
             operators: []
         };
     };

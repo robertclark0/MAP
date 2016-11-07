@@ -61,7 +61,7 @@
                         aggregate: true,
                         aggregation: {
                             type: 'count',
-                            allias: 'Month_Count'
+                            alias: 'Month_Count'
                         }
                     },
                     {
@@ -70,7 +70,7 @@
                         aggregate: true,
                         aggregation: {
                             type: 'case-count',
-                            allias: 'Month_Jan',
+                            alias: 'Month_Jan',
                             operators:
                             [
                                 {

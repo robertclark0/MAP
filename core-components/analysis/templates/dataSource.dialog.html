@@ -7,12 +7,12 @@
     <md-dialog-content>
         <md-list>
             <md-subheader class="md-primary" style="background-color: transparent">Table</md-subheader>
-            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in DO.dataSource | filter: {SourceType : 'T'}">
-                {{source.SourceName}}
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in SO.product.DataSources | filter: {SourceType : 'T'}">
+                {{source.Alias}}
             </md-list-item>
             <md-subheader class="md-primary" style="background-color: transparent">Stored Procedure</md-subheader>
-            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in DO.dataSource | filter: {SourceType : 'P'}">
-                {{source.SourceName}}
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in SO.product.DataSources | filter: {SourceType : 'P'}">
+                {{source.Alias}}
             </md-list-item>
         </md-list>
     </md-dialog-content>

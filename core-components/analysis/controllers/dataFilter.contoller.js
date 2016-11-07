@@ -23,7 +23,7 @@
 
     $scope.newFilter = {
         model: null,
-        allias: null,
+        alias: null,
         dataValue: null,
         operations: [],
         selectedValues: []
@@ -31,10 +31,10 @@
 
 
     $scope.checkTypeSelection = function () {
-        $scope.newFilter.allias = $scope.newFilter.model.name;
+        $scope.newFilter.alias = $scope.newFilter.model.name;
     };
     $scope.checkDataSelection = function () {
-        $scope.newFilter.allias = $scope.newFilter.dataValue.COLUMN_NAME;
+        $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
     };
     $scope.addOperation = function () {
         $scope.newFilter.operations.push({ operation: $scope.selectedOperation, useData: true });
@@ -50,7 +50,7 @@
         }
         else {
             var filter = angular.copy($scope.newFilter);
-            filter.allias = filter.model.name;
+            filter.alias = filter.model.name;
             filter.GUID = SF.generateGUID();
 
             $scope.componentProperties.editObject.filters.push(filter);
@@ -61,7 +61,7 @@
         if (clearTypeBool) {
             $scope.newFilter.model = null;
         }       
-        $scope.newFilter.allias = null;
+        $scope.newFilter.alias = null;
         $scope.newFilter.dataValue = null;
         $scope.newFilter.operations.length = 0;
         $scope.newFilter.selectedValues.length = 0;

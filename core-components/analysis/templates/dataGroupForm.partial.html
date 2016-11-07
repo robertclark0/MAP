@@ -12,10 +12,10 @@
 </div>
 <div layout="column">
     <md-list class="mdo-listitem-padding">
-        <md-list-item class="md-2-line" ng-click="null" ng-show="componentProperties.editObject.source.name !== null">
+        <md-list-item class="md-2-line" ng-click="null" ng-show="componentProperties.editObject.source.alias !== null">
             <div class="md-list-item-text" layout="column">
                 <h3>Data Source</h3>
-                <h4>{{componentProperties.editObject.source.name}}</h4>
+                <h4>{{componentProperties.editObject.source.alias}}</h4>
             </div>
             <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="showConfigureDataSource()">
                 <md-tooltip md-direction="bottom">Edit</md-tooltip>
@@ -49,7 +49,7 @@
 </div>
 <div layout="row">
     <md-list flex>
-        <md-list-item ng-click="showConfigureDataSource()" ng-hide="componentProperties.editObject.source.name !== null">
+        <md-list-item ng-click="showConfigureDataSource()" ng-hide="componentProperties.editObject.source.alias !== null">
             <md-icon md-svg-src="assets/icons/md-settings.svg" aria-label="component"></md-icon>
             <p>Select Data Source</p>
         </md-list-item>

@@ -57,8 +57,8 @@
         <md-card ng-repeat="selection in current.selectionLevel">
             <md-toolbar style="background-color: transparent;">
                 <div class="md-toolbar-tools">
-                    <h5 ng-show="selection.aggregation.allias">{{selection.aggregation.allias}} <span style="color: gray; font-weight: 400; font-size: 14px; font-style: italic;"> [{{selection.name}}]</span></h5>
-                    <h5 ng-show="!selection.aggregation.allias">{{selection.name}}</h5>
+                    <h5 ng-show="selection.aggregation.alias">{{selection.aggregation.alias}} <span style="color: gray; font-weight: 400; font-size: 14px; font-style: italic;"> [{{selection.name}}]</span></h5>
+                    <h5 ng-show="!selection.aggregation.alias">{{selection.name}}</h5>
                     <span flex></span>
                     <md-menu>
                         <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">

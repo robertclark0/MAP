@@ -35,7 +35,7 @@
 
                                 <md-list-item class="md-2-line" ng-click="null" ng-repeat="filter in componentProperties.editObject.filters">
                                     <div class="md-list-item-text" layout="column">
-                                        <h3>{{filter.allias}}</h3>
+                                        <h3>{{filter.alias}}</h3>
                                         <p class="md-primary">{{filter.dataValue.COLUMN_NAME}}</p>
                                     </div>
                                     <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
@@ -94,7 +94,7 @@
                         </div>
                         <md-input-container ng-show="newFilter.model !== null">
                             <label>Alias</label>
-                            <input type="text" ng-model="newFilter.allias" />
+                            <input type="text" ng-model="newFilter.alias" />
                         </md-input-container>
 
 
@@ -111,7 +111,7 @@
 
                                 <md-list-item class="md-2-line" ng-click="null" ng-repeat="filter in componentProperties.editObject.filters">
                                     <div class="md-list-item-text" layout="column">
-                                        <h3>{{filter.allias}}</h3>
+                                        <h3>{{filter.alias}}</h3>
                                         <p class="md-primary">{{filter.dataValue.COLUMN_NAME}} [ <span ng-repeat="op in filter.operations">{{op.operation.name}} </span>]</p>
                                     </div>
                                     <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">

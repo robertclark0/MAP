@@ -33,7 +33,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }).then(function () { getTableSchema(); }, function () { });
     };
     $scope.showConfigureDataSelections = function (ev) {
-        if ($scope.componentProperties.editObject.source.name !== null) {
+        if ($scope.componentProperties.editObject.source.alias !== null) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/dataSelection.dialog.html',
                 parent: angular.element(document.body),
@@ -64,7 +64,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT
-            API.tableSchema().save(logger.postObject({ entityCode: SO.product.Code, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+            API.schema().save(logger.postObject({ type: "table", alias: $scope.componentProperties.editObject.source.alias })).$promise.then(function (response) {
                 //API.tableSchema().get().$promise.then(function (response) {
                 $scope.DO.tableSchema = response.result;
             }).catch(function (error) {

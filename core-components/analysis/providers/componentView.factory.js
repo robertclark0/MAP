@@ -173,16 +173,6 @@
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
         }
 
-        //LOAD DATA SOURCES IF DATAGROUP
-        if (editConfig.componentType === 'dataGroup') {
-            //REMOVE BEFORE FLIGHT
-            API.dataSources().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
-                //API.dataSources().get().$promise.then(function (response) {
-                DO.dataSource = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Data Sources', error);
-            });
-        }
     }
     function saveEdit() {
         //console.log(factory.componentProperties);
@@ -204,7 +194,7 @@
 
                     //GET DISTINCT FOR SELECTION LEVELS
                     //factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
-                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.alias, level);
                     //    //THIS is actually not the right place for this functionality
                     //    //When the user selections a region, the next chip autocomplete needs to only show
                     //    //options availalbe in that region, or in otherwords, WHERE Region = .. etc.

@@ -247,7 +247,7 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
     };
 
     dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
-        apiResource.columnSchema().save({ post: { entityCode: dataGroup.source.product, tableName: dataGroup.source.name, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+        apiResource.schema().save({ post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
             filterDataObject.dataValues = response.result;
             console.log(response.result);
         });
@@ -266,6 +266,9 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
     var productAPI = apiEndpoint + 'products';
     apiResource.products = function () { return $resource(productAPI); };
 
+    var schemaAPI = apiEndpoint + 'schema';
+    apiResource.schema = function () { return $resource(schemaAPI); };
+
     //==================
 
     var queryAPI = apiEndpoint + 'query';
@@ -276,12 +279,6 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
 
     var downloadUpdateAPI = apiEndpoint + 'download-update';
     apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
-
-    var tableSchemaAPI = apiEndpoint + 'schema/table';
-    apiResource.tableSchema = function () { return $resource(tableSchemaAPI); };
-
-    var columnSchemaAPI = apiEndpoint + 'schema/column';
-    apiResource.columnSchema = function () { return $resource(columnSchemaAPI); };
 
     var getReportAPI = apiEndpoint + 'report';
     apiResource.getReport = function () { return $resource(getReportAPI); };
@@ -475,9 +472,8 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.name = name || 'New Data Group';
         this.GUID = null;
         this.source = {
-            product: null,
             type: null,
-            name: null
+            alias: null
         };
         this.pagination = {
             enabled: true,
@@ -500,7 +496,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.aggregation = {
             type: null, // count | sum | case-count | case-sum
             round: 2,
-            allias: null,
+            alias: null,
             operators: []
         };
     };

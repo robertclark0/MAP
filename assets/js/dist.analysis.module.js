@@ -202,7 +202,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }).then(function () { getTableSchema(); }, function () { });
     };
     $scope.showConfigureDataSelections = function (ev) {
-        if ($scope.componentProperties.editObject.source.name !== null) {
+        if ($scope.componentProperties.editObject.source.alias !== null) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/dataSelection.dialog.html',
                 parent: angular.element(document.body),
@@ -233,7 +233,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     function getTableSchema() {
         if ($scope.componentProperties.editObject.source.type === 'T') {
             //REMOVE BEFORE FLIGHT
-            API.tableSchema().save(logger.postObject({ entityCode: SO.product.Code, tableName: $scope.componentProperties.editObject.source.name })).$promise.then(function (response) {
+            API.schema().save(logger.postObject({ type: "table", alias: $scope.componentProperties.editObject.source.alias })).$promise.then(function (response) {
                 //API.tableSchema().get().$promise.then(function (response) {
                 $scope.DO.tableSchema = response.result;
             }).catch(function (error) {
@@ -312,7 +312,7 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
                         aggregate: true,
                         aggregation: {
                             type: 'count',
-                            allias: 'Month_Count'
+                            alias: 'Month_Count'
                         }
                     },
                     {
@@ -321,7 +321,7 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
                         aggregate: true,
                         aggregation: {
                             type: 'case-count',
-                            allias: 'Month_Jan',
+                            alias: 'Month_Jan',
                             operators:
                             [
                                 {
@@ -430,7 +430,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
 
     $scope.newFilter = {
         model: null,
-        allias: null,
+        alias: null,
         dataValue: null,
         operations: [],
         selectedValues: []
@@ -438,10 +438,10 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
 
 
     $scope.checkTypeSelection = function () {
-        $scope.newFilter.allias = $scope.newFilter.model.name;
+        $scope.newFilter.alias = $scope.newFilter.model.name;
     };
     $scope.checkDataSelection = function () {
-        $scope.newFilter.allias = $scope.newFilter.dataValue.COLUMN_NAME;
+        $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
     };
     $scope.addOperation = function () {
         $scope.newFilter.operations.push({ operation: $scope.selectedOperation, useData: true });
@@ -457,7 +457,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         }
         else {
             var filter = angular.copy($scope.newFilter);
-            filter.allias = filter.model.name;
+            filter.alias = filter.model.name;
             filter.GUID = SF.generateGUID();
 
             $scope.componentProperties.editObject.filters.push(filter);
@@ -468,7 +468,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         if (clearTypeBool) {
             $scope.newFilter.model = null;
         }       
-        $scope.newFilter.allias = null;
+        $scope.newFilter.alias = null;
         $scope.newFilter.dataValue = null;
         $scope.newFilter.operations.length = 0;
         $scope.newFilter.selectedValues.length = 0;
@@ -618,20 +618,15 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
 analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
-    var SO = appManager.state.SO;
-    var API = appManager.data.API;
-    var logger = appManager.logger;
-    var DO = appManager.data.DO;
-    $scope.DO = appManager.data.DO;
+    $scope.SO = appManager.state.SO;
 
 
     $scope.componentProperties = componentViewFactory.componentProperties;
 
 
     $scope.setDataSource = function (dataSourceObject) {
-        $scope.componentProperties.editObject.source.product = SO.product.Code;
+        $scope.componentProperties.editObject.source.alias = dataSourceObject.Alias;
         $scope.componentProperties.editObject.source.type = dataSourceObject.SourceType;
-        $scope.componentProperties.editObject.source.name = dataSourceObject.SourceName;
         $scope.closeDialog();
     };
 
@@ -915,16 +910,6 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
         }
 
-        //LOAD DATA SOURCES IF DATAGROUP
-        if (editConfig.componentType === 'dataGroup') {
-            //REMOVE BEFORE FLIGHT
-            API.dataSources().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
-                //API.dataSources().get().$promise.then(function (response) {
-                DO.dataSource = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Data Sources', error);
-            });
-        }
     }
     function saveEdit() {
         //console.log(factory.componentProperties);
@@ -946,7 +931,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
 
                     //GET DISTINCT FOR SELECTION LEVELS
                     //factory.componentProperties.editObject.drillDown.level.forEach(function (level, levelIndex) {
-                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.name, level);
+                    //    //newDataObject.drillDown[levelIndex] =  getColumnDistinct(factory.componentProperties.editObject.source.product, factory.componentProperties.editObject.source.alias, level);
                     //    //THIS is actually not the right place for this functionality
                     //    //When the user selections a region, the next chip autocomplete needs to only show
                     //    //options availalbe in that region, or in otherwords, WHERE Region = .. etc.
