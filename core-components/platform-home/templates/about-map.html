@@ -1,0 +1,58 @@
+﻿<section layout="row">
+    <md-toolbar class="site-content-toolbar">
+        <div class="md-toolbar-tools">
+            <md-button href="#/platform-home/product-lines">< Return To Products</md-button>
+            <span flex></span>
+            <md-button ng-click="showUserInfo()">{{user.fName}} <span style="color: gray"><em> [{{user.akoUserID}}]</em></span></md-button>
+        </div>
+    </md-toolbar>
+</section>
+<div class="row cm-ph-content-items">
+
+    <md-content layout="column" style="background-color: transparent;">
+        <div>
+            <h3>MEDCOM360 ANALYTICS PLATFORM</h3>
+            <p>Welcome to a new generation of data analysis and visualization. MEDCOM360 Analytics Platform is an Army-built application platform for data discovery, ad-hoc report creation and sharing analysis.</p>
+            <p>Download the MAP User Guide below for a tour of MAP features. To use this platform with your own data, contact PASBA. No licensing required.</p>
+            <br />
+
+        </div>
+
+        <div layout="row">
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent;">Platform Documentation</md-subheader>
+                <md-list class="md-dense">
+                    <md-list-item ng-click="null">                        
+                        <h3>MAP User Guide</h3>
+                        <md-button class="md-icon-button" ng-click="null">
+                            <md-tooltip md-direction="bottom">Download</md-tooltip>
+                            <md-icon md-svg-src="assets/icons/md-download.svg" aria-label="action"></md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </div>
+            <div flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent;">Product Data Documentation</md-subheader>
+                <md-list class="md-dense">
+                    <md-list-item ng-click="null">
+                        <h3>TeleHealth Data Guide</h3>
+                        <md-button class="md-icon-button" ng-click="null">
+                            <md-tooltip md-direction="bottom">Download</md-tooltip>
+                            <md-icon md-svg-src="assets/icons/md-download.svg" aria-label="action"></md-icon>
+                        </md-button>
+                    </md-list-item>
+                    <md-list-item ng-click="null">
+                        <h3>CHUP Data Guide</h3>
+                        <md-button class="md-icon-button" ng-click="null">
+                            <md-tooltip md-direction="bottom">Download</md-tooltip>
+                            <md-icon md-svg-src="assets/icons/md-download.svg" aria-label="action"></md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </div>
+
+
+    </md-content>
+
+</div>

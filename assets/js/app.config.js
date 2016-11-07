@@ -30,6 +30,17 @@
                 waitOnParent: ['module', function () { }]
             }
         })
+        .state("platformHome.about", {
+            url: "/about",
+            templateUrl: "core-components/platform-home/templates/about-map.html",
+            css: "assets/css/dist.platformHome.css",
+            resolve: {
+                log: ['appManager', function (appManager) {
+                    appManager.logger.clientLog("route", "platformHome.about");
+                }],
+                waitOnParent: ['module', function () { }]
+            }
+        })
 
 
         //  Module
