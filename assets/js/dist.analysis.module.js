@@ -500,8 +500,6 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
 analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----      
-    var API = appManager.data.API;
-    var logger = appManager.logger;
     var SO = appManager.state.SO;
     var SC = appManager.state.SC;
     $scope.DO = appManager.data.DO;
@@ -509,16 +507,24 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
     $scope.componentList = componentViewFactory.componentList;
 
 
-    $scope.selected = [];
-    $scope.selectionKey = { value: null };
-    $scope.saveMode = false;
-    $scope.saveIndex = null;
+    $scope.newSelection = {
+        dataValue: null,
+        alias: null, 
+        operations: []
+    };
 
-    $scope.$watch('DO.tableSchema | filter: { selected : true }', function (newValue) {
-        $scope.selected = newValue.map(function (column) {
-            return column.COLUMN_NAME;
-        });
-    }, true);
+    $scope.selectionChange = function () {
+        $scope.newSelection.alias = $scope.newSelection.dataValue.COLUMN_NAME;
+    };
+
+    $scope.operations = [
+        { name: "Order", type: 'op-order' },
+        { name: "Count", type: 'op-count' },
+        { name: "Sum", type: 'op-sum' },
+        { name: "Pivot", type: 'op-pivot' },
+    ]
+
+
 
     $scope.closeDialog = function () {
         $mdDialog.hide();

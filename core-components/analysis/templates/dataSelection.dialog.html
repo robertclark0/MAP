@@ -5,74 +5,103 @@
         <div ng-show="componentProperties.editType === 'existing'" class="md-toolbar-tools" style="background-color: rgb(68, 138, 255);">Data Selection</div>
     </md-toolbar>
     <md-dialog-content>
+        <md-subheader class="md-primary" style="background-color: transparent;">Data Selection Levels</md-subheader>
+        <section layout="row">
+            
+            <div layout="column" flex style="padding-left: 15px;">
+                <md-select md-on-close="" ng-model="funny" style="margin-top: 0; margin-bottom: 0;">
+                    <md-option ng-value="">Level 1</md-option>
+                    <md-option ng-value="">Level 2</md-option>
+                    <md-option ng-value="">Level 3</md-option>
+                </md-select>
+            </div>
+            <md-button class="md-icon-button" ng-click="">
+                <md-tooltip md-direction="bottom">Add Selection Level</md-tooltip>
+                <md-icon md-svg-src="assets/icons/md-add.svg" aria-label="add"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="">
+                <md-tooltip md-direction="bottom">Remove Selection Level</md-tooltip>
+                <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="add"></md-icon>
+            </md-button>
 
-        <md-tabs md-center-tabs md-dynamic-height class="dense-tabs">
-            <md-tab label="Basic">
+        </section>
+        <section layout="row">
+            <div layout="column" flex="45" style="min-height: 350px; padding-left: 15px;">
+                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Data Selection Settings</md-subheader>
 
-                <section layout="row">
-                    <div layout="column" flex="45" style="max-height: 450px;">
-                        <md-subheader class="md-primary" style="background-color: transparent">Available Data</md-subheader>
-                        <md-select ng-model="selectionKey.value" placeholder="Data Selection Key" style="padding-left: 15px;">
-                            <md-option ng-repeat="selection in selected" ng-value="selection">{{selection}}</md-option>
+                <div layout="column">
+                    <md-input-container>
+                        <label>Data Value</label>
+                        <md-select md-on-close="selectionChange()" ng-model="newSelection.dataValue">
+                            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
                         </md-select>
-                        <md-content style="background-color: white;">
+                    </md-input-container>
+                    <md-input-container ng-show="newFilter.dataValue !== null">
+                        <label>Alias</label>
+                        <input type="text" ng-model="newSelection.alias" />
+                    </md-input-container>
 
-                            <md-virtual-repeat-container style="height: 250px">
-                                <md-list-item md-virtual-repeat="column in DO.tableSchema">
-                                    <p>{{column.COLUMN_NAME}}</p>
-                                    <md-checkbox class="md-secondary" ng-model="column.selected"></md-checkbox>
-                                </md-list-item>
-                            </md-virtual-repeat-container>
-
-                        </md-content>
-                        <div layout="column">
-                            <md-button ng-hide="saveMode" ng-disabled="selected.length === 0 || selectionKey.value === null" ng-click="saveSelection()">Create Selection</md-button>
-                            <md-button ng-show="saveMode" ng-click="updateSelection()">Save Selection</md-button>
-                        </div>
+                    <p style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                    <md-content style="max-height: 200px;" style="background-color: white;">
+                        <md-list>
+                            <md-list-item ng-repeat="operation in newFilter.operations">
+                                <p>{{operation.operation.name}}</p>
+                                <md-switch class="md-secondary" ng-model="operation.useData">Use Dataset Values</md-switch>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                    <div layout="row">
+                        <md-input-container flex="85">
+                            <label>Operation</label>
+                            <md-select md-on-close="" ng-model="selectedOperation">
+                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
                     </div>
-                    <div flex></div>
-                    <div layout="column" flex="50">
-                        <md-subheader class="md-primary" style="background-color: transparent">Selections</md-subheader>
-                        <md-content class="inset" style="background-color: white;">
-                            <md-list class="mdo-listitem-padding">
-
-                                <md-list-item class="md-2-line" ng-click="null" ng-repeat="selectionLevel in componentProperties.editObject.selections">
-                                    <div class="md-list-item-text" layout="column">
-                                        <h3>Data Selection Level {{index}}: {{componentProperties.editObject.drillDown.level[$index]}}</h3>
-                                        <p class="md-primary">{{selectionPreview(selectionLevel)}}</p>
-                                    </div>
-                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
-                                        <md-tooltip md-direction="bottom">Edit</md-tooltip>
-                                        <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
-                                    </md-button>
-                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
-                                        <md-tooltip md-direction="bottom">Move Up</md-tooltip>
-                                        <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
-                                    </md-button>
-                                    <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelectionLevel($index)">
-                                        <md-tooltip md-direction="bottom">Delete</md-tooltip>
-                                        <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
-                                    </md-button>
-                                    <md-divider></md-divider>
-                                </md-list-item>
-                            </md-list>
-                        </md-content>
-
-                    </div>
-
-                </section>
-            </md-tab>
-            <md-tab label="Advanced">
-                <md-contentent>more tab stuff</md-contentent>
-            </md-tab>
-        </md-tabs>
+                </div>
 
 
+
+
+                <div layout="column">
+                    <md-button ng-disabled="disabled" ng-click="saveFilter()">Create Filter</md-button>
+                </div>
+            </div>
+            <div flex></div>
+            <div layout="column" flex="50">
+                <md-subheader class="md-primary" style="background-color: transparent">Data Selections</md-subheader>
+                <md-content class="inset" style="background-color: white;">
+                    <md-list class="mdo-listitem-padding">
+
+                        <md-list-item class="md-2-line" ng-click="null" ng-repeat="filter in componentProperties.editObject.filters">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{filter.alias}}</h3>
+                                <p class="md-primary">{{filter.dataValue.COLUMN_NAME}} [ <span ng-repeat="op in filter.operations">{{op.operation.name}} </span>]</p>
+                            </div>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
+                                <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
+                                <md-tooltip md-direction="bottom">Move Up</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelectionLevel($index)">
+                                <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                            </md-button>
+                            <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+        </section>
 
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-        
+
         <span flex></span>
         <md-button ng-click="closeDialog()">
             Close

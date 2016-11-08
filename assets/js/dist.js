@@ -630,6 +630,9 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateScope.SF = stateFunctions;
     stateScope.SC = stateClasses;
 
+    console.log("State Loaded");
+    console.log(stateScope.SO);
+
     return stateScope;
 
 }]);
