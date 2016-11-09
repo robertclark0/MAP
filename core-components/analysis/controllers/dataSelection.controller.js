@@ -7,6 +7,11 @@
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
 
+    $scope.selectedOperation = null;
+
+    $scope.selectionLevels = ["Level 1"];
+    $scope.selectedLevel = "Level 1";
+    $scope.selectionIndex = 0;
 
     $scope.newSelection = {
         dataValue: null,
@@ -25,6 +30,16 @@
         { name: "Pivot", type: 'op-pivot' },
     ]
 
+    $scope.addOperation = function () {
+        $scope.newSelection.operations.push($scope.selectedOperation);
+        $scope.selectedOperation = null
+    }
+
+
+    $scope.createSelection = function () {
+        $scope.selectionIndex = $scope.selectionLevels.indexOf($scope.selectedLevel);
+        $scope.componentProperties.editObject.selections[$scope.selectionIndex].push(angular.copy($scope.newSelection));
+    };
 
 
     $scope.closeDialog = function () {

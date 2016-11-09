@@ -483,7 +483,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.aggregation = {
             enabled: true
         };
-        this.selections = [];
+        this.selections = [[]];
         this.drillDown = { level: [], selection: [] };
         this.filters = [];
 

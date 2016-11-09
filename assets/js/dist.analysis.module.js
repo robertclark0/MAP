@@ -506,6 +506,11 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
 
+    $scope.selectedOperation = null;
+
+    $scope.selectionLevels = ["Level 1"];
+    $scope.selectedLevel = "Level 1";
+    $scope.selectionIndex = 0;
 
     $scope.newSelection = {
         dataValue: null,
@@ -524,101 +529,21 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
         { name: "Pivot", type: 'op-pivot' },
     ]
 
+    $scope.addOperation = function () {
+        $scope.newSelection.operations.push($scope.selectedOperation);
+        $scope.selectedOperation = null
+    }
+
+
+    $scope.createSelection = function () {
+        $scope.selectionIndex = $scope.selectionLevels.indexOf($scope.selectedLevel);
+        $scope.componentProperties.editObject.selections[$scope.selectionIndex].push(angular.copy($scope.newSelection));
+    };
 
 
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }
-
-    //SAVE
-    $scope.saveSelection = function () {
-        var selectionLevel = [];
-
-        $scope.selected.forEach(function (entry) {
-            var selected = new SC.DataSelection(entry);
-            selectionLevel.push(selected);
-        });
-
-        $scope.componentProperties.editObject.selections.push(selectionLevel);
-        $scope.componentProperties.editObject.drillDown.level.push($scope.selectionKey.value)
-
-        clearSelections();
-    };
-    var clearSelections = function () {
-        $scope.selected.length = 0;
-        $scope.selectionKey.value = null;
-        $scope.DO.tableSchema.forEach(function (entry) {
-            entry.selected = false;
-        });
-    };
-
-
-    //UPDATE
-    $scope.updateSelection = function () {
-        var selectionLevel = [];
-
-        $scope.selected.forEach(function (entry) {
-            var selected = new SC.DataSelection(entry);
-            selectionLevel.push(selected);
-        });
-
-        $scope.componentProperties.editObject.selections[$scope.saveIndex] = selectionLevel;
-        $scope.componentProperties.editObject.drillDown.level[$scope.saveIndex] = $scope.selectionKey.value;
-
-        clearSelections();
-        $scope.saveMode = false;
-    };
-
-    //DELETE
-    $scope.deleteSelectionLevel = function (index) {
-        $scope.componentProperties.editObject.selections.splice(index, 1);
-        $scope.componentProperties.editObject.drillDown.level.splice(index, 1);
-    };
-
-    //MOVE
-    $scope.moveSelectionLevelUp = function (index) {
-        if (index > 0) {
-            var desitationIndex = index - 1;
-
-            var tempSelection = $scope.componentProperties.editObject.selections[desitationIndex];
-            $scope.componentProperties.editObject.selections[desitationIndex] = $scope.componentProperties.editObject.selections[index];
-            $scope.componentProperties.editObject.selections[index] = tempSelection;
-
-            var tempDrilldown = $scope.componentProperties.editObject.drillDown.level[desitationIndex];
-            $scope.componentProperties.editObject.drillDown.level[desitationIndex] = $scope.componentProperties.editObject.drillDown.level[index];
-            $scope.componentProperties.editObject.drillDown.level[index] = tempDrilldown;
-        }
-    };
-
-    //EDIT
-    $scope.editSelection = function (index) {
-
-        clearSelections();
-        $scope.saveMode = true;
-        $scope.saveIndex = index;
-
-        $scope.componentProperties.editObject.selections[index].forEach(function (selectionEntry) {
-            $scope.DO.tableSchema.forEach(function (schemaEntry) {
-                if (schemaEntry.COLUMN_NAME === selectionEntry.name) {
-                    schemaEntry.selected = true;
-                }
-            });
-        });
-        $scope.selectionKey.value = $scope.componentProperties.editObject.drillDown.level[index];
-    };
-
-    //PREVIEW
-    $scope.selectionPreview = function (selectionLevel) {
-
-        var returnValue = "";
-        selectionLevel.forEach(function (entry) {
-            returnValue += entry.name + ", ";
-        });
-        if (returnValue.length > 30) {
-            return returnValue.substr(0, 27) + "...";
-        }
-        return returnValue.substr(0, returnValue.length - 2);
-    };
 
 }]);
 analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
