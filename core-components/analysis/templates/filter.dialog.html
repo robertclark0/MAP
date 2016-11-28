@@ -18,12 +18,20 @@
                         <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}} <span style="font-style: italic">{{column.DATA_TYPE}}</span></md-option>
                     </md-select>
                 </md-input-container>
-                <p style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
-                <md-content style="max-height: 200px;" style="background-color: white;">
+                <md-input-container ng-show="newFilter.model !== null">
+                    <label>Alias</label>
+                    <input type="text" ng-model="newFilter.alias" />
+                </md-input-container>
+                <p ng-show="newFilter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                <md-content style="max-height: 200px; background-color: transparent;" style="background-color: white;">
                     <md-list>
-                        <md-list-item ng-repeat="operation in newFilter.operations">
+                        <md-list-item ng-repeat="operation in newFilter.operations track by $index">
                             <p>{{operation.operation.name}}</p>
-                            <md-switch class="md-secondary" ng-model="operation.useData">Use Dataset Values</md-switch>
+                            <!--<md-switch class="md-secondary" ng-model="operation.useData">Use Dataset Values</md-switch>-->
+                            <md-button class="md-secondary md-icon-button">
+                                <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                                <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                            </md-button>
                         </md-list-item>
                     </md-list>
                 </md-content>
@@ -37,10 +45,7 @@
                     <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
                 </div>
             </div>
-            <md-input-container ng-show="newFilter.model !== null">
-                <label>Alias</label>
-                <input type="text" ng-model="newFilter.alias" />
-            </md-input-container>
+
 
 
 

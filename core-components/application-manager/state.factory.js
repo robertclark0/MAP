@@ -57,7 +57,7 @@
         };
         this.selections = [[]];
         this.drillDown = { level: [], selection: [] };
-        this.filters = [];
+        this.filters = [[]];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

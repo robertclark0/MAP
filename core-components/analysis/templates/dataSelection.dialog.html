@@ -9,76 +9,81 @@
 
         <section layout="row">
             <div layout="column" flex="45" style="min-height: 350px; padding-left: 15px;">
-                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Selection Settings</md-subheader>
+                <form name="dataSelectionForm">
+                    <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Selection Settings</md-subheader>
 
-                <div layout="column">
-                    <md-input-container>
-                        <label>Data Value</label>
-                        <md-select md-on-close="selectionChange()" ng-model="newSelection.dataValue">
-                            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container style="height: 32px;">
-                        <label>Alias</label>
-                        <input type="text" ng-model="newSelection.alias" />
-                    </md-input-container>
-                    <div layout="row">
-                        <md-input-container flex="85">
-                            <label>Operation</label>
-                            <md-select md-on-close="" ng-model="selectedOperation">
-                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+                    <div layout="column">
+                        <md-input-container>
+                            <label>Data Value</label>
+                            <md-select md-on-close="selectionChange()" ng-model="newSelection.dataValue" required>
+                                <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                        <md-input-container style="height: 32px;">
+                            <label>Alias</label>
+                            <input type="text" ng-model="newSelection.alias" />
+                        </md-input-container>
+                        <p ng-show="newSelection.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                        <md-content style="max-height: 200px; background-color: transparent;">
+                            <md-list>
+                                <md-list-item ng-repeat="operation in newSelection.operations track by $index">
+                                    {{operation.name}}
+                                    <md-button class="md-secondary md-icon-button" ng-click="removeOperation(operation)">
+                                        <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                                        <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                                    </md-button>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+                        <div layout="row">
+                            <md-input-container flex="85">
+                                <label>Operation</label>
+                                <md-select md-on-close="" ng-model="selectedOperation">
+                                    <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-button ng-disabled="!selectedOperation || !newSelection.dataValue" ng-click="addOperation()">Add</md-button>
+                        </div>
                     </div>
 
-                    <md-content style="max-height: 200px; background-color: transparent;">
-                        <md-list>
-                            <md-list-item ng-repeat="operation in newSelection.operations">{{operation.name}}</md-list-item>
-                        </md-list>
-                    </md-content>
-                </div>
-
-
-
-
-                <div layout="column">
-                    <md-button ng-disabled="disabled" ng-click="createSelection()">Create Selection</md-button>
-                </div>
+                    <div layout="column">
+                        <md-button ng-click="createSelection()">Create Selection</md-button>
+                    </div>
+                </form>
             </div>
+
             <div flex></div>
+
             <div layout="column" flex="50">
-                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Data Selections</md-subheader>
+                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Levels & Selections</md-subheader>
                 <section layout="column">
-                    <md-input-container>
-                        <label>Selection Level</label>
-                        <md-select md-on-close="" ng-model="selectedLevel" style="margin-top: 0; margin-bottom: 0;">
-                            <md-option ng-value="level" ng-repeat="level in selectionLevels">{{level}}</md-option>
-                            <md-divider></md-divider>
-                            <md-option ng-click="null">Add Selection Level</md-option>
-                        </md-select>
-                    </md-input-container>
+                    <div layout="row">
+                        <md-input-container flex="80">
+                            <label>Selection Level</label>
+                            <md-select md-on-close="changeSelectionLevel()" ng-model="selectedLevel" style="margin-top: 0; margin-bottom: 0;">
+                                <md-option ng-value="level" ng-repeat="level in selectionLevels">{{level}} <span ng-show="componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME">[ {{componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME}} ]</span></md-option>
+                            </md-select>
+                        </md-input-container>
+                        <div flex></div>
+                        <md-button ng-click="addSelectionLevel(selectionLevels.length)" ng-disabled="componentProperties.editObject.selections[selectionIndex].length === 0 || selectionIndex !== selectionLevels.length - 1">Add</md-button>
+                        <md-button ng-click="deleteSelectionLevel()" ng-disabled="selectionIndex !== selectionLevels.length - 1">Remove</md-button>
+                    </div>
                     <md-content class="inset" style="background-color: white;">
                         <md-list class="mdo-listitem-padding">
-
                             <md-list-item class="md-2-line" ng-click="null" ng-repeat="selection in componentProperties.editObject.selections[selectionIndex]">
                                 <div class="md-list-item-text" layout="column">
                                     <h3>{{selection.alias}}</h3>
-                                    <p class="md-primary">{{selection.dataValue.COLUMN_NAME}} [ <span ng-repeat="op in selection.operations">{{op.name}} </span>]</p>
+                                    <p class="md-primary">{{selection.dataValue.COLUMN_NAME}} <span ng-show="selection.operations.length > 0">[ <span ng-repeat="op in selection.operations">{{op.name}} </span>]</span></p>
                                 </div>
-                                <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="editSelection($index)">
-                                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
-                                    <md-icon md-svg-src="assets/icons/md-edit.svg" aria-label="action"></md-icon>
-                                </md-button>
-                                <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionLevelUp($index)">
+                                <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="moveSelectionUp(componentProperties.editObject.selections[selectionIndex], selection, $index)">
                                     <md-tooltip md-direction="bottom">Move Up</md-tooltip>
                                     <md-icon md-svg-src="assets/icons/md-arrow-up.svg" aria-label="action"></md-icon>
                                 </md-button>
-                                <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelectionLevel($index)">
+                                <md-button class="md-secondary md-icon-button md-seconday-icon-override" ng-click="deleteSelection($index)">
                                     <md-tooltip md-direction="bottom">Delete</md-tooltip>
-                                    <md-icon md-svg-src="assets/icons/md-delete.svg" aria-label="action"></md-icon>
+                                    <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
                                 </md-button>
-                                <md-divider></md-divider>
+                                <md-divider ng-hide="$last"></md-divider>
                             </md-list-item>
                         </md-list>
                     </md-content>

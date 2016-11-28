@@ -47,7 +47,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
         }
     };
     $scope.showConfigureFilters = function (ev) {
-        if ($scope.componentProperties.editObject.selections.length > 0) {
+        if ($scope.componentProperties.editObject.selections[0].length > 0) {
             $mdDialog.show({
                 templateUrl: 'core-components/analysis/templates/filter.dialog.html',
                 parent: angular.element(document.body),
