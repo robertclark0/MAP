@@ -45,6 +45,13 @@
         if ($scope.dataSelectionForm.$valid) {
             console.log($scope.selectionIndex);
             $scope.componentProperties.editObject.selections[$scope.selectionIndex].push(angular.copy($scope.newSelection));
+
+            $scope.newSelection.dataValue = null;
+            $scope.newSelection.alias = null;
+            $scope.newSelection.operations.length = 0;
+
+            $scope.dataSelectionForm.$setPristine();
+            $scope.dataSelectionForm.$setUntouched();
         }
     };
 
