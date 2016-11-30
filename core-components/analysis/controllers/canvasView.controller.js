@@ -5,6 +5,7 @@
     var DO = appManager.data.DO;
     var SC = appManager.state.SC;
     var DF = appManager.data.DF;
+    $scope.SF = appManager.state.SF;
 
     DF.populateAppData();
 
@@ -16,25 +17,8 @@
 
     $scope.gridsterOpts = {
         columns: 36,
-        resizable: {
-            //start: function (event, $element, widget) {
-            //    widget.destroyChart();
-            //},
-            //stop: function (event, $element, widget) {
-            //    widget.createChart();
-            //}
-        },
-        draggable: {
-            //start: function (event, $element, widget) {
-            //    widget.destroyChart();
-            //},
-            //stop: function (event, $element, widget) {
-            //    widget.createChart();
-            //}
-        }
     };
    
-
     $scope.changeOptions = function (element) {
         
         var options = element.chartOptions;
@@ -42,37 +26,6 @@
         element.chartOptions = options;
 
     };
-
-    //$scope.addChart = function (chartObject) {
-    //    if (DO.charts.map(function (obj) { return obj.GUID }).indexOf(chartObject.GUID) === -1) {
-    //        DO.charts.push(chartObject);
-    //    }
-    //    console.log(DO.charts);
-    //};
-
-
-
-    //temp
-    $scope.chartData = [{
-        name: 'CHUP',
-        type: 'column',
-        color: 'red',
-        data: [4687, 3416, 1612, 450],
-        dataLabels: {
-            enabled: true
-        }
-    },
-    {
-        name: 'POLY',
-        type: 'column',
-        color: 'blue',
-        data: [2687, 1416, 2612, 1450],
-        dataLabels: {
-            enabled: true
-        }
-    }];
-
-
 
 
     //Chart Globals
@@ -85,61 +38,35 @@
 
     //MENU FUNCTIONS
     $scope.addCanvasElement = function (name, type) {
-
        $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
     };
 
 
-    //CURRENT OBJECT CONTROLS
+    // ---- ---- ---- ---- Current Objects and Control Functions ---- ---- ---- ---- //
     $scope.current = {
-        canvas: DSO.canvases[0],
+        canvas: null,
         dataGroup: null,
         selectionLevel: null,
         selectionIndex: null,
-        selectionValue: null,
         canvasElement: null
     };
-    $scope.changeCurrent = function(enterIndex)
-    {
-        if(enterIndex < 1)
-        {
-            $scope.current.dataGroup = null;
-            if($scope.current.canvas.dataGroups[0]){ $scope.current.dataGroup = $scope.current.canvas.dataGroups[0]; }
-
-            $scope.current.canvasElement = null;
-            if($scope.current.canvas.canvasElements[0]){ $scope.current.canvasElement = $scope.current.canvas.canvasElements[0]; }
-        }
-        if(enterIndex < 2)
-        {
-            $scope.current.selectionLevel = null;
-            if ($scope.current.dataGroup) {
-                $scope.current.selectionLevel = $scope.current.dataGroup.selections[0];
-                $scope.current.selectionIndex = 0;
-            }
-        }			
+    
+    $scope.setSelectionLevel = function (selectionLevel, index) {
+        $scope.current.selectionLevel = selectionLevel;
+        $scope.current.selectionIndex = index;
+    }
+    $scope.setDataGroup = function (dataGroup) {
+        $scope.current.dataGroup = dataGroup;
+        $scope.setSelectionLevel(dataGroup.selections[0], 0);
     };
-    $scope.changeCurrent(0);
+    $scope.setCanvas = function (canvas) {
+        $scope.current.canvas = canvas;
+        $scope.setDataGroup(canvas.dataGroups[0]);
+    }(DSO.canvases[0]);
+    
 
+    // ---- ---- ---- ---- Side Nav Functions ---- ---- ---- ---- //
 
-    //DATA CONTROLL SIDE NAVE FUNCTIONS
-    $scope.moveDataSelectionUp = function (index) {
-        if (index > 0) {
-            var desitationIndex = index - 1;
-
-            var tempSelection = $scope.currentSelectionLevel[desitationIndex];
-            $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
-            $scope.currentSelectionLevel[index] = tempSelection;
-        }
-    };
-    $scope.moveDataSelectionDown = function (index) {
-        if ($scope.currentSelectionLevel[index + 1]) {
-            var desitationIndex = index + 1;
-
-            var tempSelection = $scope.currentSelectionLevel[desitationIndex];
-            $scope.currentSelectionLevel[desitationIndex] = $scope.currentSelectionLevel[index];
-            $scope.currentSelectionLevel[index] = tempSelection;
-        }
-    };
 
 
     //DATA CONTROLL - AGGREGATE FUNCTIONS

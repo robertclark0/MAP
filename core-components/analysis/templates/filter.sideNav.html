@@ -1,6 +1,6 @@
 ﻿<md-sidenav md-component-id="panelFilters" ng-class="{'md-sidenav-right' : panel.side === 'right', 'md-sidenav-left' : panel.side === 'left'}" class="map-gray-1" md-whiteframe="4" md-is-locked-open="panel.lock" flex>
     <md-toolbar>
-        <h1 class="md-toolbar-tools">Filters</h1>
+        <h1 class="md-toolbar-tools">Filter Controls</h1>
     </md-toolbar>
     <md-fab-toolbar md-direction="left" style="margin-top:-67px;">
         <md-fab-trigger class="align-with-text">
@@ -26,8 +26,8 @@
 
     <md-content class="map-gray-1">
 
-        <div ng-repeat="filter in current.dataGroup.filters">
-            <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter'}"></directive-generator>
+        <div ng-repeat="filter in current.dataGroup.filters[current.selectionIndex]">
+            <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter', current: '$parent.current'}"></directive-generator>
         </div>
 
         <!--<div layout="row">

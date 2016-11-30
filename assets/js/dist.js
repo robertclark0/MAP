@@ -387,11 +387,12 @@ mapApp.directive('cohortSelection', [function () {
 
     };
 }]);
-mapApp.directive('customFilter', [ function () {
+mapApp.directive('customFilter', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
-            filter: '='
+            filter: '=',
+            current: '='
         },
         replace: true,
         templateUrl: 'shared-components/filters/custom-filter/customFilter.html',
@@ -399,8 +400,7 @@ mapApp.directive('customFilter', [ function () {
     };
 
     function link(scope, elem, attr) {
-
-
+        scope.SF = appManager.state.SF;
     };
 }]);
 applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appDataManager', function ($mdToast, appStateManager, appDataManager) {
@@ -616,6 +616,28 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                 }
             });
         });
+    };
+    stateFunctions.moveUp = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex > 0) {
+            var desitationIndex = targetIndex - 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
+    };
+    stateFunctions.moveDown = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex < source.length - 1) {
+            var desitationIndex = targetIndex + 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
     };
 
 

@@ -28,7 +28,7 @@
                             <button ng-click="$mdOpenMenu()">Canvas: <strong>{{current.canvas.name}}</strong></button>
                             <md-menu-content>
                                 <md-menu-item ng-repeat="canvas in canvases">
-                                    <md-button ng-click="current.canvas = canvas; changeCurrent(0);">
+                                    <md-button ng-click="setCanvas(canvas)">
                                         {{canvas.name}}
                                     </md-button>
                                 </md-menu-item>
@@ -38,7 +38,7 @@
                             <button ng-click="$mdOpenMenu()">Data Group: <strong>{{current.dataGroup.name}}</strong></button>
                             <md-menu-content>
                                 <md-menu-item ng-repeat="dataGroup in current.canvas.dataGroups">
-                                    <md-button ng-click="current.dataGroup = dataGroup; changeCurrent(1);">
+                                    <md-button ng-click="setDataGroup(dataGroup)">
                                         {{dataGroup.name}}
                                     </md-button>
                                 </md-menu-item>
@@ -52,11 +52,11 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} ({{current.dataGroup.drillDown.level[current.selectionIndex]}})</strong></span></button>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} [ {{current.dataGroup.selections[current.selectionIndex][0].dataValue.COLUMN_NAME}} ]</strong></span></button>
                             <md-menu-content>
-                                <md-menu-item ng-repeat="level in current.dataGroup.drillDown.level track by $index">
-                                    <md-button ng-click="current.selectionLevel = current.dataGroup.selections[$index]; current.selectionIndex = $index; changeCurrent(2)">
-                                        Level {{$index + 1}} ({{level}})
+                                <md-menu-item ng-repeat="level in current.dataGroup.selections track by $index">
+                                    <md-button ng-click="setSelectionLevel(level, $index)">
+                                        Level {{$index + 1}} <span ng-show="current.dataGroup.selections[$index][0].dataValue.COLUMN_NAME">[ {{current.dataGroup.selections[$index][0].dataValue.COLUMN_NAME}} ]</span>
                                     </md-button>
                                 </md-menu-item>
                                 <md-menu-divider></md-menu-divider>

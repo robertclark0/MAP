@@ -9,15 +9,21 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button ng-click="moveDataSelectionUp($index)">
+                        <md-button ng-click="SF.moveUp(current.dataGroup.filters[current.selectionIndex], filter)">
                             <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
                             Move Filter Up
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-click="moveDataSelectionDown($index)">
+                        <md-button ng-click="SF.moveDown(current.dataGroup.filters[current.selectionIndex], filter)">
                             <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
                             Move Filter Down
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="showAggregateFunctions($event, selection)">
+                            <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
+                            Filter Operations
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
@@ -27,7 +33,7 @@
     <md-card-content style="padding: 0">
         <md-list style="padding: 0;" class="md-dense">
             <md-list-item ng-repeat="op in filter.operations">
-                <directive-generator name="{{op.operation.type}}" attributes="{ filter: '$parent.filter', operation: '$parent.op'}"></directive-generator>
+                <directive-generator name="{{op.type}}" attributes="{ filter: '$parent.filter', operation: '$parent.op'}"></directive-generator>
             </md-list-item>
         </md-list>
     </md-card-content>

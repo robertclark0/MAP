@@ -187,6 +187,28 @@
             });
         });
     };
+    stateFunctions.moveUp = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex > 0) {
+            var desitationIndex = targetIndex - 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
+    };
+    stateFunctions.moveDown = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex < source.length - 1) {
+            var desitationIndex = targetIndex + 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
+    };
 
 
     //    DATA STUCTURES

@@ -2,7 +2,7 @@
     <md-toolbar class="">
         <div class="md-toolbar-tools">
             <h2>
-                <span>Data Controls</span>
+                <span>Data Selection Controls</span>
             </h2>
         </div>
     </md-toolbar>
@@ -57,8 +57,8 @@
         <md-card ng-repeat="selection in current.selectionLevel">
             <md-toolbar style="background-color: transparent;">
                 <div class="md-toolbar-tools">
-                    <h5 ng-show="selection.aggregation.alias">{{selection.aggregation.alias}} <span style="color: gray; font-weight: 400; font-size: 14px; font-style: italic;"> [{{selection.name}}]</span></h5>
-                    <h5 ng-show="!selection.aggregation.alias">{{selection.name}}</h5>
+                    <h5 ng-show="selection.alias">{{selection.alias}}</h5>
+                    <h5 ng-show="!selection.alias">{{selection.dataValue.COLUMN_NAME}}</h5>
                     <span flex></span>
                     <md-menu>
                         <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -66,13 +66,13 @@
                         </md-button>
                         <md-menu-content width="4">
                             <md-menu-item>
-                                <md-button ng-click="moveDataSelectionUp($index)">
+                                <md-button ng-click="SF.moveUp(current.selectionLevel, selection, $index)">
                                     <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
                                     Move Data Selection Up
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="moveDataSelectionDown($index)">
+                                <md-button ng-click="SF.moveDown(current.selectionLevel, selection, $index)">
                                     <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
                                     Move Data Selection Down
                                 </md-button>
@@ -80,7 +80,7 @@
                             <md-menu-item>
                                 <md-button ng-click="showAggregateFunctions($event, selection)">
                                     <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
-                                    Data Functions
+                                    Data Operations
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
