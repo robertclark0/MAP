@@ -419,6 +419,19 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     }
 
 }]);
+analysis.controller('DataFilterOperations', ['$scope', '$mdDialog', 'filter', function ($scope, $mdDialog, filter) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
+    $scope.filter = filter;
+
+
+    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
+
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
+
+}]);
 analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //

@@ -1,31 +1,35 @@
 ﻿<md-sidenav md-component-id="panelData" ng-class="{'md-sidenav-right' : panel.side === 'right', 'md-sidenav-left' : panel.side === 'left'}" class="map-gray-1" md-whiteframe="4" md-is-locked-open="panel.lock" flex>
-    <md-toolbar class="">
+    <md-toolbar>
         <div class="md-toolbar-tools">
-            <h2>
-                <span>Data Selection Controls</span>
-            </h2>
+            <h2>Data Selection Controls</h2>
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button aria-label="dock" ng-click="panel.lock = !panel.lock">
+                            <md-icon md-svg-icon="assets/icons/md-lock-outline.svg"></md-icon>
+                            Dock/Undock Panel
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="panel.side = 'right'">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-right.svg"></md-icon>
+                            Dock Panel Right
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="panel.side = 'left'">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-left.svg"></md-icon>
+                            Dock Panel Left
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
         </div>
     </md-toolbar>
-    <md-fab-toolbar md-direction="left" style="margin-top:-67px;">
-        <md-fab-trigger class="align-with-text">
-            <md-button aria-label="menu" class="md-fab md-primary md-no-shadow">
-                <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
-            </md-button>
-        </md-fab-trigger>
-        <md-toolbar>
-            <md-fab-actions class="md-toolbar-tools">
-                <md-button aria-label="dock" class="md-icon-button" ng-click="panel.lock = !panel.lock">
-                    <md-icon md-svg-icon="assets/icons/md-lock-outline.svg"></md-icon>
-                </md-button>
-                <md-button aria-label="right" class="md-icon-button" ng-click="panel.side = 'right'">
-                    <md-icon md-svg-icon="assets/icons/md-arrow-right.svg"></md-icon>
-                </md-button>
-                <md-button aria-label="left" class="md-icon-button" ng-click="panel.side = 'left'">
-                    <md-icon md-svg-icon="assets/icons/md-arrow-left.svg"></md-icon>
-                </md-button>
-            </md-fab-actions>
-        </md-toolbar>
-    </md-fab-toolbar>
 
 
     <md-content class="map-gray-1">
