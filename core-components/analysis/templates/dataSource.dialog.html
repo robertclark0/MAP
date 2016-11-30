@@ -6,12 +6,12 @@
     </md-toolbar>
     <md-dialog-content>
         <md-list>
-            <md-subheader class="md-primary" style="background-color: transparent">Table</md-subheader>
-            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in SO.product.DataSources | filter: {SourceType : 'T'}">
+            <md-subheader class="md-primary" ng-show="dataSets.length > 0" style="background-color: transparent">Data Sets</md-subheader>
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in dataSets">
                 {{source.Alias}}
             </md-list-item>
-            <md-subheader class="md-primary" style="background-color: transparent">Stored Procedure</md-subheader>
-            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in SO.product.DataSources | filter: {SourceType : 'P'}">
+            <md-subheader class="md-primary" ng-show="procedures.length > 0" style="background-color: transparent">Stored Procedures</md-subheader>
+            <md-list-item ng-click="setDataSource(source)" ng-repeat="source in procedures">
                 {{source.Alias}}
             </md-list-item>
         </md-list>

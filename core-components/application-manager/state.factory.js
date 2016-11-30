@@ -172,8 +172,8 @@
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
-            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
-            { type: 'custom-filter', name: 'Custom Filter', productLine: null }
+            { type: 'custom-filter', name: 'Custom Filter', productLine: null },
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }            
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
     };

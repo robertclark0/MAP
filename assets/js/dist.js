@@ -235,12 +235,14 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
                     //dataGroup.query.execute();
                 }
 
-                dataGroup.filters.forEach(function (filter) {
-                    if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
-                        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
-                        dataObject.filters.push(newFilterDataObject);
-                        dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
-                    }
+                dataGroup.filters.forEach(function (filterLevel) {
+                    filterLevel.forEach(function (filter) {
+                        if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
+                            var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+                            dataObject.filters.push(newFilterDataObject);
+                            dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
+                        }
+                    })
                 });
             });
         });
@@ -600,8 +602,8 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
-            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
-            { type: 'custom-filter', name: 'Custom Filter', productLine: null }
+            { type: 'custom-filter', name: 'Custom Filter', productLine: null },
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }            
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
     };

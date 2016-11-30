@@ -10,7 +10,7 @@
     var factory = {};
 
 
-    // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ----
+    // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ---- //
     factory.dashboardComponents = {
         selection: null,
         components: [
@@ -68,7 +68,7 @@
                 };
                 list.push(listItem);
             });
-            
+
         });
         factory.componentList.components = list;
     }
@@ -110,7 +110,7 @@
     }
 
 
-    // ---- ---- ---- ---- COMPONENT LIST ---- ---- ---- ----
+    // ---- ---- ---- ---- COMPONENT LIST ---- ---- ---- ---- //
     factory.componentList = {
         components: null,
         actions: [
@@ -139,7 +139,7 @@
     }
 
 
-    // ---- ---- ---- ---- COMPONENET PROPERTIES ---- ---- ---- ----
+    // ---- ---- ---- ---- COMPONENET PROPERTIES ---- ---- ---- ---- //
     factory.componentProperties = {
         editType: null,
         editObject: null,
@@ -148,6 +148,7 @@
         parentTemp: [],
         closeEdit: closeEdit,
         saveEdit: saveEdit,
+        getSchema: getSchema
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
@@ -171,11 +172,15 @@
         }
         else {
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
+
+            if (factory.componentProperties.editObject.source) {
+                getSchema();
+            }
+
         }
 
     }
     function saveEdit() {
-        //console.log(factory.componentProperties);
         if (factory.componentProperties.editParent === null) {
             if (factory.componentList.components.length === 1) {
                 factory.componentProperties.editParent = factory.componentList.components[0].parent;
@@ -220,6 +225,17 @@
             controller: 'DataSelection'
         });
     };
+    function getSchema() {
+        if (factory.componentProperties.editObject.source.type === 'T') {
+            //REMOVE BEFORE FLIGHT
+            API.schema().save(logger.postObject({ type: "table", alias: factory.componentProperties.editObject.source.alias })).$promise.then(function (response) {
+                //API.tableSchema().get().$promise.then(function (response) {
+                DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+    }
 
 
     return factory;

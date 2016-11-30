@@ -54,12 +54,14 @@
                     //dataGroup.query.execute();
                 }
 
-                dataGroup.filters.forEach(function (filter) {
-                    if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
-                        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
-                        dataObject.filters.push(newFilterDataObject);
-                        dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
-                    }
+                dataGroup.filters.forEach(function (filterLevel) {
+                    filterLevel.forEach(function (filter) {
+                        if (dataObject.filters.map(function (obj) { return obj.GUID }).indexOf(filter.GUID) < 0) {
+                            var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+                            dataObject.filters.push(newFilterDataObject);
+                            dataFunctions.getDistinctFilterValues(dataGroup, filter, newFilterDataObject);
+                        }
+                    })
                 });
             });
         });

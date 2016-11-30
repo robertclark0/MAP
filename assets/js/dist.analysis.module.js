@@ -169,7 +169,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
 }]);
 analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
-    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     var SO = appManager.state.SO;
     var logger = appManager.logger;
     var API = appManager.data.API;
@@ -179,16 +179,16 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     $scope.SO = appManager.state.SO;
 
 
-    // ---- ---- ---- ---- Dashboard Components ---- ---- ---- ----
+    // ---- ---- ---- ---- Dashboard Components ---- ---- ---- ---- //
     $scope.dashboardComponents = componentViewFactory.dashboardComponents;
 
     $scope.dashboardComponents.components[0].action("canvas", $scope.DSO);
 
-    // ---- ---- ---- ---- Component List ---- ---- ---- ----
+    // ---- ---- ---- ---- Component List ---- ---- ---- ---- //
     $scope.componentList = componentViewFactory.componentList;
 
 
-    // ---- ---- ---- ---- Component Properties ---- ---- ---- ----
+    // ---- ---- ---- ---- Component Properties ---- ---- ---- ---- //
     $scope.componentProperties = componentViewFactory.componentProperties;
     
 
@@ -199,7 +199,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
             targetEvent: ev,
             clickOutsideToClose: true,
             controller: 'DataSource'
-        }).then(function () { getTableSchema(); }, function () { });
+        }).then(function () { $scope.componentProperties.getSchema(); }, function () { });
     };
     $scope.showConfigureDataSelections = function (ev) {
         if ($scope.componentProperties.editObject.source.alias !== null) {
@@ -229,19 +229,6 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
             logger.toast.warning('Please Create Data Selections First.');
         }
     };
-
-    function getTableSchema() {
-        if ($scope.componentProperties.editObject.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: $scope.componentProperties.editObject.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                $scope.DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
-    }
-
 
     $scope.closeDialog = function () {
         $mdDialog.hide();
@@ -407,12 +394,23 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
 }]);
 analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
-    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     var SF = appManager.state.SF;
     $scope.DO = appManager.data.DO;
     $scope.filters = SF.availableDataFilters();
     $scope.canvasFilters = SF.canvasDataFilters();
     $scope.componentProperties = componentViewFactory.componentProperties;
+
+    $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
+    $scope.selectionIndex = 0;
+
+    $scope.newFilter = {
+        model: $scope.filters[0],
+        dataValue: null,
+        alias: null,
+        operations: [],
+        selectedValues: []
+    };
 
     $scope.operations = [
         { name: "Range", type: 'op-checklist' },
@@ -424,73 +422,70 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
         { name: "Greater or Equal", type: 'op-select' },
         { name: "Less or Equal", type: 'op-select' }
     ]
-
-    $scope.disabled = true;
     $scope.selectedOperation = null
 
-    $scope.newFilter = {
-        model: null,
-        alias: null,
-        dataValue: null,
-        operations: [],
-        selectedValues: []
+
+    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
+    $scope.selectionChange = function () {
+        if ($scope.newFilter.dataValue) {
+            $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
+        }
     };
 
-
-    $scope.checkTypeSelection = function () {
-        $scope.newFilter.alias = $scope.newFilter.model.name;
-    };
-    $scope.checkDataSelection = function () {
-        $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
-    };
     $scope.addOperation = function () {
-        $scope.newFilter.operations.push({ operation: $scope.selectedOperation, useData: true });
+        $scope.newFilter.operations.push($scope.selectedOperation);
         $scope.selectedOperation = null
     }
-    $scope.saveFilter = function () {
-        if ($scope.newFilter.model.type === 'custom-filter') { 
 
-            var filter = angular.copy($scope.newFilter);
-            filter.GUID = SF.generateGUID();
-
-            $scope.componentProperties.editObject.filters.push(filter);
-        }
-        else {
-            var filter = angular.copy($scope.newFilter);
-            filter.alias = filter.model.name;
-            filter.GUID = SF.generateGUID();
-
-            $scope.componentProperties.editObject.filters.push(filter);
-        }
-        $scope.clearFilter();
+    $scope.removeOperation = function (index) {
+        $scope.newFilter.operations.splice(index, 1);
     };
-    $scope.clearFilter = function (clearTypeBool) {
-        if (clearTypeBool) {
-            $scope.newFilter.model = null;
-        }       
-        $scope.newFilter.alias = null;
+
+    $scope.createFilter = function () {
+        if ($scope.dataFilterForm.$valid) {
+
+            var filter = angular.copy($scope.newFilter);
+            filter.GUID = SF.generateGUID();
+
+            $scope.componentProperties.editObject.filters[$scope.selectionIndex].push(filter);
+            $scope.clearFilter();
+        }
+    };
+
+    $scope.clearFilter = function () {
+        $scope.newFilter.model =  $scope.filters[0],          
         $scope.newFilter.dataValue = null;
+        $scope.newFilter.alias = null;
         $scope.newFilter.operations.length = 0;
-        $scope.newFilter.selectedValues.length = 0;
-        $scope.selectedOperation = null
+        $scope.selectedOperation = null;
+
+        $scope.dataFilterForm.$setPristine();
+        $scope.dataFilterForm.$setUntouched();
     };
 
-    $scope.$watch('newFilter', function (nv) {
-        if (nv.model) {
-            if (nv.model.type === 'custom-filter') {
-                if (nv.dataValue !== null && nv.operations.length > 0) {
-                    $scope.disabled = false;
-                }
-                else {
-                    $scope.disabled = true;
-                }
-            }
-            else{
-                $scope.disabled = false;
-            }
-        }
-    }, true);
 
+    // ---- ---- ---- ---- Selection Level Navigation ---- ---- ---- ---- //
+    $scope.changeSelectionLevel = function () {
+        $scope.selectionIndex = $scope.componentProperties.editObject.selections.indexOf($scope.selectedLevel);
+    }
+
+
+    // ---- ---- ---- ---- Selection Levels ---- ---- ---- ---- //
+    $scope.moveSelectionUp = function (source, target, targetIndex) {
+        if (targetIndex > 0) {
+            var desitationIndex = targetIndex - 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
+    };
+
+    $scope.deleteSelection = function (index) {
+        $scope.componentProperties.editObject.filters[$scope.selectionIndex].splice(index, 1);
+    };
+
+
+    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
 
     $scope.closeDialog = function () {
         $mdDialog.hide();
@@ -500,17 +495,11 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
 analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
-
-    var SO = appManager.state.SO;
-    var SC = appManager.state.SC;
     $scope.DO = appManager.data.DO;
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
 
-    $scope.selectedOperation = null;
-
-    $scope.selectionLevels = ["Level 1"];
-    $scope.selectedLevel = "Level 1";
+    $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
     $scope.selectionIndex = 0;
 
     $scope.newSelection = {
@@ -519,41 +508,77 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
         operations: []
     };
 
-    $scope.selectionChange = function () {
-        $scope.newSelection.alias = $scope.newSelection.dataValue.COLUMN_NAME;
-    };
-
     $scope.operations = [
         { name: "Order", type: 'op-order' },
         { name: "Count", type: 'op-count' },
         { name: "Sum", type: 'op-sum' },
         { name: "Pivot", type: 'op-pivot' },
     ]
+    $scope.selectedOperation = null;
 
+
+    // ---- ---- ---- ---- Selection Settings ---- ---- ---- ---- //
+    $scope.selectionChange = function () {
+        if ($scope.newSelection.dataValue) {
+            $scope.newSelection.alias = $scope.newSelection.dataValue.COLUMN_NAME;
+        }      
+    };
+  
     $scope.addOperation = function () {
         $scope.newSelection.operations.push($scope.selectedOperation);
         $scope.selectedOperation = null
     }
-    $scope.removeOperation = function (operation) {
-        var index = $scope.newSelection.operations.indexOf(operation);
+
+    $scope.removeOperation = function (index) {
         $scope.newSelection.operations.splice(index, 1);
     };
 
-
     $scope.createSelection = function () {
         if ($scope.dataSelectionForm.$valid) {
-            console.log($scope.selectionIndex);
+
             $scope.componentProperties.editObject.selections[$scope.selectionIndex].push(angular.copy($scope.newSelection));
-
-            $scope.newSelection.dataValue = null;
-            $scope.newSelection.alias = null;
-            $scope.newSelection.operations.length = 0;
-
-            $scope.dataSelectionForm.$setPristine();
-            $scope.dataSelectionForm.$setUntouched();
+            $scope.clearSelection();
         }
     };
 
+    $scope.clearSelection = function () {
+        $scope.newSelection.dataValue = null;
+        $scope.newSelection.alias = null;
+        $scope.newSelection.operations.length = 0;
+        $scope.selectedOperation = null
+
+        $scope.dataSelectionForm.$setPristine();
+        $scope.dataSelectionForm.$setUntouched();
+    };
+
+
+    // ---- ---- ---- ---- Selection Level Navigation ---- ---- ---- ---- //
+    $scope.addSelectionLevel = function () {
+        $scope.componentProperties.editObject.selections.splice($scope.selectionIndex + 1, 0, []);
+        $scope.componentProperties.editObject.filters.splice($scope.selectionIndex + 1, 0, []);
+
+        $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex + 1];
+        $scope.selectionIndex = $scope.selectionIndex + 1;
+    };
+
+    $scope.deleteSelectionLevel = function () {
+        $scope.componentProperties.editObject.selections.splice($scope.selectionIndex, 1);
+        $scope.componentProperties.editObject.filters.splice($scope.selectionIndex, 1);
+
+        $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex];
+        
+        if ($scope.selectionIndex >= $scope.componentProperties.editObject.selections.length) {
+            $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex - 1];
+            $scope.selectionIndex = $scope.selectionIndex - 1;
+        }
+    }
+
+    $scope.changeSelectionLevel = function () {
+        $scope.selectionIndex = $scope.componentProperties.editObject.selections.indexOf($scope.selectedLevel);
+    }
+
+
+    // ---- ---- ---- ---- Selection Levels ---- ---- ---- ---- //
     $scope.moveSelectionUp = function (source, target, targetIndex) {
         if (targetIndex > 0) {
             var desitationIndex = targetIndex - 1;
@@ -568,27 +593,7 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
     };
 
 
-    $scope.addSelectionLevel = function (index) {
-        var label = "Level " + (index + 1);
-        $scope.selectionLevels.push(label);
-        $scope.componentProperties.editObject.selections.push([]);
-        $scope.selectedLevel = $scope.selectionLevels[index];
-        $scope.selectionIndex = index;
-    };
-
-    $scope.deleteSelectionLevel = function () {
-        var index = $scope.componentProperties.editObject.selections.length - 1;
-        $scope.selectionLevels.splice(index, 1);
-        $scope.componentProperties.editObject.selections.splice(index, 1);
-        $scope.selectedLevel = $scope.selectionLevels[index - 1];
-        $scope.selectionIndex = index - 1;
-    }
-
-    $scope.changeSelectionLevel = function () {
-        $scope.selectionIndex = $scope.selectionLevels.indexOf($scope.selectedLevel);
-    }
-
-
+    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }
@@ -602,6 +607,13 @@ analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory
 
     $scope.componentProperties = componentViewFactory.componentProperties;
 
+    $scope.dataSets = $scope.SO.product.DataSources.filter(function (obj) {
+        return obj.SourceType === 'T';
+    });
+
+    $scope.procedures = $scope.SO.product.DataSources.filter(function (obj) {
+        return obj.SourceType === 'P';
+    })
 
     $scope.setDataSource = function (dataSourceObject) {
         $scope.componentProperties.editObject.source.alias = dataSourceObject.Alias;
@@ -726,7 +738,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
     var factory = {};
 
 
-    // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ----
+    // ---- ---- ---- ---- DASHBOARD COMPONENTS ---- ---- ---- ---- //
     factory.dashboardComponents = {
         selection: null,
         components: [
@@ -784,7 +796,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
                 };
                 list.push(listItem);
             });
-            
+
         });
         factory.componentList.components = list;
     }
@@ -826,7 +838,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
     }
 
 
-    // ---- ---- ---- ---- COMPONENT LIST ---- ---- ---- ----
+    // ---- ---- ---- ---- COMPONENT LIST ---- ---- ---- ---- //
     factory.componentList = {
         components: null,
         actions: [
@@ -855,7 +867,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
     }
 
 
-    // ---- ---- ---- ---- COMPONENET PROPERTIES ---- ---- ---- ----
+    // ---- ---- ---- ---- COMPONENET PROPERTIES ---- ---- ---- ---- //
     factory.componentProperties = {
         editType: null,
         editObject: null,
@@ -864,6 +876,7 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         parentTemp: [],
         closeEdit: closeEdit,
         saveEdit: saveEdit,
+        getSchema: getSchema
     };
     function newEdit(editConfig) {
         factory.componentProperties.editType = editConfig.editType;
@@ -887,11 +900,15 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         }
         else {
             factory.componentProperties.editObject = angular.copy(editConfig.editObject);
+
+            if (factory.componentProperties.editObject.source) {
+                getSchema();
+            }
+
         }
 
     }
     function saveEdit() {
-        //console.log(factory.componentProperties);
         if (factory.componentProperties.editParent === null) {
             if (factory.componentList.components.length === 1) {
                 factory.componentProperties.editParent = factory.componentList.components[0].parent;
@@ -936,6 +953,17 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
             controller: 'DataSelection'
         });
     };
+    function getSchema() {
+        if (factory.componentProperties.editObject.source.type === 'T') {
+            //REMOVE BEFORE FLIGHT
+            API.schema().save(logger.postObject({ type: "table", alias: factory.componentProperties.editObject.source.alias })).$promise.then(function (response) {
+                //API.tableSchema().get().$promise.then(function (response) {
+                DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+    }
 
 
     return factory;

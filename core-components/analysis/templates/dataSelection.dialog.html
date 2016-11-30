@@ -6,7 +6,6 @@
     </md-toolbar>
     <md-dialog-content>
 
-
         <section layout="row">
             <div layout="column" flex="45" style="min-height: 350px; padding-left: 15px;">
                 <form name="dataSelectionForm">
@@ -28,7 +27,7 @@
                             <md-list>
                                 <md-list-item ng-repeat="operation in newSelection.operations track by $index">
                                     {{operation.name}}
-                                    <md-button class="md-secondary md-icon-button" ng-click="removeOperation(operation)">
+                                    <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
                                         <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
                                         <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
                                     </md-button>
@@ -47,7 +46,7 @@
                     </div>
 
                     <div layout="column">
-                        <md-button ng-click="createSelection()">Create Selection</md-button>
+                        <md-button ng-click="createSelection()" ng-disabled="componentProperties.editObject.selections.length === 0">Create Selection</md-button>
                     </div>
                 </form>
             </div>
@@ -61,12 +60,12 @@
                         <md-input-container flex="80">
                             <label>Selection Level</label>
                             <md-select md-on-close="changeSelectionLevel()" ng-model="selectedLevel" style="margin-top: 0; margin-bottom: 0;">
-                                <md-option ng-value="level" ng-repeat="level in selectionLevels">{{level}} <span ng-show="componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME">[ {{componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME}} ]</span></md-option>
+                                <md-option ng-value="level" ng-repeat="level in componentProperties.editObject.selections">Level {{$index + 1}} <span ng-show="componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME">[ {{componentProperties.editObject.selections[$index][0].dataValue.COLUMN_NAME}} ]</span></md-option>
                             </md-select>
                         </md-input-container>
                         <div flex></div>
-                        <md-button ng-click="addSelectionLevel(selectionLevels.length)" ng-disabled="componentProperties.editObject.selections[selectionIndex].length === 0 || selectionIndex !== selectionLevels.length - 1">Add</md-button>
-                        <md-button ng-click="deleteSelectionLevel()" ng-disabled="selectionIndex !== selectionLevels.length - 1">Remove</md-button>
+                        <md-button ng-click="addSelectionLevel(componentProperties.editObject.selections.length)" ng-disabled="componentProperties.editObject.selections[selectionIndex].length === 0">Add</md-button>
+                        <md-button ng-click="deleteSelectionLevel()" ng-disabled="componentProperties.editObject.selections.length === 0">Remove</md-button>
                     </div>
                     <md-content class="inset" style="background-color: white;">
                         <md-list class="mdo-listitem-padding">

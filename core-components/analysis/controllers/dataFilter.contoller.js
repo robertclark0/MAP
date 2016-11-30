@@ -1,11 +1,22 @@
 ﻿analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
-    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ----   
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     var SF = appManager.state.SF;
     $scope.DO = appManager.data.DO;
     $scope.filters = SF.availableDataFilters();
     $scope.canvasFilters = SF.canvasDataFilters();
     $scope.componentProperties = componentViewFactory.componentProperties;
+
+    $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
+    $scope.selectionIndex = 0;
+
+    $scope.newFilter = {
+        model: $scope.filters[0],
+        dataValue: null,
+        alias: null,
+        operations: [],
+        selectedValues: []
+    };
 
     $scope.operations = [
         { name: "Range", type: 'op-checklist' },
@@ -17,73 +28,70 @@
         { name: "Greater or Equal", type: 'op-select' },
         { name: "Less or Equal", type: 'op-select' }
     ]
-
-    $scope.disabled = true;
     $scope.selectedOperation = null
 
-    $scope.newFilter = {
-        model: null,
-        alias: null,
-        dataValue: null,
-        operations: [],
-        selectedValues: []
+
+    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
+    $scope.selectionChange = function () {
+        if ($scope.newFilter.dataValue) {
+            $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
+        }
     };
 
-
-    $scope.checkTypeSelection = function () {
-        $scope.newFilter.alias = $scope.newFilter.model.name;
-    };
-    $scope.checkDataSelection = function () {
-        $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
-    };
     $scope.addOperation = function () {
-        $scope.newFilter.operations.push({ operation: $scope.selectedOperation, useData: true });
+        $scope.newFilter.operations.push($scope.selectedOperation);
         $scope.selectedOperation = null
     }
-    $scope.saveFilter = function () {
-        if ($scope.newFilter.model.type === 'custom-filter') { 
 
-            var filter = angular.copy($scope.newFilter);
-            filter.GUID = SF.generateGUID();
-
-            $scope.componentProperties.editObject.filters.push(filter);
-        }
-        else {
-            var filter = angular.copy($scope.newFilter);
-            filter.alias = filter.model.name;
-            filter.GUID = SF.generateGUID();
-
-            $scope.componentProperties.editObject.filters.push(filter);
-        }
-        $scope.clearFilter();
+    $scope.removeOperation = function (index) {
+        $scope.newFilter.operations.splice(index, 1);
     };
-    $scope.clearFilter = function (clearTypeBool) {
-        if (clearTypeBool) {
-            $scope.newFilter.model = null;
-        }       
-        $scope.newFilter.alias = null;
+
+    $scope.createFilter = function () {
+        if ($scope.dataFilterForm.$valid) {
+
+            var filter = angular.copy($scope.newFilter);
+            filter.GUID = SF.generateGUID();
+
+            $scope.componentProperties.editObject.filters[$scope.selectionIndex].push(filter);
+            $scope.clearFilter();
+        }
+    };
+
+    $scope.clearFilter = function () {
+        $scope.newFilter.model =  $scope.filters[0],          
         $scope.newFilter.dataValue = null;
+        $scope.newFilter.alias = null;
         $scope.newFilter.operations.length = 0;
-        $scope.newFilter.selectedValues.length = 0;
-        $scope.selectedOperation = null
+        $scope.selectedOperation = null;
+
+        $scope.dataFilterForm.$setPristine();
+        $scope.dataFilterForm.$setUntouched();
     };
 
-    $scope.$watch('newFilter', function (nv) {
-        if (nv.model) {
-            if (nv.model.type === 'custom-filter') {
-                if (nv.dataValue !== null && nv.operations.length > 0) {
-                    $scope.disabled = false;
-                }
-                else {
-                    $scope.disabled = true;
-                }
-            }
-            else{
-                $scope.disabled = false;
-            }
-        }
-    }, true);
 
+    // ---- ---- ---- ---- Selection Level Navigation ---- ---- ---- ---- //
+    $scope.changeSelectionLevel = function () {
+        $scope.selectionIndex = $scope.componentProperties.editObject.selections.indexOf($scope.selectedLevel);
+    }
+
+
+    // ---- ---- ---- ---- Selection Levels ---- ---- ---- ---- //
+    $scope.moveSelectionUp = function (source, target, targetIndex) {
+        if (targetIndex > 0) {
+            var desitationIndex = targetIndex - 1;
+            var oldSelection = source[desitationIndex];
+            source[desitationIndex] = target;
+            source[targetIndex] = oldSelection;
+        }
+    };
+
+    $scope.deleteSelection = function (index) {
+        $scope.componentProperties.editObject.filters[$scope.selectionIndex].splice(index, 1);
+    };
+
+
+    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
 
     $scope.closeDialog = function () {
         $mdDialog.hide();

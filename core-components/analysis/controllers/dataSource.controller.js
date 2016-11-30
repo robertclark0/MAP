@@ -6,6 +6,13 @@
 
     $scope.componentProperties = componentViewFactory.componentProperties;
 
+    $scope.dataSets = $scope.SO.product.DataSources.filter(function (obj) {
+        return obj.SourceType === 'T';
+    });
+
+    $scope.procedures = $scope.SO.product.DataSources.filter(function (obj) {
+        return obj.SourceType === 'P';
+    })
 
     $scope.setDataSource = function (dataSourceObject) {
         $scope.componentProperties.editObject.source.alias = dataSourceObject.Alias;
