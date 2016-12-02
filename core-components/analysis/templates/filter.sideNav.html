@@ -36,13 +36,29 @@
         <div ng-repeat="filter in current.dataGroup.filters[current.selectionIndex]">
             <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter', current: '$parent.current'}"></directive-generator>
         </div>
-
-        <!--<div layout="row">
-            <span flex></span>
-            <md-button class="md-fab md-mini" aria-label="Add">
-                <md-icon md-svg-src="assets/icons/md-add.svg"></md-icon>
-            </md-button>
-        </div>-->
+        <div>
+            <md-card ng-repeat="tempCard in tempCards">
+                <md-toolbar style="background-color: transparent;">
+                    <div class="md-toolbar-tools">
+                        <h5>{{tempCard.alias}}</h5>
+                        <span flex></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content layout="row" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div layout="column" style="padding: 0 20px">
+            <md-autocomplete md-selected-item="selectedValue"
+                             md-search-text="searchText"
+                             md-items="value in filterResults(searchText)"
+                             md-item-text="value.COLUMN_NAME"
+                             md-floating-label="New Filter"
+                             md-selected-item-change="valueChanged(value)">
+                <md-item-template>{{value.COLUMN_NAME}}</md-item-template>
+            </md-autocomplete>
+        </div>
 
     </md-content>
 </md-sidenav>

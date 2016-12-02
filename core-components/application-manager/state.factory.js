@@ -187,6 +187,9 @@
             });
         });
     };
+
+
+    // ---- ---- ---- ---- Generic Prototypal Functions ---- ---- ---- ---- //
     stateFunctions.moveUp = function (source, target, targetIndex) {
         if (!targetIndex) {
             targetIndex = source.indexOf(target);
@@ -207,6 +210,14 @@
             var oldSelection = source[desitationIndex];
             source[desitationIndex] = target;
             source[targetIndex] = oldSelection;
+        }
+    };
+    stateFunctions.deleteElement = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex >= 0) {
+            source.splice(targetIndex, 1);
         }
     };
 

@@ -20,10 +20,17 @@
                             Move Filter Down
                         </md-button>
                     </md-menu-item>
+                    <md-divider></md-divider>
                     <md-menu-item>
                         <md-button ng-click="showOperations($event)">
                             <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
                             Filter Operations
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="SF.deleteElement(current.dataGroup.filters[current.selectionIndex], filter)">
+                            <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
+                            Delete Filter
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>

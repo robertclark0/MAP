@@ -367,7 +367,14 @@ mapApp.directive('opSelect', ['appManager', function (appManager) {
 
     function link(scope, elem, attr) {
 
+        scope.list = [1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20];
+
+        
         scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+
+        scope.$watch('filterDataObject', function () {
+            scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+        }, true);
 
     };
 }]);
@@ -631,6 +638,9 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             });
         });
     };
+
+
+    // ---- ---- ---- ---- Generic Prototypal Functions ---- ---- ---- ---- //
     stateFunctions.moveUp = function (source, target, targetIndex) {
         if (!targetIndex) {
             targetIndex = source.indexOf(target);
@@ -651,6 +661,14 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             var oldSelection = source[desitationIndex];
             source[desitationIndex] = target;
             source[targetIndex] = oldSelection;
+        }
+    };
+    stateFunctions.deleteElement = function (source, target, targetIndex) {
+        if (!targetIndex) {
+            targetIndex = source.indexOf(target);
+        }
+        if (targetIndex >= 0) {
+            source.splice(targetIndex, 1);
         }
     };
 

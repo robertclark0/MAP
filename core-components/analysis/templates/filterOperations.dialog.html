@@ -37,7 +37,7 @@
                                 <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-button ng-disabled="!selectedOperation || !newFilter.dataValue" ng-click="addOperation()">Add</md-button>
+                        <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
                     </div>
                 </div>
 
