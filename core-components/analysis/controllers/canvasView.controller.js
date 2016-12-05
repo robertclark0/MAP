@@ -104,9 +104,10 @@
             var newFilter = {
                 model: SF.availableDataFilters()[0],
                 dataValue: dataValue,
+                dataValueOrder: null,
                 alias: dataValue.COLUMN_NAME,
-                operations: [{ name: "Equal", type: 'op-select' }],
-                selectedValues: []
+                operations: [{ name: "Equal", type: 'op-select', selectedValues: [] }]
+                
             };
             newFilter.GUID = SF.generateGUID();
 
@@ -115,7 +116,9 @@
             var tempGUID = SF.generateGUID();
             createTempCard(dataValue, tempGUID);
 
-            API.schema().save({ post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+            var postObject = { post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
+
+            API.schema().save(postObject).$promise.then(function (response) {
                 newFilterDataObject.dataValues = response.result;
                 DO.filters.push(newFilterDataObject);
                 deleteTempCard(tempGUID);

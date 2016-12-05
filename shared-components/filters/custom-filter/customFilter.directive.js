@@ -21,7 +21,8 @@
                 clickOutsideToClose: true,
                 controller: 'DataFilterOperations',
                 locals: {
-                    filter: scope.filter
+                    filter: scope.filter,
+                    current: scope.current
                 }
             });
         };

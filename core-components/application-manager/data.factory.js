@@ -68,7 +68,7 @@
     };
 
     dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
-        apiResource.schema().save({ post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME } }).$promise.then(function (response) {
+        apiResource.schema().save({ post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } }).$promise.then(function (response) {
             filterDataObject.dataValues = response.result;
             console.log(response.result);
         });

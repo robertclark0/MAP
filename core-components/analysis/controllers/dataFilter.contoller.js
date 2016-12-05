@@ -13,20 +13,20 @@
     $scope.newFilter = {
         model: $scope.filters[0],
         dataValue: null,
+        dataValueOrder: null,
         alias: null,
-        operations: [],
-        selectedValues: []
+        operations: []
     };
 
     $scope.operations = [
-        { name: "Range", type: 'op-checklist' },
-        { name: "Equal", type: 'op-select' },
-        { name: "Toggle", type: 'op-toggle' },
-        { name: "Between", type: 'op-between' },
-        { name: "Greater", type: 'op-select' },
-        { name: "Less", type: 'op-select' },
-        { name: "Greater or Equal", type: 'op-select' },
-        { name: "Less or Equal", type: 'op-select' }
+        { name: "Range", type: 'op-checklist', selectedValues: [] },
+        { name: "Equal", type: 'op-select', selectedValues: [] },
+        { name: "Toggle", type: 'op-toggle', selectedValues: [] },
+        { name: "Between", type: 'op-between', selectedValues: [] },
+        { name: "Greater", type: 'op-select', selectedValues: [] },
+        { name: "Less", type: 'op-select', selectedValues: [] },
+        { name: "Greater or Equal", type: 'op-select', selectedValues: [] },
+        { name: "Less or Equal", type: 'op-select', selectedValues: [] }
     ]
     $scope.selectedOperation = null
 

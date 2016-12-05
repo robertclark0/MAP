@@ -7,7 +7,7 @@
 
         <div layout="column" style="min-height: 350px; padding-left: 15px;">
             <form name="dataFilterForm">
-                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Filter Settings</md-subheader>
+                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Settings</md-subheader>
 
                 <div layout="column">
                     <md-input-container style="height: 32px;">
@@ -17,6 +17,12 @@
                     <md-input-container style="height: 32px;">
                         <label>Alias</label>
                         <input type="text" ng-model="filter.alias" />
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Filter Value Order</label>
+                        <md-select md-on-close="orderChange()" ng-model="filter.dataValueOrder">
+                            <md-option ng-repeat="option in filterValueOrderOptions" ng-value="option.value">{{option.name}}</md-option>
+                        </md-select>
                     </md-input-container>
                     <p ng-show="filter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
                     <md-content style="max-height: 200px; background-color: transparent;">
@@ -39,6 +45,7 @@
                         </md-input-container>
                         <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
                     </div>
+
                 </div>
 
             </form>

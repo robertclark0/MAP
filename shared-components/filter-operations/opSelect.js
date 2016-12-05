@@ -1,4 +1,4 @@
-﻿mapApp.directive('opSelect', ['appManager', function (appManager) {
+﻿mapApp.directive('opSelect', ['appManager', '$mdPanel', function (appManager, $mdPanel) {
     return {
         restrict: 'E',
         scope: {
@@ -12,14 +12,30 @@
 
     function link(scope, elem, attr) {
 
-        scope.list = [1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20];
+        scope.showSelect = function (ev) {
+            var position = $mdPanel.newPanelPosition()
+            .relativeTo(ev.target)
+            .addPanelPosition('align-start', 'center');
 
-        
-        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+            var config = {
+                attachTo: angular.element(document.body),
+                controller: 'SelectPanel',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 250px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{item}}</md-list-item></md-virtual-repeat-container></md-card',
+                //panelClass: 'popout-menu',
+                locals: {
+                    filter: scope.filter,
+                    operation: scope.operation
+                },
+                position: position,
+                openFrom: ev,
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                focusOnOpen: true,
+                zIndex: 1001
+            };
 
-        scope.$watch('filterDataObject', function () {
-            scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
-        }, true);
+            $mdPanel.open(config);
+        };
 
     };
 }]);

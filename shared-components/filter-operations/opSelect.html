@@ -1,6 +1,4 @@
-﻿<md-input-container flex>
-    <label>{{operation.name}}</label>
-    <md-select ng-model="funny">
-        <md-option ng-repeat="value in list" ng-value="value">{{value}}</md-option>
-    </md-select>
+﻿<md-input-container flex ng-click="showSelect($event)" style="margin-bottom: 0;">
+        <label>{{operation.name}}</label>
+        <input type="text" ng-model="operation.selectedValues[0]" />
 </md-input-container>

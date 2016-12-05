@@ -12,7 +12,11 @@
 
     function link(scope, elem, attr) {
 
-        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID).dataValues;
+        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID);
+
+        scope.$watch('filterDataObject', function (nv) {
+            scope.filterDataObject.dataValues = nv.dataValues;
+        }, true);
         
     };
 }]);
