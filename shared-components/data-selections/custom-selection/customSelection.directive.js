@@ -1,12 +1,12 @@
-﻿mapApp.directive('customFilter', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+﻿mapApp.directive('customDataSelection', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
     return {
         restrict: 'E',
         scope: {
-            filter: '=',
+            selection: '=',
             current: '='
         },
         replace: true,
-        templateUrl: 'shared-components/filters/custom-filter/customFilter.html',
+        templateUrl: 'shared-components/data-selections/custom-selection/customSelection.html',
         link: link
     };
 
@@ -15,13 +15,13 @@
 
         scope.showOperations = function (ev) {
             $mdDialog.show({
-                templateUrl: 'core-components/analysis/templates/filterOperations.dialog.html',
+                templateUrl: 'core-components/analysis/templates/dataSelectionSettings.dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                controller: 'DataFilterOperations',
+                controller: 'DataSelectionSettings',
                 locals: {
-                    filter: scope.filter,
+                    selection: scope.selection,
                     current: scope.current
                 }
             });

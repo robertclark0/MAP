@@ -1,4 +1,4 @@
-﻿mapApp.directive('opChecklist', ['appManager', function (appManager) {
+﻿mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -6,7 +6,7 @@
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/filter-operations/opChecklist.html',
+        templateUrl: 'shared-components/data-filter-operations/checklist.html',
         link: link
     };
 

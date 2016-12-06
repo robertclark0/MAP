@@ -1,4 +1,4 @@
-﻿mapApp.directive('opSelect', ['appManager', '$mdPanel', function (appManager, $mdPanel) {
+﻿mapApp.directive('dfoSelect', ['appManager', '$mdPanel', function (appManager, $mdPanel) {
     return {
         restrict: 'E',
         scope: {
@@ -6,7 +6,7 @@
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/filter-operations/opSelect.html',
+        templateUrl: 'shared-components/data-filter-operations/select.html',
         link: link
     };
 

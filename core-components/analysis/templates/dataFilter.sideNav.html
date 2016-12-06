@@ -50,12 +50,12 @@
             </md-card>
         </div>
         <div layout="column" style="padding: 0 20px">
-            <md-autocomplete md-selected-item="selectedValue"
-                             md-search-text="searchText"
-                             md-items="value in filterResults(searchText)"
+            <md-autocomplete md-selected-item="filterAuto.selectedValue"
+                             md-search-text="filterAuto.searchText"
+                             md-items="value in filterResults(filterAuto.searchText)"
                              md-item-text="value.COLUMN_NAME"
                              md-floating-label="New Filter"
-                             md-selected-item-change="valueChanged(value)">
+                             md-selected-item-change="filterAutoChanged(value)">
                 <md-item-template>{{value.COLUMN_NAME}}</md-item-template>
             </md-autocomplete>
         </div>

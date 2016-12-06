@@ -33,6 +33,7 @@
 
 
     <md-content class="map-gray-1">
+
         <md-list class="md-dense" ng-show="current.dataGroup">
             <md-list-item>
                 <p> Auto Query </p>
@@ -58,48 +59,22 @@
             </md-list-item>
         </md-list>
 
-        <md-card ng-repeat="selection in current.selectionLevel">
-            <md-toolbar style="background-color: transparent;">
-                <div class="md-toolbar-tools">
-                    <h5 ng-show="selection.alias">{{selection.alias}}</h5>
-                    <h5 ng-show="!selection.alias">{{selection.dataValue.COLUMN_NAME}}</h5>
-                    <span flex></span>
-                    <md-menu>
-                        <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                            <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
-                        </md-button>
-                        <md-menu-content width="4">
-                            <md-menu-item>
-                                <md-button ng-click="SF.moveUp(current.selectionLevel, selection, $index)">
-                                    <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
-                                    Move Data Selection Up
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="SF.moveDown(current.selectionLevel, selection, $index)">
-                                    <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
-                                    Move Data Selection Down
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="showAggregateFunctions($event, selection)">
-                                    <md-icon md-svg-icon="assets/icons/md-functions.svg"></md-icon>
-                                    Data Operations
-                                </md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </div>
-            </md-toolbar>
-            <md-card-content style="padding: 0">
-                <md-list style="padding: 0;" class="md-dense">
-                    <md-list-item>
+        <div ng-repeat="selection in current.dataGroup.selections[current.selectionIndex]">
+            <directive-generator name="{{selection.model.type}}" attributes="{ selection: '$parent.selection', current: '$parent.current'}"></directive-generator>
+        </div>
 
-                    </md-list-item>
-                </md-list>
-            </md-card-content>
-            <!--<p ng-repeat="op in selection.aggregation.operators">{{op.name}}</p>-->
-        </md-card>
+        
+
+        <div layout="column" style="padding: 0 20px">
+            <md-autocomplete md-selected-item="dataAuto.selectedValue"
+                             md-search-text="dataAuto.searchText"
+                             md-items="value in filterResults(dataAuto.searchText)"
+                             md-item-text="value.COLUMN_NAME"
+                             md-floating-label="New Data Selection"
+                             md-selected-item-change="selectionAutoChanged(value)">
+                <md-item-template>{{value.COLUMN_NAME}}</md-item-template>
+            </md-autocomplete>
+        </div>
 
     </md-content>
 </md-sidenav>

@@ -21,7 +21,7 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div layout="column" ng-show="newFilter.model.type === 'custom-filter'">
+                    <div layout="column" ng-show="newFilter.model.type === 'custom-data-filter'">
                         <md-input-container>
                             <label>Data Value</label>
                             <md-select md-on-close="selectionChange()" ng-model="newFilter.dataValue" ng-required="newFilter.model === filters[0]">

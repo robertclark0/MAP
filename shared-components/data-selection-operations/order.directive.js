@@ -1,4 +1,4 @@
-﻿mapApp.directive('dopOrder', ['appManager', function (appManager) {
+﻿mapApp.directive('dsoOrder', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -6,7 +6,7 @@
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-operations/dopOrder.html',
+        templateUrl: 'shared-components/data-selection-operations/order.html',
         link: link
     };
 

@@ -1,4 +1,4 @@
-﻿analysis.controller('DataFilterOperations', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', function ($scope, $mdDialog, filter, current, appManager) {
+﻿analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', function ($scope, $mdDialog, filter, current, appManager) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     $scope.filter = filter;
@@ -7,14 +7,14 @@
     var DF = appManager.data.DF;
 
     $scope.operations = [
-        { name: "Range", type: 'op-checklist', selectedValues: [] },
-        { name: "Equal", type: 'op-select', selectedValues: [] },
-        { name: "Toggle", type: 'op-toggle', selectedValues: [] },
-        { name: "Between", type: 'op-between', selectedValues: [] },
-        { name: "Greater", type: 'op-select', selectedValues: [] },
-        { name: "Less", type: 'op-select', selectedValues: [] },
-        { name: "Greater or Equal", type: 'op-select', selectedValues: [] },
-        { name: "Less or Equal", type: 'op-select', selectedValues: [] }
+        { name: "Range", type: 'dfo-checklist', selectedValues: [] },
+        { name: "Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+        { name: "Between", type: 'dfo-between', selectedValues: [] },
+        { name: "Greater", type: 'dfo-select', selectedValues: [] },
+        { name: "Less", type: 'dfo-select', selectedValues: [] },
+        { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
     ]
     $scope.selectedOperation = null
 

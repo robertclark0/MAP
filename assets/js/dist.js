@@ -161,7 +161,7 @@ mapApp.directive('selectionControl', [function () {
         }
     };
 }]);
-mapApp.directive('dopOrder', ['appManager', function (appManager) {
+mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -169,13 +169,170 @@ mapApp.directive('dopOrder', ['appManager', function (appManager) {
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-operations/dopOrder.html',
+        templateUrl: 'shared-components/data-filter-operations/checklist.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID);
+
+        scope.$watch('filterDataObject', function (nv) {
+            scope.filterDataObject.dataValues = nv.dataValues;
+        }, true);
+        
+    };
+}]);
+mapApp.directive('dfoSelect', ['appManager', '$mdPanel', function (appManager, $mdPanel) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            operation: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-filter-operations/select.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+        scope.showSelect = function (ev) {
+            var position = $mdPanel.newPanelPosition()
+            .relativeTo(ev.target)
+            .addPanelPosition('align-start', 'center');
+
+            var config = {
+                attachTo: angular.element(document.body),
+                controller: 'SelectPanel',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 250px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{item}}</md-list-item></md-virtual-repeat-container></md-card',
+                //panelClass: 'popout-menu',
+                locals: {
+                    filter: scope.filter,
+                    operation: scope.operation
+                },
+                position: position,
+                openFrom: ev,
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                focusOnOpen: true,
+                zIndex: 1001
+            };
+
+            $mdPanel.open(config);
+        };
+
+    };
+}]);
+mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', function (mdPanelRef, $scope, filter, operation, appManager) {
+
+    $scope.filter = filter;
+
+    $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
+
+    $scope.$watch('filterDataObject', function () {
+        $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
+    }, true);
+
+    $scope.selected = function (item) {
+        operation.selectedValues[0] = item;
+        mdPanelRef.close();
+    }
+
+}]);
+mapApp.directive('cohortSelection', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            element: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-filters/cohort-selection/cohortSelection.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+
+    };
+}]);
+mapApp.directive('customDataFilter', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            current: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-filters/custom-filter/customFilter.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+        scope.SF = appManager.state.SF;
+
+        scope.showOperations = function (ev) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/dataFilterSettings.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataFilterSettings',
+                locals: {
+                    filter: scope.filter,
+                    current: scope.current
+                }
+            });
+        };
+
+    };
+}]);
+mapApp.directive('dsoOrder', ['appManager', function (appManager) {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            operation: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-selection-operations/order.html',
         link: link
     };
 
     function link(scope, elem, attr) {
 
         
+
+    };
+}]);
+mapApp.directive('customDataSelection', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+    return {
+        restrict: 'E',
+        scope: {
+            selection: '=',
+            current: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-selections/custom-selection/customSelection.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+        scope.SF = appManager.state.SF;
+
+        scope.showOperations = function (ev) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/dataSelectionSettings.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataSelectionSettings',
+                locals: {
+                    selection: scope.selection,
+                    current: scope.current
+                }
+            });
+        };
 
     };
 }]);
@@ -335,132 +492,6 @@ mapApp.directive('directiveGenerator', ['$compile', function ($compile) {
 //        console.log(exception, cause);
 //    }
 //})
-mapApp.directive('opChecklist', ['appManager', function (appManager) {
-    return {
-        restrict: 'E',
-        scope: {
-            filter: '=',
-            operation: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/filter-operations/opChecklist.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-        scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID);
-
-        scope.$watch('filterDataObject', function (nv) {
-            scope.filterDataObject.dataValues = nv.dataValues;
-        }, true);
-        
-    };
-}]);
-mapApp.directive('opSelect', ['appManager', '$mdPanel', function (appManager, $mdPanel) {
-    return {
-        restrict: 'E',
-        scope: {
-            filter: '=',
-            operation: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/filter-operations/opSelect.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-        scope.showSelect = function (ev) {
-            var position = $mdPanel.newPanelPosition()
-            .relativeTo(ev.target)
-            .addPanelPosition('align-start', 'center');
-
-            var config = {
-                attachTo: angular.element(document.body),
-                controller: 'SelectPanel',
-                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 250px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{item}}</md-list-item></md-virtual-repeat-container></md-card',
-                //panelClass: 'popout-menu',
-                locals: {
-                    filter: scope.filter,
-                    operation: scope.operation
-                },
-                position: position,
-                openFrom: ev,
-                clickOutsideToClose: true,
-                escapeToClose: true,
-                focusOnOpen: true,
-                zIndex: 1001
-            };
-
-            $mdPanel.open(config);
-        };
-
-    };
-}]);
-mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', function (mdPanelRef, $scope, filter, operation, appManager) {
-
-    $scope.filter = filter;
-
-    $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
-
-    $scope.$watch('filterDataObject', function () {
-        $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
-    }, true);
-
-    $scope.selected = function (item) {
-        operation.selectedValues[0] = item;
-        mdPanelRef.close();
-    }
-
-}]);
-mapApp.directive('cohortSelection', [function () {
-    return {
-        restrict: 'E',
-        scope: {
-            element: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/filters/cohort-selection/cohortSelection.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-
-    };
-}]);
-mapApp.directive('customFilter', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
-    return {
-        restrict: 'E',
-        scope: {
-            filter: '=',
-            current: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/filters/custom-filter/customFilter.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-        scope.SF = appManager.state.SF;
-
-        scope.showOperations = function (ev) {
-            $mdDialog.show({
-                templateUrl: 'core-components/analysis/templates/filterOperations.dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                controller: 'DataFilterOperations',
-                locals: {
-                    filter: scope.filter,
-                    current: scope.current
-                }
-            });
-        };
-
-    };
-}]);
 applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appDataManager', function ($mdToast, appStateManager, appDataManager) {
     var SO = appStateManager.SO;    var DO = appDataManager.DO;    var clientLog = [];    var logger = {};    logger.toast = {
         success: function (message) {
@@ -501,12 +532,12 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                 {
                     side: 'left', // left, right | this sets the default value
                     lock: false,
-                    templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataFilter.sideNav.html'
                 },
                 {
                     side: 'left',
                     lock: false,
-                    templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataSelection.sideNav.html'
                 },
                 {
                     side: 'right',
@@ -660,7 +691,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
-            { type: 'custom-filter', name: 'Custom Filter', productLine: null },
+            { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
             { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }            
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });

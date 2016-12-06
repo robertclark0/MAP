@@ -78,12 +78,7 @@
         $scope.setDataGroup(canvas.dataGroups[0]);
     }(DSO.canvases[0]);
 
-
-    // ---- ---- ---- ---- Side Nav Functions ---- ---- ---- ---- //
-    $scope.tempCards = [];
-
-    $scope.selectedValue = null;
-    $scope.searchText = null;
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
     $scope.filterResults = function (query) {
         if (query) {
             var results = DO.tableSchema.filter(function (tableValue) {
@@ -96,9 +91,21 @@
             return DO.tableSchema;
         }
     };
-    $scope.valueChanged = function (value) {
-        quickAddFilter(value);
+
+
+    // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
+    $scope.tempCards = [];
+
+    $scope.filterAuto = {
+        selectedValue: null,
+        searchText: null,
     };
+
+    $scope.filterAutoChanged = function (value) {
+        quickAddFilter(value);
+        $scope.filterAuto.searchText = null;
+    };
+
     function quickAddFilter(dataValue) {
         if (dataValue) {
             var newFilter = {
@@ -106,8 +113,7 @@
                 dataValue: dataValue,
                 dataValueOrder: null,
                 alias: dataValue.COLUMN_NAME,
-                operations: [{ name: "Equal", type: 'op-select', selectedValues: [] }]
-                
+                operations: [{ name: "Equal", type: 'dfo-select', selectedValues: [] }]                
             };
             newFilter.GUID = SF.generateGUID();
 
@@ -137,9 +143,28 @@
     }
 
     
+    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    $scope.dataAuto = {
+        selectedValue: null,
+        searchText: null,
+    };
 
+    $scope.selectionAutoChanged = function (value) {
+        quickAddDataSelection(value);
+        $scope.dataAuto.searchText = null;
+    };
+    function quickAddDataSelection(dataValue) {
+        if(dataValue){
+            var newSelection = {
+                model: { name: "Custom Data Selection", type: "custom-data-selection" },
+                dataValue: dataValue,
+                alias: dataValue.COLUMN_NAME,
+                operations: []
+            };
 
-
+            $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
+        }
+    };
 
     //DATA CONTROLL - AGGREGATE FUNCTIONS
     $scope.showAggregateFunctions = function (ev, selection) {

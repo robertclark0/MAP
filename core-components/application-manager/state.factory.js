@@ -13,12 +13,12 @@
                 {
                     side: 'left', // left, right | this sets the default value
                     lock: false,
-                    templateUrl: 'core-components/analysis/templates/filter.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataFilter.sideNav.html'
                 },
                 {
                     side: 'left',
                     lock: false,
-                    templateUrl: 'core-components/analysis/templates/dataValue.sideNav.html'
+                    templateUrl: 'core-components/analysis/templates/dataSelection.sideNav.html'
                 },
                 {
                     side: 'right',
@@ -172,7 +172,7 @@
     };
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
-            { type: 'custom-filter', name: 'Custom Filter', productLine: null },
+            { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
             { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }            
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });

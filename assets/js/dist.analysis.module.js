@@ -79,12 +79,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
         $scope.setDataGroup(canvas.dataGroups[0]);
     }(DSO.canvases[0]);
 
-
-    // ---- ---- ---- ---- Side Nav Functions ---- ---- ---- ---- //
-    $scope.tempCards = [];
-
-    $scope.selectedValue = null;
-    $scope.searchText = null;
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
     $scope.filterResults = function (query) {
         if (query) {
             var results = DO.tableSchema.filter(function (tableValue) {
@@ -97,9 +92,21 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
             return DO.tableSchema;
         }
     };
-    $scope.valueChanged = function (value) {
-        quickAddFilter(value);
+
+
+    // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
+    $scope.tempCards = [];
+
+    $scope.filterAuto = {
+        selectedValue: null,
+        searchText: null,
     };
+
+    $scope.filterAutoChanged = function (value) {
+        quickAddFilter(value);
+        $scope.filterAuto.searchText = null;
+    };
+
     function quickAddFilter(dataValue) {
         if (dataValue) {
             var newFilter = {
@@ -107,8 +114,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
                 dataValue: dataValue,
                 dataValueOrder: null,
                 alias: dataValue.COLUMN_NAME,
-                operations: [{ name: "Equal", type: 'op-select', selectedValues: [] }]
-                
+                operations: [{ name: "Equal", type: 'dfo-select', selectedValues: [] }]                
             };
             newFilter.GUID = SF.generateGUID();
 
@@ -138,9 +144,28 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
     }
 
     
+    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    $scope.dataAuto = {
+        selectedValue: null,
+        searchText: null,
+    };
 
+    $scope.selectionAutoChanged = function (value) {
+        quickAddDataSelection(value);
+        $scope.dataAuto.searchText = null;
+    };
+    function quickAddDataSelection(dataValue) {
+        if(dataValue){
+            var newSelection = {
+                model: { name: "Custom Data Selection", type: "custom-data-selection" },
+                dataValue: dataValue,
+                alias: dataValue.COLUMN_NAME,
+                operations: []
+            };
 
-
+            $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
+        }
+    };
 
     //DATA CONTROLL - AGGREGATE FUNCTIONS
     $scope.showAggregateFunctions = function (ev, selection) {
@@ -217,7 +242,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     $scope.showConfigureFilters = function (ev) {
         if ($scope.componentProperties.editObject.selections[0].length > 0) {
             $mdDialog.show({
-                templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+                templateUrl: 'core-components/analysis/templates/dataFilter.dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
@@ -412,14 +437,14 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     };
 
     $scope.operations = [
-        { name: "Range", type: 'op-checklist', selectedValues: [] },
-        { name: "Equal", type: 'op-select', selectedValues: [] },
-        { name: "Toggle", type: 'op-toggle', selectedValues: [] },
-        { name: "Between", type: 'op-between', selectedValues: [] },
-        { name: "Greater", type: 'op-select', selectedValues: [] },
-        { name: "Less", type: 'op-select', selectedValues: [] },
-        { name: "Greater or Equal", type: 'op-select', selectedValues: [] },
-        { name: "Less or Equal", type: 'op-select', selectedValues: [] }
+        { name: "Range", type: 'dfo-checklist', selectedValues: [] },
+        { name: "Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+        { name: "Between", type: 'dfo-between', selectedValues: [] },
+        { name: "Greater", type: 'dfo-select', selectedValues: [] },
+        { name: "Less", type: 'dfo-select', selectedValues: [] },
+        { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
     ]
     $scope.selectedOperation = null
 
@@ -491,7 +516,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     }
 
 }]);
-analysis.controller('DataFilterOperations', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', function ($scope, $mdDialog, filter, current, appManager) {
+analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', function ($scope, $mdDialog, filter, current, appManager) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     $scope.filter = filter;
@@ -500,14 +525,14 @@ analysis.controller('DataFilterOperations', ['$scope', '$mdDialog', 'filter', 'c
     var DF = appManager.data.DF;
 
     $scope.operations = [
-        { name: "Range", type: 'op-checklist', selectedValues: [] },
-        { name: "Equal", type: 'op-select', selectedValues: [] },
-        { name: "Toggle", type: 'op-toggle', selectedValues: [] },
-        { name: "Between", type: 'op-between', selectedValues: [] },
-        { name: "Greater", type: 'op-select', selectedValues: [] },
-        { name: "Less", type: 'op-select', selectedValues: [] },
-        { name: "Greater or Equal", type: 'op-select', selectedValues: [] },
-        { name: "Less or Equal", type: 'op-select', selectedValues: [] }
+        { name: "Range", type: 'dfo-checklist', selectedValues: [] },
+        { name: "Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+        { name: "Between", type: 'dfo-between', selectedValues: [] },
+        { name: "Greater", type: 'dfo-select', selectedValues: [] },
+        { name: "Less", type: 'dfo-select', selectedValues: [] },
+        { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+        { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
     ]
     $scope.selectedOperation = null
 
@@ -556,16 +581,17 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
     $scope.selectionIndex = 0;
 
     $scope.newSelection = {
+        model: {name: "Custom Data Selection", type: "custom-data-selection"},
         dataValue: null,
         alias: null, 
         operations: []
     };
 
     $scope.operations = [
-        { name: "Order", type: 'op-order' },
-        { name: "Count", type: 'op-count' },
-        { name: "Sum", type: 'op-sum' },
-        { name: "Pivot", type: 'op-pivot' },
+        { name: "Order", type: 'dso-order' },
+        { name: "Count", type: 'dso-count' },
+        { name: "Sum", type: 'dso-sum' },
+        { name: "Pivot", type: 'dso-pivot' },
     ]
     $scope.selectedOperation = null;
 
@@ -647,6 +673,42 @@ analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFact
 
 
     // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
+    $scope.closeDialog = function () {
+        $mdDialog.hide();
+    }
+
+}]);
+analysis.controller('DataSelectionSettings', ['$scope', '$mdDialog', 'selection', 'current', 'appManager', function ($scope, $mdDialog, selection, current, appManager) {
+
+    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
+    $scope.selection = selection;
+    var API = appManager.data.API;
+    var logger = appManager.logger;
+    var DF = appManager.data.DF;
+
+    $scope.operations = [
+        { name: "Order", type: 'dso-order' },
+        { name: "Count", type: 'dso-count' },
+        { name: "Sum", type: 'dso-sum' },
+        { name: "Pivot", type: 'dso-pivot' },
+    ]
+    $scope.selectedOperation = null;
+
+
+
+    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
+    $scope.addOperation = function () {
+        $scope.selection.operations.push($scope.selectedOperation);
+        $scope.selectedOperation = null
+    }
+
+    $scope.removeOperation = function (index) {
+        $scope.selection.operations.splice(index, 1);
+    };
+
+
+    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
+
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }

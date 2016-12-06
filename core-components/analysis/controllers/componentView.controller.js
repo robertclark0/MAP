@@ -49,7 +49,7 @@ analysis.controller('ComponentView', ['$scope', 'appManager', 'componentViewFact
     $scope.showConfigureFilters = function (ev) {
         if ($scope.componentProperties.editObject.selections[0].length > 0) {
             $mdDialog.show({
-                templateUrl: 'core-components/analysis/templates/filter.dialog.html',
+                templateUrl: 'core-components/analysis/templates/dataFilter.dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
