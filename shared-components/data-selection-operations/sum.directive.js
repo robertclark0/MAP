@@ -1,4 +1,4 @@
-﻿mapApp.directive('dsoOrder', ['appManager', function (appManager) {
+﻿mapApp.directive('dsoSum', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -6,13 +6,13 @@
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-selection-operations/order.html',
+        templateUrl: 'shared-components/data-selection-operations/sum.html',
         link: link
     };
 
     function link(scope, elem, attr) {
 
-        
+
 
     };
 }]);

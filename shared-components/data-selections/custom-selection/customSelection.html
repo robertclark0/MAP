@@ -42,7 +42,7 @@
     <md-card-content style="padding: 0">
         <md-list style="padding: 0;" class="md-dense">
             <md-list-item ng-repeat="op in selection.operations">
-                <directive-generator name="{{op.type}}" attributes="{ filter: '$parent.selection', operation: '$parent.op'}"></directive-generator>
+                <directive-generator name="{{op.type}}" attributes="{ selection: '$parent.selection', operation: '$parent.op'}"></directive-generator>
             </md-list-item>
         </md-list>
     </md-card-content>
