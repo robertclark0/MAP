@@ -39,7 +39,7 @@
         </div>
     </md-toolbar>
     <md-card-content style="padding: 0">
-        <md-list style="padding: 0;" class="md-dense">
+        <md-list style="padding: 0; padding-bottom: 5px;" class="md-dense">
             <md-list-item ng-repeat="op in filter.operations">
                 <directive-generator name="{{op.type}}" attributes="{ filter: '$parent.filter', operation: '$parent.op'}"></directive-generator>
             </md-list-item>

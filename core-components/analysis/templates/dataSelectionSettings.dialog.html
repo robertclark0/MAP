@@ -5,41 +5,48 @@
     </md-toolbar>
     <md-dialog-content>
 
-        <div layout="column" style="min-height: 350px; padding-left: 15px;">
+        <div layout="column" style="min-height: 350px; padding: 0 15px;">
             <form name="dataSelectionForm">
                 <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Settings</md-subheader>
 
                 <div layout="column">
-                    <md-input-container style="height: 32px;">
-                        <label>Data Value</label>
-                        <input type="text" ng-model="selection.dataValue.COLUMN_NAME" disabled />
+                    <div layout="row">
+                        <md-input-container flex="75" style="height: 32px;">
+                            <label>Data Value</label>
+                            <input type="text" ng-model="selection.dataValue.COLUMN_NAME" disabled />
+                        </md-input-container>
+                        <div flex="25" layout-align="center center">
+                            <md-list-item style="margin-top: 15px">
+                                <p>Pivot</p>
+                                <md-checkbox class="md-secondary" ng-model="selection.pivot" ng-change="checkInput()"></md-checkbox>
+                            </md-list-item>
+                        </div>                       
+                    </div>
+                    <md-input-container ng-show="selection.pivot" style="height: 30px;">
+                        <div layout="row" layout-align="space-around" ng-show="pivotProgress" style="position: absolute; left: 45%">
+                            <md-progress-circular md-mode="indeterminate" md-diameter="40px"></md-progress-circular>
+                        </div>
+                        <label ng-show="pivotValues">Pivot Value</label>
+                        <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="selection.pivotValue">
+                            <md-option ng-repeat="value in pivotValues" ng-value="value">{{value}}</md-option>
+                        </md-select>
                     </md-input-container>
                     <md-input-container style="height: 32px;">
                         <label>Alias</label>
                         <input type="text" ng-model="selection.alias" />
                     </md-input-container>
-                </div>
-                <p ng-show="filter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
-                <md-content style="max-height: 200px; background-color: transparent;">
-                    <md-list>
-                        <md-list-item ng-repeat="operation in selection.operations track by $index">
-                            {{operation.name}}
-                            <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
-                                <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
-                                <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
-                            </md-button>
+                    <md-list class="md-dense">
+                        <md-list-item>
+                            <p>Order Results</p>
+                            <md-checkbox class="md-secondary" ng-model="selection.showOrder"></md-checkbox>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>Select As Function</p>
+                            <md-checkbox class="md-secondary" ng-model="selection.function"></md-checkbox>
                         </md-list-item>
                     </md-list>
-                </md-content>
-                <div layout="row">
-                    <md-input-container flex="85">
-                        <label>Operation</label>
-                        <md-select ng-model="selectedOperation">
-                            <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
                 </div>
+
             </form>
         </div>
 

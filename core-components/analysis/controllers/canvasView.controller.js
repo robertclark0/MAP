@@ -158,7 +158,11 @@
             var newSelection = {
                 model: { name: "Custom Data Selection", type: "custom-data-selection" },
                 dataValue: dataValue,
+                pivot: false,
+                pivotValue: null,
                 alias: dataValue.COLUMN_NAME,
+                showOrder: false,
+                order: null,
                 operations: []
             };
 

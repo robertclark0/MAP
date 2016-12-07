@@ -11,12 +11,15 @@
     $scope.newSelection = {
         model: {name: "Custom Data Selection", type: "custom-data-selection"},
         dataValue: null,
-        alias: null, 
+        pivot: false,
+        pivotValue: null,
+        alias: null,
+        showOrder: false,
+        order: null,
         operations: []
     };
 
     $scope.operations = [
-        { name: "Order", type: 'dso-order' },
         { name: "Count", type: 'dso-count' },
         { name: "Sum", type: 'dso-sum' },
         { name: "Pivot", type: 'dso-pivot' },

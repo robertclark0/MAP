@@ -287,7 +287,7 @@ mapApp.directive('customDataFilter', ['appManager', '$mdDialog', function (appMa
 
     };
 }]);
-mapApp.directive('dsoCount', ['appManager', function (appManager) {
+mapApp.directive('dsoCheck', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -295,43 +295,7 @@ mapApp.directive('dsoCount', ['appManager', function (appManager) {
             operation: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-selection-operations/count.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-
-
-    };
-}]);
-mapApp.directive('dsoOrder', ['appManager', function (appManager) {
-    return {
-        restrict: 'E',
-        scope: {
-            selection: '=',
-            operation: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/data-selection-operations/order.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-        
-
-    };
-}]);
-mapApp.directive('dsoSum', ['appManager', function (appManager) {
-    return {
-        restrict: 'E',
-        scope: {
-            selection: '=',
-            operation: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/data-selection-operations/sum.html',
+        templateUrl: 'shared-components/data-selection-operations/check.html',
         link: link
     };
 
