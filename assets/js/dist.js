@@ -575,34 +575,30 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             enabled: true
         };
         this.selections = [[]];
-        this.drillDown = { level: [], selection: [] };
         this.filters = [[]];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.DataSelection = function (name) {
-        this.name = name || null;
-        this.order = 'asc'; // asc | desc
-        this.aggregate = false;
-        this.aggregation = {
-            type: null, // count | sum | case-count | case-sum
-            round: 2,
-            alias: null,
-            operators: []
-        };
-    };
-    stateClasses.DataOperator = function () {
-        this.type = null; // greater | less | greaterEqual | lessEqual | equal | in | between
-        this.values = [];
-        this.valueType = null; // string | int
+    stateClasses.DataSelection = function (model, dataValue) {
+        this.model = model || null;
+        this.dataValue = dataValue || null;
+        this.alias = null;
+        this.pivot = false;
+        this.pivotValues = [];
+        this.order = false;
+        this.orderValue = null;
+        this.aggregateFunction = false;
+        this.aggregateFunctionValue = null;
     };
 
-    stateClasses.DataFilter = function (name, type, GUID) {
-        this.name = name || 'New Data Filter';
-        this.type = type,
+    stateClasses.DataFilter = function (model, dataValue, GUID) {
+        this.model = model || null;
+        this.dataValue = dataValue || null;
+        this.alias = null;
+        this.orderValue = null;
+        this.operations = [];
         this.GUID = null;
-        this.visibleInReport = true;
-        this.selectedValue = []; //this should probably be extracted out to the data side.
+        this.visibleInReport = false;
 
         var _constructor = function (obj) {
             if (GUID) {
@@ -625,47 +621,12 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
-    stateClasses.ColumnProperty = function () {
-        this.column = '';
-        this.aggregate = 'none';
-        this.partition = false;
-        this.grouped = false;
-    };
 
 
     //    STATE DATA FUNCTIONS
     //
     var stateFunctions = {};
 
-    stateFunctions.state = {
-        canvases: function (options, object) {
-            switch (options) {
-                case null:
-                case undefined:
-                    return session.DynamicStateObject.canvases;
-                default:
-                    switch (options.method) {
-                        case 'add':
-                            session.DynamicStateObject.canvases.push(object);
-                            return session.DynamicStateObject.canvases.length - 1; //returns index of new object
-                        case 'delete':
-                            session.DynamicStateObject.canvases.splice(object, 1);
-                            break;
-                        case 'return':
-                        default:
-                            switch (options.returns) {
-                                case 'index':
-                                    return session.DynamicStateObject.canvases[object];
-                                case 'current':
-                                    return session.DynamicStateObject.canvases[session.DynamicStateObject.dashboard.index.canvas];
-                                case 'all':
-                                default:
-                                    return session.DynamicStateObject.canvases;
-                            }
-                    }
-            }
-        }
-    };
     stateFunctions.generateGUID = function () {
         var d = new Date().getTime();
         if (window.performance && typeof window.performance.now === "function") {
@@ -689,13 +650,6 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             $state.go(state);
         }
     };
-    stateFunctions.availableDataFilters = function () {
-        var availableFilters = [
-            { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
-            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }            
-        ];
-        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
-    };
     stateFunctions.canvasDataFilters = function () {
         var rawFilterArray = [];
         session.DynamicStateObject.canvases.forEach(function (canvas) {
@@ -705,6 +659,29 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
                 }
             });
         });
+    };
+
+
+
+    stateFunctions.availableDataFilters = function () {
+        var availableFilters = [
+            { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }
+        ];
+        return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
+    };
+    stateFunctions.availableDataFilterOperations = function () {
+        var availableOperations = [
+            { name: "Range", type: 'dfo-checklist', selectedValues: [] },
+            { name: "Equal", type: 'dfo-select', selectedValues: [] },
+            { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+            { name: "Between", type: 'dfo-between', selectedValues: [] },
+            { name: "Greater", type: 'dfo-select', selectedValues: [] },
+            { name: "Less", type: 'dfo-select', selectedValues: [] },
+            { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+            { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
+        ];
+        return availableOperations;
     };
 
 

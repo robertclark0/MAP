@@ -1,6 +1,7 @@
 ﻿analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
+    var SC = appManager.state.SC;
     $scope.DO = appManager.data.DO;
     $scope.componentProperties = componentViewFactory.componentProperties;
     $scope.componentList = componentViewFactory.componentList;
@@ -8,23 +9,7 @@
     $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
     $scope.selectionIndex = 0;
 
-    $scope.newSelection = {
-        model: {name: "Custom Data Selection", type: "custom-data-selection"},
-        dataValue: null,
-        pivot: false,
-        pivotValue: null,
-        alias: null,
-        showOrder: false,
-        order: null,
-        operations: []
-    };
-
-    $scope.operations = [
-        { name: "Count", type: 'dso-count' },
-        { name: "Sum", type: 'dso-sum' },
-        { name: "Pivot", type: 'dso-pivot' },
-    ]
-    $scope.selectedOperation = null;
+    $scope.newSelection = new SC.DataSelection({name: "Custom Data Selection", type: "custom-data-selection"});
 
 
     // ---- ---- ---- ---- Selection Settings ---- ---- ---- ---- //
@@ -52,10 +37,7 @@
     };
 
     $scope.clearSelection = function () {
-        $scope.newSelection.dataValue = null;
-        $scope.newSelection.alias = null;
-        $scope.newSelection.operations.length = 0;
-        $scope.selectedOperation = null
+        $scope.newSelection = new SC.DataSelection();
 
         $scope.dataSelectionForm.$setPristine();
         $scope.dataSelectionForm.$setUntouched();

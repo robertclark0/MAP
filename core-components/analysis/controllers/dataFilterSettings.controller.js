@@ -2,30 +2,16 @@
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     $scope.filter = filter;
+    var SF = appManager.state.SF;
     var API = appManager.data.API;
     var logger = appManager.logger;
     var DF = appManager.data.DF;
 
-    $scope.operations = [
-        { name: "Range", type: 'dfo-checklist', selectedValues: [] },
-        { name: "Equal", type: 'dfo-select', selectedValues: [] },
-        { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
-        { name: "Between", type: 'dfo-between', selectedValues: [] },
-        { name: "Greater", type: 'dfo-select', selectedValues: [] },
-        { name: "Less", type: 'dfo-select', selectedValues: [] },
-        { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
-        { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
-    ]
+    $scope.operations = SF.availableDataFilterOperations();
     $scope.selectedOperation = null
 
-    $scope.filterValueOrderOptions = [
-        { name: "Default", value: null },
-        { name: "Ascending", value: "asc" },
-        { name: "Descending", value: "desc" }
-    ];
-
     $scope.orderChange = function () {
-        var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } };
+        var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.orderValue } };
         var filterDataObject = DF.getFilter(filter.GUID);
 
         API.schema().save(postObject).$promise.then(function (response) {
@@ -46,7 +32,6 @@
 
 
     // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
-
     $scope.closeDialog = function () {
         $mdDialog.hide();
     }

@@ -18,19 +18,45 @@
                         <div flex="25" layout-align="center center">
                             <md-list-item style="margin-top: 15px">
                                 <p>Pivot</p>
-                                <md-checkbox class="md-secondary" ng-model="selection.pivot" ng-change="checkInput()"></md-checkbox>
+                                <md-checkbox class="md-secondary" ng-model="selection.pivot" ng-change="pivotChcked()"></md-checkbox>
                             </md-list-item>
                         </div>                       
                     </div>
-                    <md-input-container ng-show="selection.pivot" style="height: 30px;">
-                        <div layout="row" layout-align="space-around" ng-show="pivotProgress" style="position: absolute; left: 45%">
-                            <md-progress-circular md-mode="indeterminate" md-diameter="40px"></md-progress-circular>
-                        </div>
-                        <label ng-show="pivotValues">Pivot Value</label>
-                        <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="selection.pivotValue">
-                            <md-option ng-repeat="value in pivotValues" ng-value="value">{{value}}</md-option>
-                        </md-select>
-                    </md-input-container>
+
+                    <p ng-show="selection.pivotValues.length > 0 && selection.pivot" style="font-size: 12px; padding-left: 2px; color: gray;">Pivot Values</p>
+                    <md-content style="max-height: 200px; background-color: transparent;" ng-show="selection.pivot">
+                        <md-list>
+                            <md-list-item ng-repeat="pivotValue in selection.pivotValues track by $index">
+                                {{pivotValue.model.name}} [ {{pivotValue.value}} ]
+                                <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
+                                    <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                                    <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+
+                    <div layout="row">
+                        <md-input-container flex="35" ng-show="selection.pivot">
+                            <label>Operation</label>
+                            <md-select ng-model="pivotOperation.model">
+                                <md-option ng-repeat="pivot in pivotOperations" ng-value="pivot">{{pivot.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex="45" ng-show="selection.pivot" style="height: 30px;">
+                            <div layout="row" layout-align="space-around" ng-show="pivotProgress" style="position: absolute; left: 45%">
+                                <md-progress-circular md-mode="indeterminate" md-diameter="40px"></md-progress-circular>
+                            </div>
+                            <label ng-show="pivotValues">Pivot Value</label>
+                            <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="pivotOperation.value">
+                                <md-option ng-repeat="value in pivotValues" ng-value="value">{{value}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-button ng-show="selection.pivot" ng-disabled="!pivotOperation.model || !pivotOperation.value" ng-click="addOperation()" flex>
+                            Add
+                        </md-button>
+                    </div>
+
                     <md-input-container style="height: 32px;">
                         <label>Alias</label>
                         <input type="text" ng-model="selection.alias" />
@@ -38,11 +64,11 @@
                     <md-list class="md-dense">
                         <md-list-item>
                             <p>Order Results</p>
-                            <md-checkbox class="md-secondary" ng-model="selection.showOrder"></md-checkbox>
+                            <md-checkbox class="md-secondary" ng-model="selection.order"></md-checkbox>
                         </md-list-item>
                         <md-list-item>
                             <p>Select As Function</p>
-                            <md-checkbox class="md-secondary" ng-model="selection.function"></md-checkbox>
+                            <md-checkbox class="md-secondary" ng-model="selection.aggregateFunction" ng-change="aggregateFunctionChecked()"></md-checkbox>
                         </md-list-item>
                     </md-list>
                 </div>

@@ -78,44 +78,35 @@
         $scope.setDataGroup(canvas.dataGroups[0]);
     }(DSO.canvases[0]);
 
+
     // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
     $scope.filterResults = function (query) {
         if (query) {
             var results = DO.tableSchema.filter(function (tableValue) {
                 return angular.lowercase(tableValue.COLUMN_NAME).indexOf(angular.lowercase(query)) >= 0;
             });
-
             return results ? results : [];
         }
-        else {
-            return DO.tableSchema;
-        }
+        else { return DO.tableSchema; }
     };
 
 
     // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
     $scope.tempCards = [];
-
     $scope.filterAuto = {
         selectedValue: null,
         searchText: null,
     };
-
     $scope.filterAutoChanged = function (value) {
         quickAddFilter(value);
         $scope.filterAuto.searchText = null;
     };
-
     function quickAddFilter(dataValue) {
         if (dataValue) {
-            var newFilter = {
-                model: SF.availableDataFilters()[0],
-                dataValue: dataValue,
-                dataValueOrder: null,
-                alias: dataValue.COLUMN_NAME,
-                operations: [{ name: "Equal", type: 'dfo-select', selectedValues: [] }]                
-            };
-            newFilter.GUID = SF.generateGUID();
+
+            var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
+            newFilter.alias = dataValue.COLUMN_NAME;
+            newFilter.operations.push({ name: "Equal", type: 'dfo-select', selectedValues: [] });
 
             var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
          
@@ -148,49 +139,30 @@
         selectedValue: null,
         searchText: null,
     };
-
     $scope.selectionAutoChanged = function (value) {
         quickAddDataSelection(value);
         $scope.dataAuto.searchText = null;
     };
     function quickAddDataSelection(dataValue) {
-        if(dataValue){
-            var newSelection = {
-                model: { name: "Custom Data Selection", type: "custom-data-selection" },
-                dataValue: dataValue,
-                pivot: false,
-                pivotValue: null,
-                alias: dataValue.COLUMN_NAME,
-                showOrder: false,
-                order: null,
-                operations: []
-            };
+        if (dataValue) {
+
+            var newSelection = new SC.DataSelection({ name: "Custom Data Selection", type: "custom-data-selection" }, dataValue);
+            newSelection.alias = dataValue.COLUMN_NAME;
 
             $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
         }
     };
 
-    //DATA CONTROLL - AGGREGATE FUNCTIONS
-    $scope.showAggregateFunctions = function (ev, selection) {
-        $scope.current.selectionValue = selection;
-        console.log($scope.current.selectionValue);
-        $mdDialog.show({
-            templateUrl: 'core-components/analysis/templates/aggregateFunctions.dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true,
-            controller: 'CanvasView'
-        });
-    };
-    $scope.selectedOperation = null;
-    $scope.operations = [
-        { name: "Count", type: 'count' },
-        { name: "Sum", type: 'sum' },
-        { name: "Pivot Count", type: 'case-count' },
-        { name: "Pivot Sum", type: 'case-sum' }
-    ];
-    $scope.addOperation = function () {
-        $scope.current.selectionValue.aggregation.operators.push($scope.selectedOperation);
+
+    // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
+
+    function buildQueryObject(dataGroup, selectionIndex) {
+        return {
+            source: dataGroup.source,
+            pagination: dataGroup.pagination,
+            selections: dataGroup.selections[selectionIndex],
+            filters: dataGroup.filters[selectionIndex]
+        }
     };
 
 }]);

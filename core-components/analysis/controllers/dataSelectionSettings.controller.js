@@ -5,42 +5,22 @@
     var API = appManager.data.API;
     var logger = appManager.logger;
     var DF = appManager.data.DF;
+    var SF = appManager.state.SF;
 
     $scope.pivotProgress = false;
 
-    $scope.operations = [
-        { name: "Count", type: 'dso-check' },
-        { name: "Sum", type: 'dso-check' },
-        { name: "Average", type: 'dso-check' },
-    ]
-    $scope.selectedOperation = null;
-
-    $scope.checkInput = function () {
+    $scope.pivotChcked = function () {
         if (selection.pivot) {
             loadPivotValues();
-            var index = selection.alias.indexOf(':');
-            if (index < 0 && selection.pivotValue) {
-                selection.alias += " : " + selection.pivotValue;
-            }
+            selection.aggregateFunction = true;
         }
-        else {
-            var index = selection.alias.indexOf(':');
-            if (index >= 0) {
-                selection.alias = selection.alias.substr(0, index - 1);
-            }
+    };
+    $scope.aggregateFunctionChecked = function () {
+        if (!selection.aggregateFunction) {
+            selection.pivot = false;
         }
     };
 
-    $scope.pivotSelected = function () {
-        var index = selection.alias.indexOf(':');
-
-        if (index < 0) {
-            selection.alias += " : " + selection.pivotValue;
-        }
-        else {
-            selection.alias = selection.alias.substr(0, index - 1) + " : " + selection.pivotValue;
-        }
-    };
 
     function loadPivotValues() {
         if (selection.pivot && selection.dataValue && !$scope.pivotValues) {
@@ -56,6 +36,23 @@
         }
     }
     loadPivotValues();
+
+    $scope.pivotOperations = [
+        { operation: "equal", name: "Equal" },
+        { operation: "greater", name: "Greater" },
+        { operation: "less", name: "Less" },
+        { operation: "greaterE", name: "Greater or Equal" },
+        { operation: "lessE", name: "Less or Equal" }
+
+    ];
+    $scope.pivotOperation = { model: null, value: null };
+    $scope.addOperation = function () {
+        selection.pivotValues.push($scope.pivotOperation);
+        $scope.pivotOperation = { model: null, value: null };
+    }
+    $scope.removeOperation = function (index) {
+        selection.pivotValues.splice(index, 1);
+    };
 
 
     // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //

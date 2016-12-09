@@ -2,6 +2,7 @@
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     var SF = appManager.state.SF;
+    var SC = appManager.state.SC;
     $scope.DO = appManager.data.DO;
     $scope.filters = SF.availableDataFilters();
     $scope.canvasFilters = SF.canvasDataFilters();
@@ -10,24 +11,9 @@
     $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
     $scope.selectionIndex = 0;
 
-    $scope.newFilter = {
-        model: $scope.filters[0],
-        dataValue: null,
-        dataValueOrder: null,
-        alias: null,
-        operations: []
-    };
+    $scope.newFilter = new SC.DataFilter($scope.filters[0]);
 
-    $scope.operations = [
-        { name: "Range", type: 'dfo-checklist', selectedValues: [] },
-        { name: "Equal", type: 'dfo-select', selectedValues: [] },
-        { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
-        { name: "Between", type: 'dfo-between', selectedValues: [] },
-        { name: "Greater", type: 'dfo-select', selectedValues: [] },
-        { name: "Less", type: 'dfo-select', selectedValues: [] },
-        { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
-        { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
-    ]
+    $scope.operations = SF.availableDataFilterOperations();
     $scope.selectedOperation = null
 
 
@@ -59,11 +45,7 @@
     };
 
     $scope.clearFilter = function () {
-        $scope.newFilter.model =  $scope.filters[0],          
-        $scope.newFilter.dataValue = null;
-        $scope.newFilter.alias = null;
-        $scope.newFilter.operations.length = 0;
-        $scope.selectedOperation = null;
+        $scope.newFilter = new SC.DataFilter($scope.filters[0]);
 
         $scope.dataFilterForm.$setPristine();
         $scope.dataFilterForm.$setUntouched();

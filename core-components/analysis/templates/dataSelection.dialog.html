@@ -22,27 +22,16 @@
                             <label>Alias</label>
                             <input type="text" ng-model="newSelection.alias" />
                         </md-input-container>
-                        <p ng-show="newSelection.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
-                        <md-content style="max-height: 200px; background-color: transparent;">
-                            <md-list>
-                                <md-list-item ng-repeat="operation in newSelection.operations track by $index">
-                                    {{operation.name}}
-                                    <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
-                                        <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
-                                        <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
-                                    </md-button>
-                                </md-list-item>
-                            </md-list>
-                        </md-content>
-                        <div layout="row">
-                            <md-input-container flex="85">
-                                <label>Operation</label>
-                                <md-select md-on-close="" ng-model="selectedOperation">
-                                    <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
-                                </md-select>
-                            </md-input-container>
-                            <md-button ng-disabled="!selectedOperation || !newSelection.dataValue" ng-click="addOperation()">Add</md-button>
-                        </div>
+                        <md-list class="md-dense">
+                            <md-list-item>
+                                <p>Order Results</p>
+                                <md-checkbox class="md-secondary" ng-model="newSelection.order"></md-checkbox>
+                            </md-list-item>
+                            <md-list-item>
+                                <p>Select As Function</p>
+                                <md-checkbox class="md-secondary" ng-model="newSelection.aggregateFunction"></md-checkbox>
+                            </md-list-item>
+                        </md-list>
                     </div>
 
                     <div layout="column">

@@ -1,4 +1,4 @@
-﻿analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', function ($scope, appManager, $state, $interval) {
+﻿analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', '$mdDialog', function ($scope, appManager, $state, $interval, $mdDialog) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -31,113 +31,8 @@
 
     $scope.sendTestQuery = function () {
 
-        var queryObject = {
-            source: {
-                product: "TELE360",
-                type: 'table',
-                name: 'TeleHealth_360_CAPER'
-            },
-            pagination:
-            {
-                enabled: false,
-                page: 1,
-                range: 10
-            },
-            aggregation:
-            {
-                enabled: true
-            },
-            selections:
-            [
+       
 
-                    {
-                        name: 'Region',
-                        order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'Month',
-                        order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'count',
-                            alias: 'Month_Count'
-                        }
-                    },
-                    {
-                        name: 'Month',
-                        order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'case-count',
-                            alias: 'Month_Jan',
-                            operators:
-                            [
-                                {
-                                    type: 'equal',
-                                    values: ['Jan'],
-                                    valueType: 'string'
-                                }
-                            ]
-                        }
-                    }
-                    
-            ],
-            filters:
-            [
-            //    {
-            //        name: 'FY',
-            //        operators:
-            //        [
-            //            {
-            //                type: 'equal',
-            //                values: ['2016'],
-            //                valueType: 'string'
-            //            }
-            //        ]
-            //    },
-            //    {
-            //        name: 'FM',
-            //        operators:
-            //        [
-            //            {
-            //                type: 'equal',
-            //                values: ['1'],
-            //                valueType: 'string'
-            //            }
-            //        ]
-            //    }
-            ]
-        };
-        //API.download().save({ query: queryObject }).$promise
-        //    .then(function (response)
-        //    {
-        //        if (response.GUID) {
-        //            var downloadGUID = response.GUID;
-        //            var check;
-
-        //            check = $interval(function () {
-        //                API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-        //                    if (response.Status === 'complete') {
-        //                        $interval.cancel(check);
-        //                        window.location(API.endpoint + "download?GUID=" + downloadGUID);
-        //                    }
-        //                    else if (response.Status === 'started') {
-
-        //                    }
-        //                    else {
-        //                        $interval.cancel(check);
-        //                    }
-        //                }).catch(function (response) {
-        //                    console.log(response);
-        //                });
-        //            }, 3000, 600);
-        //        }
-        //    })
-        //    .catch(function (response)
-        //    {
-        //        console.log(response);
-        //    });
         API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
     };

@@ -41,16 +41,16 @@
     </md-toolbar>
     <md-card-content style="padding: 0">
         <md-list style="padding: 0;" class="md-dense">
-            <md-list-item ng-show="selection.showOrder">
-                <md-radio-group layout="row" ng-model="selection.order" flex>
+            <md-list-item ng-show="selection.order">
+                <md-radio-group layout="row" ng-model="selection.orderValue" flex>
                     <md-radio-button value="asc" flex="50">Ascending</md-radio-button>
                     <md-radio-button value="desc" flex="50">Descending</md-radio-button>
                 </md-radio-group>
             </md-list-item>
-            <md-list-item ng-show="selection.function">
+            <md-list-item ng-show="selection.aggregateFunction">
                 <md-input-container flex>
                     <label>Function</label>
-                    <md-select md-on-close="" ng-model="selection.funny">
+                    <md-select md-on-close="" ng-model="selection.aggregateFunctionValue">
                         <md-option value="count">Count</md-option>
                         <md-option value="sum">Sum</md-option>
                         <md-option value="avg">Average</md-option>
@@ -59,11 +59,6 @@
                     </md-select>
                 </md-input-container>
             </md-list-item>
-
-            
-
-                <directive-generator ng-repeat="op in selection.operations" name="{{op.type}}" attributes="{ selection: '$parent.selection', operation: '$parent.op'}"></directive-generator>
-
         </md-list>
     </md-card-content>
 </md-card>
