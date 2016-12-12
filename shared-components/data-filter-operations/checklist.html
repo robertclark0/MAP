@@ -1,8 +1,8 @@
 ﻿<md-content flex style=" max-height: 192px">
     <md-virtual-repeat-container style="height: 192px">
-        <md-list-item md-virtual-repeat="value in filterDataObject.dataValues">
-            <p>{{value}}</p>
-            <md-checkbox class="md-secondary" ng-model="test"></md-checkbox>
+        <md-list-item md-virtual-repeat="dataValue in filterDataObject.dataValues">
+            <p>{{dataValue.value}}</p>
+            <md-checkbox class="md-secondary" ng-model="dataValue.isChecked" ng-change="checkChanged()"></md-checkbox>
         </md-list-item>
     </md-virtual-repeat-container>
 </md-content>

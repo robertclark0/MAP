@@ -27,7 +27,7 @@
                     <md-content style="max-height: 200px; background-color: transparent;" ng-show="selection.pivot">
                         <md-list>
                             <md-list-item ng-repeat="pivotValue in selection.pivotValues track by $index">
-                                {{pivotValue.model.name}} [ {{pivotValue.value}} ]
+                                {{pivotValue.name}} [ {{pivotValue.selectedValues[0]}} ]
                                 <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
                                     <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
                                     <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
@@ -39,7 +39,7 @@
                     <div layout="row">
                         <md-input-container flex="35" ng-show="selection.pivot">
                             <label>Operation</label>
-                            <md-select ng-model="pivotOperation.model">
+                            <md-select ng-model="pivotOperation">
                                 <md-option ng-repeat="pivot in pivotOperations" ng-value="pivot">{{pivot.name}}</md-option>
                             </md-select>
                         </md-input-container>
@@ -48,11 +48,11 @@
                                 <md-progress-circular md-mode="indeterminate" md-diameter="40px"></md-progress-circular>
                             </div>
                             <label ng-show="pivotValues">Pivot Value</label>
-                            <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="pivotOperation.value">
+                            <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="pivotOperation.selectedValues[0]">
                                 <md-option ng-repeat="value in pivotValues" ng-value="value">{{value}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-button ng-show="selection.pivot" ng-disabled="!pivotOperation.model || !pivotOperation.value" ng-click="addOperation()" flex>
+                        <md-button ng-show="selection.pivot" ng-disabled="!pivotOperation.selectedValues" ng-click="addOperation()" flex>
                             Add
                         </md-button>
                     </div>

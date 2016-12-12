@@ -153,14 +153,14 @@
     };
     stateFunctions.availableDataFilterOperations = function () {
         var availableOperations = [
-            { name: "Range", type: 'dfo-checklist', selectedValues: [] },
-            { name: "Equal", type: 'dfo-select', selectedValues: [] },
-            { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
-            { name: "Between", type: 'dfo-between', selectedValues: [] },
-            { name: "Greater", type: 'dfo-select', selectedValues: [] },
-            { name: "Less", type: 'dfo-select', selectedValues: [] },
-            { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
-            { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
+            { operation:"in", name: "Range", type: 'dfo-checklist', selectedValues: [] },
+            { operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [] },
+            { operation: "equal", name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+            { operation: "equal", name: "Between", type: 'dfo-between', selectedValues: [] },
+            { operation: "greater", name: "Greater", type: 'dfo-select', selectedValues: [] },
+            { operation: "less", name: "Less", type: 'dfo-select', selectedValues: [] },
+            { operation: "greaterE", name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+            { operation: "lessE", name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
         ];
         return availableOperations;
     };

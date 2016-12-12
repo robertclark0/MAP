@@ -17,6 +17,15 @@
         scope.$watch('filterDataObject', function (nv) {
             scope.filterDataObject.dataValues = nv.dataValues;
         }, true);
+
+
+        scope.checkChanged = function () {
+            scope.operation.selectedValues = scope.filterDataObject.dataValues.filter(function (obj) {
+                return obj.isChecked;
+            }).map(function (obj) {
+                return obj.value;
+            });
+        };
         
     };
 }]);

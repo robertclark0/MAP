@@ -180,6 +180,15 @@ mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
         scope.$watch('filterDataObject', function (nv) {
             scope.filterDataObject.dataValues = nv.dataValues;
         }, true);
+
+
+        scope.checkChanged = function () {
+            scope.operation.selectedValues = scope.filterDataObject.dataValues.filter(function (obj) {
+                return obj.isChecked;
+            }).map(function (obj) {
+                return obj.value;
+            });
+        };
         
     };
 }]);
@@ -407,8 +416,9 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
 
     dataFunctions.getDistinctFilterValues = function (dataGroup, filter, filterDataObject) {
         apiResource.schema().save({ post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } }).$promise.then(function (response) {
-            filterDataObject.dataValues = response.result;
-            console.log(response.result);
+            response.result.forEach(function (obj) {
+                filterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
         });
     };
 
@@ -672,14 +682,14 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     };
     stateFunctions.availableDataFilterOperations = function () {
         var availableOperations = [
-            { name: "Range", type: 'dfo-checklist', selectedValues: [] },
-            { name: "Equal", type: 'dfo-select', selectedValues: [] },
-            { name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
-            { name: "Between", type: 'dfo-between', selectedValues: [] },
-            { name: "Greater", type: 'dfo-select', selectedValues: [] },
-            { name: "Less", type: 'dfo-select', selectedValues: [] },
-            { name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
-            { name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
+            { operation:"in", name: "Range", type: 'dfo-checklist', selectedValues: [] },
+            { operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [] },
+            { operation: "equal", name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
+            { operation: "equal", name: "Between", type: 'dfo-between', selectedValues: [] },
+            { operation: "greater", name: "Greater", type: 'dfo-select', selectedValues: [] },
+            { operation: "less", name: "Less", type: 'dfo-select', selectedValues: [] },
+            { operation: "greaterE", name: "Greater or Equal", type: 'dfo-select', selectedValues: [] },
+            { operation: "lessE", name: "Less or Equal", type: 'dfo-select', selectedValues: [] }
         ];
         return availableOperations;
     };

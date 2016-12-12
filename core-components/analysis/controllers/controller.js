@@ -31,8 +31,6 @@
 
     $scope.sendTestQuery = function () {
 
-       
-
         API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
     };

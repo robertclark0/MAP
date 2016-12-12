@@ -117,7 +117,9 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
             var postObject = { post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
 
             API.schema().save(postObject).$promise.then(function (response) {
-                newFilterDataObject.dataValues = response.result;
+                response.result.forEach(function (obj) {
+                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                });
                 DO.filters.push(newFilterDataObject);
                 deleteTempCard(tempGUID);
                 $scope.current.dataGroup.filters[$scope.current.selectionIndex].push(newFilter);
@@ -152,6 +154,28 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
 
             $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
         }
+    };
+
+
+    // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
+
+    function buildQueryObject(dataGroup, selectionIndex) {
+        return {
+            source: dataGroup.source,
+            pagination: dataGroup.pagination,
+            aggregation: dataGroup.aggregation,
+            selections: dataGroup.selections[selectionIndex],
+            filters: dataGroup.filters[selectionIndex]
+        }
+    };
+
+    $scope.build = function () {
+        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+
+        console.log(JSON.stringify(queryObject))
+
+        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
+
     };
 
 }]);
@@ -257,113 +281,6 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
 
     $scope.sendTestQuery = function () {
 
-        var queryObject = {
-            source: {
-                product: "TELE360",
-                type: 'table',
-                name: 'TeleHealth_360_CAPER'
-            },
-            pagination:
-            {
-                enabled: false,
-                page: 1,
-                range: 10
-            },
-            aggregation:
-            {
-                enabled: true
-            },
-            selections:
-            [
-
-                    {
-                        name: 'Region',
-                        order: 'asc',
-                        aggregate: false
-                    },
-                    {
-                        name: 'Month',
-                        order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'count',
-                            alias: 'Month_Count'
-                        }
-                    },
-                    {
-                        name: 'Month',
-                        order: 'asc',
-                        aggregate: true,
-                        aggregation: {
-                            type: 'case-count',
-                            alias: 'Month_Jan',
-                            operators:
-                            [
-                                {
-                                    type: 'equal',
-                                    values: ['Jan'],
-                                    valueType: 'string'
-                                }
-                            ]
-                        }
-                    }
-                    
-            ],
-            filters:
-            [
-            //    {
-            //        name: 'FY',
-            //        operators:
-            //        [
-            //            {
-            //                type: 'equal',
-            //                values: ['2016'],
-            //                valueType: 'string'
-            //            }
-            //        ]
-            //    },
-            //    {
-            //        name: 'FM',
-            //        operators:
-            //        [
-            //            {
-            //                type: 'equal',
-            //                values: ['1'],
-            //                valueType: 'string'
-            //            }
-            //        ]
-            //    }
-            ]
-        };
-        //API.download().save({ query: queryObject }).$promise
-        //    .then(function (response)
-        //    {
-        //        if (response.GUID) {
-        //            var downloadGUID = response.GUID;
-        //            var check;
-
-        //            check = $interval(function () {
-        //                API.downloadUpdate().get({ GUID: downloadGUID }).$promise.then(function (response) {
-        //                    if (response.Status === 'complete') {
-        //                        $interval.cancel(check);
-        //                        window.location(API.endpoint + "download?GUID=" + downloadGUID);
-        //                    }
-        //                    else if (response.Status === 'started') {
-
-        //                    }
-        //                    else {
-        //                        $interval.cancel(check);
-        //                    }
-        //                }).catch(function (response) {
-        //                    console.log(response);
-        //                });
-        //            }, 3000, 600);
-        //        }
-        //    })
-        //    .catch(function (response)
-        //    {
-        //        console.log(response);
-        //    });
         API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
 
     };
@@ -479,7 +396,10 @@ analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'cur
         var filterDataObject = DF.getFilter(filter.GUID);
 
         API.schema().save(postObject).$promise.then(function (response) {
-            filterDataObject.dataValues = response.result;
+            filterDataObject.dataValues.length = 0;
+            response.result.forEach(function (obj) {
+                filterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
         });
     };
 
@@ -625,7 +545,6 @@ analysis.controller('DataSelectionSettings', ['$scope', '$mdDialog', 'selection'
             var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: selection.dataValue.COLUMN_NAME, order: 'asc' } };
 
             API.schema().save(postObject).$promise.then(function (response) {
-                console.log(response.result);
                 $scope.pivotProgress = false;
                 $scope.pivotValues = response.result;
             });
@@ -634,17 +553,17 @@ analysis.controller('DataSelectionSettings', ['$scope', '$mdDialog', 'selection'
     loadPivotValues();
 
     $scope.pivotOperations = [
-        { operation: "equal", name: "Equal" },
-        { operation: "greater", name: "Greater" },
-        { operation: "less", name: "Less" },
-        { operation: "greaterE", name: "Greater or Equal" },
-        { operation: "lessE", name: "Less or Equal" }
+        { operation: "equal", name: "Equal", selectedValues: [] },
+        { operation: "greater", name: "Greater", selectedValues: [] },
+        { operation: "less", name: "Less", selectedValues: [] },
+        { operation: "greaterE", name: "Greater or Equal", selectedValues: [] },
+        { operation: "lessE", name: "Less or Equal", selectedValues: [] }
 
     ];
-    $scope.pivotOperation = { model: null, value: null };
+    $scope.pivotOperation = null;
     $scope.addOperation = function () {
         selection.pivotValues.push($scope.pivotOperation);
-        $scope.pivotOperation = { model: null, value: null };
+        $scope.pivotOperation = null;
     }
     $scope.removeOperation = function (index) {
         selection.pivotValues.splice(index, 1);

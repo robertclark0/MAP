@@ -116,7 +116,9 @@
             var postObject = { post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
 
             API.schema().save(postObject).$promise.then(function (response) {
-                newFilterDataObject.dataValues = response.result;
+                response.result.forEach(function (obj) {
+                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                });
                 DO.filters.push(newFilterDataObject);
                 deleteTempCard(tempGUID);
                 $scope.current.dataGroup.filters[$scope.current.selectionIndex].push(newFilter);
@@ -160,9 +162,19 @@
         return {
             source: dataGroup.source,
             pagination: dataGroup.pagination,
+            aggregation: dataGroup.aggregation,
             selections: dataGroup.selections[selectionIndex],
             filters: dataGroup.filters[selectionIndex]
         }
+    };
+
+    $scope.build = function () {
+        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+
+        console.log(JSON.stringify(queryObject))
+
+        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
+
     };
 
 }]);

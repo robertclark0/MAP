@@ -15,7 +15,10 @@
         var filterDataObject = DF.getFilter(filter.GUID);
 
         API.schema().save(postObject).$promise.then(function (response) {
-            filterDataObject.dataValues = response.result;
+            filterDataObject.dataValues.length = 0;
+            response.result.forEach(function (obj) {
+                filterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
         });
     };
 

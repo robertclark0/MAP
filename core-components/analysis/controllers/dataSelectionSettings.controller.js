@@ -29,7 +29,6 @@
             var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: selection.dataValue.COLUMN_NAME, order: 'asc' } };
 
             API.schema().save(postObject).$promise.then(function (response) {
-                console.log(response.result);
                 $scope.pivotProgress = false;
                 $scope.pivotValues = response.result;
             });
@@ -38,17 +37,17 @@
     loadPivotValues();
 
     $scope.pivotOperations = [
-        { operation: "equal", name: "Equal" },
-        { operation: "greater", name: "Greater" },
-        { operation: "less", name: "Less" },
-        { operation: "greaterE", name: "Greater or Equal" },
-        { operation: "lessE", name: "Less or Equal" }
+        { operation: "equal", name: "Equal", selectedValues: [] },
+        { operation: "greater", name: "Greater", selectedValues: [] },
+        { operation: "less", name: "Less", selectedValues: [] },
+        { operation: "greaterE", name: "Greater or Equal", selectedValues: [] },
+        { operation: "lessE", name: "Less or Equal", selectedValues: [] }
 
     ];
-    $scope.pivotOperation = { model: null, value: null };
+    $scope.pivotOperation = null;
     $scope.addOperation = function () {
         selection.pivotValues.push($scope.pivotOperation);
-        $scope.pivotOperation = { model: null, value: null };
+        $scope.pivotOperation = null;
     }
     $scope.removeOperation = function (index) {
         selection.pivotValues.splice(index, 1);
