@@ -42,12 +42,14 @@
     <md-card-content style="padding: 0">
         <md-list style="padding: 0;" class="md-dense">
             <md-list-item ng-show="selection.order">
+                <div ng-show="!selection.orderValue" style="position: absolute; top: 13px; left: -6px;"><md-icon style="color:orangered" md-svg-icon="assets/icons/md-warning.svg"></md-icon></div>
                 <md-radio-group layout="row" ng-model="selection.orderValue" flex>
                     <md-radio-button value="asc" flex="50">Ascending</md-radio-button>
                     <md-radio-button value="desc" flex="50">Descending</md-radio-button>
                 </md-radio-group>
             </md-list-item>
             <md-list-item ng-show="selection.aggregateFunction">
+                <div ng-show="!selection.aggregateFunctionValue" style="position: absolute; top: 24px; left: -6px;"><md-icon style="color:orangered" md-svg-icon="assets/icons/md-warning.svg"></md-icon></div>
                 <md-input-container flex>
                     <label>Function</label>
                     <md-select md-on-close="" ng-model="selection.aggregateFunctionValue">

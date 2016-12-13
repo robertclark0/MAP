@@ -11,9 +11,11 @@
     $scope.SF = appManager.state.SF;
     $scope.DO = appManager.data.DO;
 
+    $scope.propertyPanel = DSO.dashboard.propertyPanel;
+
     DF.populateAppData();
 
-    $scope.propertyPanel = DSO.dashboard.propertyPanel;
+    //
 
     $scope.toggleSideNav = function (navID) {
         $mdSidenav(navID).toggle();

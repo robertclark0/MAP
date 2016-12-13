@@ -10,13 +10,10 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="dataViewOptions">
                     <ul>
-                        <li gridster-item="item" ng-repeat="item in dataViewItems" style=" border: 1px solid rgb(150,150,150)">
-                            <table>
-                                <tr>
-                                    <th>Column_5</th>
-                                    <th>Column_6</th>
-                                    <th>Column_7</th>
-                                    <th>Column_8</th>
+                        <li gridster-item="item" ng-repeat="datas in dataGroupData" style=" border: 1px solid rgb(150,150,150)">
+                            <table class="table table-striped">
+                                <tr ng-repeat="row in datas.result">
+                                    <td ng-repeat="cell in row">{{cell}}</td>
                                 </tr>
                             </table>
                         </li>
@@ -25,9 +22,74 @@
             </div>
 
             <div class="map-gray-2">
-                <md-tabs md-align-tabs="bottom" class="ink-bar-top">
-                    <md-tab ng-repeat="canvas in canvases">{{canvas.name}}</md-tab>
-                </md-tabs>
+                <!--<md-tabs md-align-tabs="bottom" class="ink-bar-top">
+            <md-tab ng-repeat="canvas in canvases" md-on-select="changeCanvas(canvas)">{{canvas.name}}</md-tab>
+        </md-tabs>-->
+                <div style="height:41px; border-top: 1px solid rgb(225,225,225);">
+                    <md-menu-bar class="map-gray-1">
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Canvas: <strong>{{current.canvas.name}}</strong></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="canvas in canvases">
+                                    <md-button ng-click="setCanvas(canvas)">
+                                        {{canvas.name}}
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Data Group: <strong>{{current.dataGroup.name}}</strong></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="dataGroup in current.canvas.dataGroups">
+                                    <md-button ng-click="setDataGroup(dataGroup)">
+                                        {{dataGroup.name}}
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} [ {{current.dataGroup.selections[current.selectionIndex][0].dataValue.COLUMN_NAME}} ]</strong></span></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="level in current.dataGroup.selections track by $index">
+                                    <md-button ng-click="setSelectionLevel(level, $index)">
+                                        Level {{$index + 1}} <span ng-show="current.dataGroup.selections[$index][0].dataValue.COLUMN_NAME">[ {{current.dataGroup.selections[$index][0].dataValue.COLUMN_NAME}} ]</span>
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-click="$mdOpenMenu()">Canvas Element: <span ng-show="true"><strong>{{current.canvasElement.name}}</strong></span></button>
+                            <md-menu-content>
+                                <md-menu-item ng-repeat="element in current.canvas.canvasElements">
+                                    <md-button ng-click="current.canvasElement = element">
+                                        {{element.name}}
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="moveDataSelectionDown($index)">
+                                        <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                                        Control Panel
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
+                </div>
             </div>
 
         </div>
