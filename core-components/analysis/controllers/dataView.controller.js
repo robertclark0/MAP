@@ -1,24 +1,20 @@
-﻿analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+﻿analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', 'dataFilterFactory', 'dataSelectionFactory', 'viewFactory', function ($scope, appManager, $mdSidenav, dataFilterFactory, dataSelectionFactory, viewFactory) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
+    var DO = appManager.data.DO;
+    var SC = appManager.state.SC;
+    var DF = appManager.data.DF;
     var API = appManager.data.API;
     var logger = appManager.logger;
-    var DO = appManager.data.DO;
-    var DF = appManager.data.DF;
+    var SF = appManager.state.SF;
+    $scope.SF = appManager.state.SF;
+    $scope.DO = appManager.data.DO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
-    $scope.canvases = DSO.canvases;
 
     DF.populateAppData();
     //
-
-    $scope.dataGroupData = DO.dataGroups;
-
-    $scope.$watch('dataGroupData', function (nv) {
-        $scope.dataGroupData = nv;
-        console.log(nv);
-    }, true);
 
     $scope.toggleSideNav = function (navID) {
         $mdSidenav(navID).toggle();
@@ -46,56 +42,54 @@
         canvasElement: null
     };
 
-    $scope.setSelectionLevel = function (selectionLevel, index) {
-        $scope.current.selectionLevel = selectionLevel;
-        $scope.current.selectionIndex = index;
-    }
-    $scope.setDataGroup = function (dataGroup) {
-        $scope.current.dataGroup = dataGroup;
-        $scope.setSelectionLevel(dataGroup.selections[0], 0);
+    $scope.setSelectionLevel = viewFactory.setSelectionLevel;
+    $scope.setDataGroup = viewFactory.setDataGroup;
+    $scope.setCanvas = viewFactory.setCanvas;
 
-        if (dataGroup.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
+    viewFactory.setCanvas(DSO.canvases[0], $scope.current);
+
+
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
+    $scope.filterResults = dataFilterFactory.filterResults;
+
+
+    // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
+    $scope.tempCards = [];
+    $scope.filterAuto = {
+        selectedValue: null,
+        searchText: null,
     };
-    $scope.setCanvas = function (canvas) {
-        $scope.current.canvas = canvas;
-        $scope.setDataGroup(canvas.dataGroups[0]);
-    }(DSO.canvases[0]);
+    $scope.filterAutoChanged = function (value) {
+        dataFilterFactory.quickAddFilter(value, $scope.current.dataGroup, $scope.current.selectionIndex, $scope.tempCards);
+        $scope.filterAuto.searchText = null;
+    };
+
+
+    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    $scope.dataAuto = {
+        selectedValue: null,
+        searchText: null,
+    };
+    $scope.selectionAutoChanged = function (value) {
+        dataSelectionFactory.quickAddDataSelection(value, $scope.current.dataGroup, $scope.current.selectionIndex);
+        $scope.dataAuto.searchText = null;
+    };
 
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
-
-    function buildQueryObject(dataGroup, selectionIndex) {
-        return {
-            source: dataGroup.source,
-            pagination: dataGroup.pagination,
-            aggregation: dataGroup.aggregation,
-            selections: dataGroup.selections[selectionIndex],
-            filters: dataGroup.filters[selectionIndex]
-        }
-    };
-
     $scope.build = function () {
-        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
-        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
-        console.log(dataGroupDataObject);
+        //var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+        //console.log(dataGroupDataObject);
 
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             console.log(response.result);
-            dataGroupDataObject.result = response.result;
-            console.log(dataGroupDataObject);
+            //dataGroupDataObject.result = response.result;
+            //console.log(dataGroupDataObject);
 
         }).catch(function (error) { console.log(error); });
 
     };
-
 
 }]);

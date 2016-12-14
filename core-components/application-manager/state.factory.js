@@ -153,7 +153,7 @@
     };
     stateFunctions.availableDataFilterOperations = function () {
         var availableOperations = [
-            { operation:"in", name: "Range", type: 'dfo-checklist', selectedValues: [] },
+            { operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] },
             { operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [] },
             { operation: "equal", name: "Toggle", type: 'dfo-toggle', selectedValues: [] },
             { operation: "equal", name: "Between", type: 'dfo-between', selectedValues: [] },

@@ -1,5 +1,5 @@
 var analysis = angular.module('analysis', ['gridster']);
-analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', function ($scope, appManager, $mdSidenav, $mdDialog) {
+analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', 'dataFilterFactory', 'dataSelectionFactory', 'viewFactory', function ($scope, appManager, $mdSidenav, $mdDialog, dataFilterFactory, dataSelectionFactory, viewFactory) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -15,7 +15,6 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
     DF.populateAppData();
-
     //
 
     $scope.toggleSideNav = function (navID) {
@@ -25,15 +24,6 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
     $scope.gridsterOpts = {
         columns: 36,
     };
-
-    $scope.changeOptions = function (element) {
-
-        var options = element.chartOptions;
-        options.title.text = 'Chart #' + Math.floor(Math.random() * 100);
-        element.chartOptions = options;
-
-    };
-
 
     //Chart Globals
     Highcharts.setOptions({
@@ -58,40 +48,15 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
         canvasElement: null
     };
 
-    $scope.setSelectionLevel = function (selectionLevel, index) {
-        $scope.current.selectionLevel = selectionLevel;
-        $scope.current.selectionIndex = index;
-    }
-    $scope.setDataGroup = function (dataGroup) {
-        $scope.current.dataGroup = dataGroup;
-        $scope.setSelectionLevel(dataGroup.selections[0], 0);
+    $scope.setSelectionLevel = viewFactory.setSelectionLevel;
+    $scope.setDataGroup = viewFactory.setDataGroup;
+    $scope.setCanvas = viewFactory.setCanvas;
 
-        if (dataGroup.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
-    };
-    $scope.setCanvas = function (canvas) {
-        $scope.current.canvas = canvas;
-        $scope.setDataGroup(canvas.dataGroups[0]);
-    }(DSO.canvases[0]);
-
-
+    viewFactory.setCanvas(DSO.canvases[0], $scope.current);
+    
+    
     // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
-    $scope.filterResults = function (query) {
-        if (query) {
-            var results = DO.tableSchema.filter(function (tableValue) {
-                return angular.lowercase(tableValue.COLUMN_NAME).indexOf(angular.lowercase(query)) >= 0;
-            });
-            return results ? results : [];
-        }
-        else { return DO.tableSchema; }
-    };
+    $scope.filterResults = dataFilterFactory.filterResults;
 
 
     // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
@@ -101,82 +66,29 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
         searchText: null,
     };
     $scope.filterAutoChanged = function (value) {
-        quickAddFilter(value);
+        dataFilterFactory.quickAddFilter(value, $scope.current.dataGroup, $scope.current.selectionIndex, $scope.tempCards);
         $scope.filterAuto.searchText = null;
     };
-    function quickAddFilter(dataValue) {
-        if (dataValue) {
-
-            var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
-            newFilter.alias = dataValue.COLUMN_NAME;
-            newFilter.operations.push({ name: "Equal", type: 'dfo-select', selectedValues: [] });
-
-            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
-         
-            var tempGUID = SF.generateGUID();
-            createTempCard(dataValue, tempGUID);
-
-            var postObject = { post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
-
-            API.schema().save(postObject).$promise.then(function (response) {
-                response.result.forEach(function (obj) {
-                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
-                });
-                DO.filters.push(newFilterDataObject);
-                deleteTempCard(tempGUID);
-                $scope.current.dataGroup.filters[$scope.current.selectionIndex].push(newFilter);
-            });
-        }
-    };
-    function createTempCard(dataValue, GUID) {
-        $scope.tempCards.push({alias: dataValue.COLUMN_NAME, GUID: GUID });
-    }
-    function deleteTempCard(GUID) {
-        var index = $scope.tempCards.map(function (obj) { return obj.GUID }).indexOf(GUID);
-        if (index >= 0) {
-            $scope.tempCards.splice(index, 1);
-        }
-    }
-
     
+
     // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
     $scope.dataAuto = {
         selectedValue: null,
         searchText: null,
     };
     $scope.selectionAutoChanged = function (value) {
-        quickAddDataSelection(value);
+        dataSelectionFactory.quickAddDataSelection(value, $scope.current.dataGroup, $scope.current.selectionIndex);
         $scope.dataAuto.searchText = null;
-    };
-    function quickAddDataSelection(dataValue) {
-        if (dataValue) {
-
-            var newSelection = new SC.DataSelection({ name: "Custom Data Selection", type: "custom-data-selection" }, dataValue);
-            newSelection.alias = dataValue.COLUMN_NAME;
-
-            $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
-        }
     };
 
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
-
-    function buildQueryObject(dataGroup, selectionIndex) {
-        return {
-            source: dataGroup.source,
-            pagination: dataGroup.pagination,
-            aggregation: dataGroup.aggregation,
-            selections: dataGroup.selections[selectionIndex],
-            filters: dataGroup.filters[selectionIndex]
-        }
-    };
-
     $scope.build = function () {
-        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
-        console.log(JSON.stringify(queryObject))
-
-        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
+        API.query().save({ query: queryObject }).$promise.then(function (response) {
+            console.log(response);
+        }).catch(function (error) { console.log(error); });
 
     };
 
@@ -606,27 +518,23 @@ analysis.controller('DataSource', ['$scope', 'appManager', 'componentViewFactory
     }
 
 }]);
-analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function ($scope, appManager, $mdSidenav) {
+analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', 'dataFilterFactory', 'dataSelectionFactory', 'viewFactory', function ($scope, appManager, $mdSidenav, dataFilterFactory, dataSelectionFactory, viewFactory) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
+    var DO = appManager.data.DO;
+    var SC = appManager.state.SC;
+    var DF = appManager.data.DF;
     var API = appManager.data.API;
     var logger = appManager.logger;
-    var DO = appManager.data.DO;
-    var DF = appManager.data.DF;
+    var SF = appManager.state.SF;
+    $scope.SF = appManager.state.SF;
+    $scope.DO = appManager.data.DO;
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
-    $scope.canvases = DSO.canvases;
 
     DF.populateAppData();
     //
-
-    $scope.dataGroupData = DO.dataGroups;
-
-    $scope.$watch('dataGroupData', function (nv) {
-        $scope.dataGroupData = nv;
-        console.log(nv);
-    }, true);
 
     $scope.toggleSideNav = function (navID) {
         $mdSidenav(navID).toggle();
@@ -654,57 +562,55 @@ analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', function 
         canvasElement: null
     };
 
-    $scope.setSelectionLevel = function (selectionLevel, index) {
-        $scope.current.selectionLevel = selectionLevel;
-        $scope.current.selectionIndex = index;
-    }
-    $scope.setDataGroup = function (dataGroup) {
-        $scope.current.dataGroup = dataGroup;
-        $scope.setSelectionLevel(dataGroup.selections[0], 0);
+    $scope.setSelectionLevel = viewFactory.setSelectionLevel;
+    $scope.setDataGroup = viewFactory.setDataGroup;
+    $scope.setCanvas = viewFactory.setCanvas;
 
-        if (dataGroup.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
+    viewFactory.setCanvas(DSO.canvases[0], $scope.current);
+
+
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
+    $scope.filterResults = dataFilterFactory.filterResults;
+
+
+    // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
+    $scope.tempCards = [];
+    $scope.filterAuto = {
+        selectedValue: null,
+        searchText: null,
     };
-    $scope.setCanvas = function (canvas) {
-        $scope.current.canvas = canvas;
-        $scope.setDataGroup(canvas.dataGroups[0]);
-    }(DSO.canvases[0]);
+    $scope.filterAutoChanged = function (value) {
+        dataFilterFactory.quickAddFilter(value, $scope.current.dataGroup, $scope.current.selectionIndex, $scope.tempCards);
+        $scope.filterAuto.searchText = null;
+    };
+
+
+    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    $scope.dataAuto = {
+        selectedValue: null,
+        searchText: null,
+    };
+    $scope.selectionAutoChanged = function (value) {
+        dataSelectionFactory.quickAddDataSelection(value, $scope.current.dataGroup, $scope.current.selectionIndex);
+        $scope.dataAuto.searchText = null;
+    };
 
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
-
-    function buildQueryObject(dataGroup, selectionIndex) {
-        return {
-            source: dataGroup.source,
-            pagination: dataGroup.pagination,
-            aggregation: dataGroup.aggregation,
-            selections: dataGroup.selections[selectionIndex],
-            filters: dataGroup.filters[selectionIndex]
-        }
-    };
-
     $scope.build = function () {
-        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
-        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
-        console.log(dataGroupDataObject);
+        //var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+        //console.log(dataGroupDataObject);
 
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             console.log(response.result);
-            dataGroupDataObject.result = response.result;
-            console.log(dataGroupDataObject);
+            //dataGroupDataObject.result = response.result;
+            //console.log(dataGroupDataObject);
 
         }).catch(function (error) { console.log(error); });
 
     };
-
 
 }]);
 analysis.directive('hcChart', function () {
@@ -1017,6 +923,141 @@ analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (a
         }
     }
 
+
+    return factory;
+}]);
+analysis.factory('dataFilterFactory', ['appManager', function (appManager) {
+
+    var SC = appManager.state.SC;
+    var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
+    var SO = appManager.state.SO;
+    var API = appManager.data.API;
+    var factory = {};
+
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
+    factory.filterResults = function (query) {
+        if (query) {
+            var results = DO.tableSchema.filter(function (tableValue) {
+                return angular.lowercase(tableValue.COLUMN_NAME).indexOf(angular.lowercase(query)) >= 0;
+            });
+            return results ? results : [];
+        }
+        else { return DO.tableSchema; }
+    };
+
+    factory.quickAddFilter = function(dataValue, dataGroup, selectionIndex, tempCards) {
+        if (dataValue) {
+
+            var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
+            newFilter.alias = dataValue.COLUMN_NAME;
+            newFilter.operations.push({ operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] });
+
+            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
+
+            var tempGUID = SF.generateGUID();
+            createTempCard(dataValue, tempGUID, tempCards);
+
+            var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
+
+            API.schema().save(postObject).$promise.then(function (response) {
+                response.result.forEach(function (obj) {
+                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                });
+                DO.filters.push(newFilterDataObject);
+                deleteTempCard(tempGUID, tempCards);
+                dataGroup.filters[selectionIndex].push(newFilter);
+            });
+        }
+    };
+
+    function createTempCard(dataValue, GUID, tempCards) {
+        tempCards.push({ alias: dataValue.COLUMN_NAME, GUID: GUID });
+    }
+    function deleteTempCard(GUID, tempCards) {
+        var index = tempCards.map(function (obj) { return obj.GUID }).indexOf(GUID);
+        if (index >= 0) {
+            tempCards.splice(index, 1);
+        }
+    }
+
+    return factory;
+}]);
+analysis.factory('dataSelectionFactory', ['appManager', function (appManager) {
+
+    var SC = appManager.state.SC;
+    var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
+    var SO = appManager.state.SO;
+    var factory = {};
+
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
+
+    factory.quickAddDataSelection = function(dataValue, dataGroup, selectionIndex) {
+        if (dataValue) {
+
+            var newSelection = new SC.DataSelection({ name: "Custom Data Selection", type: "custom-data-selection" }, dataValue);
+            newSelection.alias = dataValue.COLUMN_NAME;
+
+            dataGroup.selections[selectionIndex].push(newSelection);
+        }
+    };
+
+
+    return factory;
+}]);
+analysis.factory('viewFactory', ['appManager', function (appManager) {
+
+    var SC = appManager.state.SC;
+    var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
+    var SO = appManager.state.SO;
+    var API = appManager.data.API;
+    var logger = appManager.logger;
+    var factory = {};
+
+    // ---- ---- ---- ---- Query Functions ---- ---- ---- ---- //
+    factory.buildQueryObject = function(dataGroup, selectionIndex) {
+        return {
+            source: dataGroup.source,
+            pagination: dataGroup.pagination,
+            aggregation: dataGroup.aggregation,
+            selections: dataGroup.selections[selectionIndex],
+            filters: dataGroup.filters[selectionIndex]
+        }
+    };
+
+    // ---- ---- ---- ---- Current Objects and Control Functions ---- ---- ---- ---- //
+    factory.setSelectionLevel = function(selectionLevel, index, current) {
+        current.selectionLevel = selectionLevel;
+        current.selectionIndex = index;
+    }
+
+    factory.setDataGroup = function (dataGroup, current) {
+        console.log(dataGroup);
+        console.log(current);
+
+        current.dataGroup = dataGroup;
+        factory.setSelectionLevel(dataGroup.selections[0], 0, current);
+
+        if (dataGroup.source.type === 'T') {
+            //REMOVE BEFORE FLIGHT
+            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
+                //API.tableSchema().get().$promise.then(function (response) {
+                DO.tableSchema = response.result;
+            }).catch(function (error) {
+                logger.toast.error('Error Getting Table Schema', error);
+            });
+        }
+    };
+
+    factory.setCanvas = function (canvas, current) {
+        current.canvas = canvas;
+        factory.setDataGroup(canvas.dataGroups[0], current);
+    };
 
     return factory;
 }]);

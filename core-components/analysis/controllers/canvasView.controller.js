@@ -1,4 +1,4 @@
-﻿analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', function ($scope, appManager, $mdSidenav, $mdDialog) {
+﻿analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDialog', 'dataFilterFactory', 'dataSelectionFactory', 'viewFactory', function ($scope, appManager, $mdSidenav, $mdDialog, dataFilterFactory, dataSelectionFactory, viewFactory) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -14,7 +14,6 @@
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
     DF.populateAppData();
-
     //
 
     $scope.toggleSideNav = function (navID) {
@@ -24,15 +23,6 @@
     $scope.gridsterOpts = {
         columns: 36,
     };
-
-    $scope.changeOptions = function (element) {
-
-        var options = element.chartOptions;
-        options.title.text = 'Chart #' + Math.floor(Math.random() * 100);
-        element.chartOptions = options;
-
-    };
-
 
     //Chart Globals
     Highcharts.setOptions({
@@ -57,40 +47,15 @@
         canvasElement: null
     };
 
-    $scope.setSelectionLevel = function (selectionLevel, index) {
-        $scope.current.selectionLevel = selectionLevel;
-        $scope.current.selectionIndex = index;
-    }
-    $scope.setDataGroup = function (dataGroup) {
-        $scope.current.dataGroup = dataGroup;
-        $scope.setSelectionLevel(dataGroup.selections[0], 0);
+    $scope.setSelectionLevel = viewFactory.setSelectionLevel;
+    $scope.setDataGroup = viewFactory.setDataGroup;
+    $scope.setCanvas = viewFactory.setCanvas;
 
-        if (dataGroup.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
-        }
-    };
-    $scope.setCanvas = function (canvas) {
-        $scope.current.canvas = canvas;
-        $scope.setDataGroup(canvas.dataGroups[0]);
-    }(DSO.canvases[0]);
-
-
+    viewFactory.setCanvas(DSO.canvases[0], $scope.current);
+    
+    
     // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
-    $scope.filterResults = function (query) {
-        if (query) {
-            var results = DO.tableSchema.filter(function (tableValue) {
-                return angular.lowercase(tableValue.COLUMN_NAME).indexOf(angular.lowercase(query)) >= 0;
-            });
-            return results ? results : [];
-        }
-        else { return DO.tableSchema; }
-    };
+    $scope.filterResults = dataFilterFactory.filterResults;
 
 
     // ---- ---- ---- ---- Filter Side Nav Functions ---- ---- ---- ---- //
@@ -100,82 +65,29 @@
         searchText: null,
     };
     $scope.filterAutoChanged = function (value) {
-        quickAddFilter(value);
+        dataFilterFactory.quickAddFilter(value, $scope.current.dataGroup, $scope.current.selectionIndex, $scope.tempCards);
         $scope.filterAuto.searchText = null;
     };
-    function quickAddFilter(dataValue) {
-        if (dataValue) {
-
-            var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
-            newFilter.alias = dataValue.COLUMN_NAME;
-            newFilter.operations.push({ name: "Equal", type: 'dfo-select', selectedValues: [] });
-
-            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
-         
-            var tempGUID = SF.generateGUID();
-            createTempCard(dataValue, tempGUID);
-
-            var postObject = { post: { type: "column", alias: $scope.current.dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
-
-            API.schema().save(postObject).$promise.then(function (response) {
-                response.result.forEach(function (obj) {
-                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
-                });
-                DO.filters.push(newFilterDataObject);
-                deleteTempCard(tempGUID);
-                $scope.current.dataGroup.filters[$scope.current.selectionIndex].push(newFilter);
-            });
-        }
-    };
-    function createTempCard(dataValue, GUID) {
-        $scope.tempCards.push({alias: dataValue.COLUMN_NAME, GUID: GUID });
-    }
-    function deleteTempCard(GUID) {
-        var index = $scope.tempCards.map(function (obj) { return obj.GUID }).indexOf(GUID);
-        if (index >= 0) {
-            $scope.tempCards.splice(index, 1);
-        }
-    }
-
     
+
     // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
     $scope.dataAuto = {
         selectedValue: null,
         searchText: null,
     };
     $scope.selectionAutoChanged = function (value) {
-        quickAddDataSelection(value);
+        dataSelectionFactory.quickAddDataSelection(value, $scope.current.dataGroup, $scope.current.selectionIndex);
         $scope.dataAuto.searchText = null;
-    };
-    function quickAddDataSelection(dataValue) {
-        if (dataValue) {
-
-            var newSelection = new SC.DataSelection({ name: "Custom Data Selection", type: "custom-data-selection" }, dataValue);
-            newSelection.alias = dataValue.COLUMN_NAME;
-
-            $scope.current.dataGroup.selections[$scope.current.selectionIndex].push(newSelection);
-        }
     };
 
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
-
-    function buildQueryObject(dataGroup, selectionIndex) {
-        return {
-            source: dataGroup.source,
-            pagination: dataGroup.pagination,
-            aggregation: dataGroup.aggregation,
-            selections: dataGroup.selections[selectionIndex],
-            filters: dataGroup.filters[selectionIndex]
-        }
-    };
-
     $scope.build = function () {
-        var queryObject = buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
-        console.log(JSON.stringify(queryObject))
-
-        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
+        API.query().save({ query: queryObject }).$promise.then(function (response) {
+            console.log(response);
+        }).catch(function (error) { console.log(error); });
 
     };
 
