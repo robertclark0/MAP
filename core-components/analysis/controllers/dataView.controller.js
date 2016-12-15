@@ -30,7 +30,7 @@
             handles: ['s'],
         },
     };
-    $scope.item = { sizeX: 1, sizeY: 1, row: 0, col: 0 };
+    $scope.item = { sizeX: 1, sizeY: 1 };
 
 
     // ---- ---- ---- ---- Current Objects and Control Functions ---- ---- ---- ---- //
@@ -80,14 +80,11 @@
     $scope.build = function () {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
-        //var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
-        //console.log(dataGroupDataObject);
+        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             console.log(response.result);
-            //dataGroupDataObject.result = response.result;
-            //console.log(dataGroupDataObject);
-
+            dataGroupDataObject.result = response.result;
         }).catch(function (error) { console.log(error); });
 
     };

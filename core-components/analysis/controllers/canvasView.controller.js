@@ -85,8 +85,11 @@
     $scope.build = function () {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
 
+        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             console.log(response);
+            dataGroupDataObject.result = response.result;
         }).catch(function (error) { console.log(error); });
 
     };

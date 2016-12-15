@@ -10,9 +10,12 @@
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
                 <div gridster="dataViewOptions">
                     <ul>
-                        <li gridster-item="item" ng-repeat="datas in dataGroupData" style=" border: 1px solid rgb(150,150,150)">
+                        <li gridster-item="item" ng-repeat="dataGroupData in DO.dataGroups" style=" border: 1px solid rgb(150,150,150); background-color: rgb(230,230,230); overflow-y: scroll">
                             <table class="table table-striped">
-                                <tr ng-repeat="row in datas.result">
+                                <tr ng-repeat="row in dataGroupData.result" ng-if="$first">
+                                    <th ng-repeat="cell in row">{{cell}}</th>
+                                </tr>
+                                <tr ng-repeat="row in dataGroupData.result" ng-if="!$first">
                                     <td ng-repeat="cell in row">{{cell}}</td>
                                 </tr>
                             </table>
