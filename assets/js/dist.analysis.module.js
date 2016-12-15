@@ -613,15 +613,20 @@ analysis.controller('DataView', ['$scope', 'appManager', '$mdSidenav', 'dataFilt
     };
 
 }]);
-analysis.directive('hcChart', function () {
+analysis.directive('hcChart', ['appManager', function (appManager) {
     return {
         restrict: 'E',
         template: '<div></div>',
         scope: {
-            canvasElement: '=',
+            canvasElement: '=element',
             data: '='
         },
         link: function (scope, element) {
+
+
+            appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element });
+            console.log(appManager.data.DO.canvasElements);
+
             var chart;
 
             var defaultchartOptions = {
@@ -644,7 +649,7 @@ analysis.directive('hcChart', function () {
                         align: 'low'
                     }
                 },
-                series: []
+                series: [{name: 'test', data: [17,34,22,27]}]
             };
 
             scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
@@ -652,9 +657,9 @@ analysis.directive('hcChart', function () {
             loadChart();
             
 
-            //scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
-            //    chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
-            //});
+            scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
+                chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
+            });
 
             //scope.$watch('canvasElement.chartOptions', function (newValue, oldValue) {
             //    if (newValue !== oldValue)
@@ -667,9 +672,9 @@ analysis.directive('hcChart', function () {
                 chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
                 
 
-                scope.data.forEach(function (d) {
-                    chart.addSeries(d);
-                });
+                //scope.data.forEach(function (d) {
+                //    chart.addSeries(d);
+                //});
 
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             };
@@ -683,7 +688,7 @@ analysis.directive('hcChart', function () {
 
         }
     };
-})
+}])
 analysis.factory('componentViewFactory', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
 
     var SC = appManager.state.SC;
