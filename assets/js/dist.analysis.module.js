@@ -625,7 +625,6 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
 
 
             appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element });
-            console.log(appManager.data.DO.canvasElements);
 
             var chart;
 
