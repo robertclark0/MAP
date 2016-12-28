@@ -39,12 +39,13 @@
                     <input ng-model="current.canvasElement.name" />
                 </md-input-container>
             </md-list-item>
-            <md-list-item>
+            <div ng-jsoneditor="onLoad" ng-model="tempChart.options" options="{}" style="width: 100%; height: 300px;"></div>
+            <!--<md-list-item>
                 <md-input-container>
                     <label>Advanced Settings</label>
                     <textarea ng-model="tempChart.options"></textarea>
                 </md-input-container>
-            </md-list-item>
+            </md-list-item>-->
             <md-list-item>
                 <md-button ng-click="updateChart()">Update</md-button>
             </md-list-item>

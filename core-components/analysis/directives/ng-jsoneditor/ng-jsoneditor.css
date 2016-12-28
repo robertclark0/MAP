@@ -1,10 +1,4 @@
-.md-no-shadow{
-    box-shadow: none !important;
-}
-.md-seconday-icon-override{
-    min-width: 40px !important;
-}
-/* reset styling (prevent conflicts with bootstrap, materialize.css, etc.) */
+﻿/* reset styling (prevent conflicts with bootstrap, materialize.css, etc.) */
 
 div.jsoneditor input {
   height: auto;

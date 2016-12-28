@@ -20,7 +20,8 @@ gulp.task('libraries.js', function () {
         'libraries/angular/angular-gridster.min.js',
         'libraries/highcharts/highcharts.min.js',
         'libraries/ngStorage/ngStorage.min.js',
-        'libraries/ocLazyLoad/ocLazyLoad.min.js'
+        'libraries/ocLazyLoad/ocLazyLoad.min.js',
+        'libraries/jsoneditor/jsoneditor-minimalist.min.js'
     ])
       .pipe(concat('dist.libraries.min.js'))
       .pipe(gulp.dest('assets/js'));
@@ -50,6 +51,7 @@ gulp.task('mapApp.module.css', function () {
         'libraries/angular/angular-material.min.css',
         'libraries/angular/angular-loading-bar.min.css',
         'libraries/angular/angular-gridster.min.css',
+        'libraries/jsoneditor.min.css',
         'assets/css/style.css',       
         'shared-components/**/*.css'
     ])

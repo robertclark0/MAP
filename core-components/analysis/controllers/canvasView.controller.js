@@ -88,7 +88,7 @@
         if (element && element.type === 'hc-Chart') {
             var chart = DF.getCanvasElement(element.GUID).chart;
             $scope.currentChart = chart;
-            $scope.tempChart.options = JSON.stringify(chart.userOptions, null, 4);
+            $scope.tempChart.options = chart.userOptions;
         }
         else {
             $scope.tempChart = { options: null };
@@ -98,7 +98,7 @@
 
     $scope.updateChart = function () {
         try{
-            $scope.currentChart.update(JSON.parse($scope.tempChart.options));
+            $scope.currentChart.update($scope.tempChart.options);
         }
         catch (e) {
             logger.toast.error("Invalid options object.", e);
