@@ -624,7 +624,7 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
         link: function (scope, element) {
 
 
-            appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element });
+            
 
             var chart;
 
@@ -654,6 +654,8 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
             scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
 
             loadChart();
+
+            appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element, chart: chart });
             
 
             scope.$watch(function () { return element[0].parentNode.clientHeight * element[0].parentNode.clientWidth }, function () {
@@ -670,7 +672,7 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
             function loadChart() {
                 chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
                 
-
+                console.log(chart);
                 //scope.data.forEach(function (d) {
                 //    chart.addSeries(d);
                 //});

@@ -57,6 +57,7 @@
         };
         this.selections = [[]];
         this.filters = [[]];
+        this.drillDownSelections = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
@@ -98,7 +99,6 @@
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
-        this.dataGroup = null;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

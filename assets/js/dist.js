@@ -586,6 +586,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         };
         this.selections = [[]];
         this.filters = [[]];
+        this.drillDownSelections = [];
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
@@ -627,7 +628,6 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
-        this.dataGroup = null;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
