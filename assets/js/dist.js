@@ -362,7 +362,7 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
     dataObject.tableSchema = [];
 
     dataObject.canvasElements = [];
-    // {element: , ChartDOM: }
+    // {GUID: , ChartDOM: }
 
     dataObject.dataGroups = [];
     // { GUID: , result: , drillDown: [] }
@@ -389,6 +389,14 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
         var index = GUIDList.indexOf(GUID);
         if (index > -1) {
             return dataObject.filters[index];
+        }
+        return null;
+    };
+    dataFunctions.getCanvasElement = function (GUID) {
+        var GUIDList = dataObject.canvasElements.map(function (obj) { return obj.GUID; });
+        var index = GUIDList.indexOf(GUID);
+        if (index > -1) {
+            return dataObject.canvasElements[index];
         }
         return null;
     };

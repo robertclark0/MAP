@@ -81,6 +81,32 @@
     };
 
 
+    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    $scope.tempChart = {options: null};
+    $scope.currentChart = null;
+    $scope.$watch('current.canvasElement', function (element) {
+        if (element && element.type === 'hc-Chart') {
+            var chart = DF.getCanvasElement(element.GUID).chart;
+            $scope.currentChart = chart;
+            $scope.tempChart.options = JSON.stringify(chart.userOptions, null, 4);
+        }
+        else {
+            $scope.tempChart = { options: null };
+            $scope.currentChart = null;
+        }
+    }, true);
+
+    $scope.updateChart = function () {
+        try{
+            $scope.currentChart.update(JSON.parse($scope.tempChart.options));
+        }
+        catch (e) {
+            logger.toast.error("Invalid options object.", e);
+        }
+
+    };
+
+
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
     $scope.build = function () {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);

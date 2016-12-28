@@ -41,8 +41,12 @@
             </md-list-item>
             <md-list-item>
                 <md-input-container>
-                    <textarea></textarea>
+                    <label>Advanced Settings</label>
+                    <textarea ng-model="tempChart.options"></textarea>
                 </md-input-container>
+            </md-list-item>
+            <md-list-item>
+                <md-button ng-click="updateChart()">Update</md-button>
             </md-list-item>
         </md-list>
     </md-content>
