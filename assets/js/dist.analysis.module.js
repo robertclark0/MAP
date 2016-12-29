@@ -82,7 +82,23 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
     };
 
 
-    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Camvas Element Side Nav Functions ---- ---- ---- ---- //
+    $scope.addSeries = function (GUID, selection) {
+        console.log(GUID);
+        console.log(selection);
+        $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: {} });
+    };
+    $scope.removeSeries = function (seriesArray, series, index) {
+
+        var chart = DF.getCanvasElement($scope.current.canvasElement.GUID).chart;
+        var seriesIndex = chart.series.map(function (obj) { return obj.name }).indexOf(series.selection);
+        if (seriesIndex >= 0) {
+            chart.series[seriesIndex].remove(true);
+        }
+        SF.deleteElement(seriesArray, series, index);
+    };
+
+
     $scope.tempChart = {options: null};
     $scope.currentChart = null;
     $scope.$watch('current.canvasElement', function (element) {
@@ -104,7 +120,6 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
         catch (e) {
             logger.toast.error("Invalid options object.", e);
         }
-
     };
 
 
@@ -644,13 +659,9 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
         restrict: 'E',
         template: '<div></div>',
         scope: {
-            canvasElement: '=element',
-            data: '='
+            canvasElement: '=element'
         },
         link: function (scope, element) {
-
-
-            
 
             var chart;
 
@@ -662,22 +673,15 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
                 credits: {
                     enabled: false
                 },
-                xAxis: {
-                    categories: ['RHC-A', 'RHC-C', 'RHC-P', 'RHC-E'],
-                },
                 yAxis: {
                     labels: {
                         format: '{value:,.0f}'
                     },
-                    title: {
-                        text: 'Patients',
-                        align: 'low'
-                    }
-                },
-                series: [{name: 'test', data: [17,34,22,27]}]
+                }
             };
 
-            scope.canvasElement.chartOptions = (typeof scope.canvasElement.chartOptions === 'undefined') ? defaultchartOptions : scope.canvasElement.chartOptions;
+
+            scope.canvasElement.chart.options = (typeof scope.canvasElement.chart.options === 'undefined') ? defaultchartOptions : scope.canvasElement.chart.options;
 
             loadChart();
 
@@ -688,22 +692,80 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             });
 
-            //scope.$watch('canvasElement.chartOptions', function (newValue, oldValue) {
-            //    if (newValue !== oldValue)
-            //    {
-            //        loadChart();
-            //    }
-            //}, true);
+            scope.$watch('canvasElement.chart.series', function (nv, ov) {
+                if (nv !== ov) {
+                    console.log("series change detected");
+
+                    var uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
+                    var axis = buildAxis(uniqueGUIDs);
+                    chart.update({ xAxis: { categories: axis } });
+                    populateSeries(scope.canvasElement.chart.series);
+                }
+            }, true);
+
+
 
             function loadChart() {
-                chart = Highcharts.chart(element[0], scope.canvasElement.chartOptions);
-                
-                console.log(chart);
-                //scope.data.forEach(function (d) {
-                //    chart.addSeries(d);
-                //});
+                chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
 
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
+            };
+            function populateSeries(seriesArray) {
+                seriesArray.forEach(function (series) {
+
+                    var seriesData = createSeriesData(series);
+                    var existingSeries = chart.series.map(function (obj) { return obj.name; });
+                    var index = existingSeries.indexOf(series.selection);
+
+                    if (index >= 0) {
+                        chart.series[index].setData(seriesData);
+                    }
+                    else {
+                        chart.addSeries({ name: series.selection, data: seriesData });
+                    }
+                    
+                });
+            };
+            function createSeriesData(series) {
+                var seriesData = [];
+                var data = appManager.data.DF.getDataGroup(series.GUID);
+                if (data && data.result[0]) {
+                    var index = data.result[0].indexOf(series.selection);
+                    if (index >= 0) {
+                        data.result.forEach(function (row, rowIndex) {
+                            if (rowIndex > 0) {
+                                seriesData.push(row[index]);
+                            }
+                        });
+                    }
+                }
+                return seriesData;
+            }
+            function buildAxis(GUIDArray) {
+                var axisValues = [];
+                GUIDArray.forEach(function (GUID) {
+                    var data = appManager.data.DF.getDataGroup(GUID);
+                    if (data) {
+                        console.log(data);
+                        if (data.result[0][0] === 'RowNum') {
+                            data.result.forEach(function (row) {
+                                axisValues.push(row[1]);
+                            });
+                        }
+                        else {
+                            data.result.forEach(function (row) {
+                                axisValues.push(row[0]);
+                            });
+                        }
+                    }
+                });
+                return unique(axisValues);
+            };
+            function unique(array) {
+                function onlyUnique(value, index, self) {
+                    return self.indexOf(value) === index;
+                }
+                return array.filter(onlyUnique);
             };
 
             scope.canvasElement.destroyChart = function () {

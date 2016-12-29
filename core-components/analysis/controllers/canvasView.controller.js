@@ -81,7 +81,23 @@
     };
 
 
-    // ---- ---- ---- ---- Data Side Nav Functions ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Camvas Element Side Nav Functions ---- ---- ---- ---- //
+    $scope.addSeries = function (GUID, selection) {
+        console.log(GUID);
+        console.log(selection);
+        $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: {} });
+    };
+    $scope.removeSeries = function (seriesArray, series, index) {
+
+        var chart = DF.getCanvasElement($scope.current.canvasElement.GUID).chart;
+        var seriesIndex = chart.series.map(function (obj) { return obj.name }).indexOf(series.selection);
+        if (seriesIndex >= 0) {
+            chart.series[seriesIndex].remove(true);
+        }
+        SF.deleteElement(seriesArray, series, index);
+    };
+
+
     $scope.tempChart = {options: null};
     $scope.currentChart = null;
     $scope.$watch('current.canvasElement', function (element) {
@@ -103,7 +119,6 @@
         catch (e) {
             logger.toast.error("Invalid options object.", e);
         }
-
     };
 
 

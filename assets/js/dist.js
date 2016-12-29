@@ -636,6 +636,10 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.height = 3;
         this.posX = 0;
         this.posY = 0;
+        this.chart = {
+            series: [],  //{ GUID: , selection: , options: {}}
+            options: undefined
+        }; 
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
