@@ -81,20 +81,23 @@
     };
 
 
-    // ---- ---- ---- ---- Camvas Element Side Nav Functions ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Canvas Element Side Nav Functions ---- ---- ---- ---- //
     $scope.addSeries = function (GUID, selection) {
-        console.log(GUID);
-        console.log(selection);
         $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: {} });
     };
     $scope.removeSeries = function (seriesArray, series, index) {
 
-        var chart = DF.getCanvasElement($scope.current.canvasElement.GUID).chart;
-        var seriesIndex = chart.series.map(function (obj) { return obj.name }).indexOf(series.selection);
-        if (seriesIndex >= 0) {
-            chart.series[seriesIndex].remove(true);
+        var element = DF.getCanvasElement($scope.current.canvasElement.GUID);
+        if (element.chart) {
+            var seriesIndex = element.chart.series.map(function (obj) { return obj.name }).indexOf(series.selection);
+            if (seriesIndex >= 0) {
+                element.chart.series[seriesIndex].remove(true);
+            }
+            SF.deleteElement(seriesArray, series, index);
         }
-        SF.deleteElement(seriesArray, series, index);
+        else {
+            console.log("No chart property on element object.");
+        }
     };
 
 
@@ -102,9 +105,11 @@
     $scope.currentChart = null;
     $scope.$watch('current.canvasElement', function (element) {
         if (element && element.type === 'hc-Chart') {
-            var chart = DF.getCanvasElement(element.GUID).chart;
-            $scope.currentChart = chart;
-            $scope.tempChart.options = chart.userOptions;
+            var element = DF.getCanvasElement(element.GUID);
+            if (element.chart) {
+                $scope.currentChart = element.chart;
+                $scope.tempChart.options = element.chart.userOptions;
+            }
         }
         else {
             $scope.tempChart = { options: null };
