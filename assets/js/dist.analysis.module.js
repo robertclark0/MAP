@@ -679,7 +679,7 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
             var defaultchartOptions = {
                 chart: {
                     backgroundColor: 'transparent',
-                    animation: false
+                    animation: true
                 },
                 credits: {
                     enabled: false
@@ -701,12 +701,67 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
             };
 
+            // takes the series array and updates the values with new data object results.
+            function updateSeries(seriesArray) {
+
+                seriesArray.forEach(function (series, seriesIndex) {
+                    
+                    var seriesData = createSeriesData(series, false);
+
+                    if (seriesData) {
+                        var newLength = seriesData.length;
+                        var existingLength = chart.series[seriesIndex].data.length;
+
+                        if (newLength > existingLength) {
+
+                            //inject Axis
+                            chart.xAxis[0].setCategories(axis);
+
+                            //Change existing points
+                            chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
+                                point.update(seriesData[pointIndex]);
+                            });
+
+                            //Add new points
+                            for (var i = existingLength; i < newLength; i++) {
+                                chart.series[seriesIndex].addPoint(seriesData[i]);
+                            }
+
+                        } else if (existingLength > newLength) {
+                            var diff = existingLength - newLength;
+
+                            //Remove Points
+                            for (var i = existingLength - 1; i > existingLength - 1 - diff; i--) {
+                                chart.series[seriesIndex].data[i].remove();
+                            }
+
+                            //inject Axis
+                            chart.xAxis[0].setCategories(axis);
+
+                            //Update Points
+                            chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
+                                point.update(seriesData[pointIndex]);
+                            });
+
+                        } else {
+                            //inject Axis
+                            chart.xAxis[0].setCategories(axis);
+
+                            //Update Points
+                            chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
+                                point.update(seriesData[pointIndex]);
+                            });
+                        }
+                    }                    
+                });
+            };
+
             // takes the array of element series and adds them or updates them in the chart.
             function populateSeries(seriesArray) {
                 scope.chartDataObjects.length = 0;
                 seriesArray.forEach(function (series) {
 
-                    var seriesData = createSeriesData(series);
+                    var seriesData = createSeriesData(series, true);
                     var existingSeries = chart.series.map(function (obj) { return obj.name; });
                     var index = existingSeries.indexOf(series.selection);
 
@@ -721,12 +776,14 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
             };
 
             // takes a single series, populates and formats the data from the data manager.
-            function createSeriesData(series) {
+            function createSeriesData(series, addReferenceBool) {
                 var seriesData = [];
                 var data = appManager.data.DF.getDataGroup(series.GUID);
 
                 //add data reference to watcher for chart data objects
-                addDataReference(data);
+                if (addReferenceBool) {
+                    addDataReference(data);
+                }
 
                 if (data && data.result) {
                     var index = data.result[0].indexOf(series.selection);
@@ -814,9 +871,13 @@ analysis.directive('hcChart', ['appManager', function (appManager) {
             }, true);
 
             scope.$watch('chartDataObjects', function (nv, ov) {
+                if (nv !== ov) {
+                    uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
+                    axis = buildAxis(uniqueGUIDs);
+                    chart.update({ xAxis: { categories: axis } });
+                    updateSeries(scope.canvasElement.chart.series);
+                }
                 console.log("data changed");
-                console.log(nv);
-                console.log(ov);
             }, true);
 
             // ---- ---- ---- ---- Load & Register ---- ---- ---- ---- //
