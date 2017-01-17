@@ -7,8 +7,8 @@
         <md-list style="padding:0">
             <md-list-item class="md-2-line" ng-click="showReport($event)">
                 <div class="md-list-item-text" style="padding-top: 4px;">
-                    <span class="md-headline">{{currentReport}}</span>
-                    <p class="md-primary">Default Category</p>
+                    <span class="md-headline">Dashboard</span>
+                    <p class="md-primary">Summary Reports</p>
                 </div>
             </md-list-item>
         </md-list>
@@ -21,7 +21,7 @@
     <div flex style="background-color: white">
         <div layout="column" layout-fill>
 
-            <ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>
+            <ng-include src="'core-components/reporting/templates/reporting.menu.html'"></ng-include>
 
             <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->

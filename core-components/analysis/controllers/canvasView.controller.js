@@ -130,6 +130,7 @@
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
     $scope.build = function () {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        console.log(JSON.stringify(queryObject));
 
         var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 

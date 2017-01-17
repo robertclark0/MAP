@@ -131,6 +131,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
     $scope.build = function () {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        console.log(JSON.stringify(queryObject));
 
         var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 
@@ -242,11 +243,6 @@ analysis.controller('Analysis', ['$scope', 'appManager', '$state', '$interval', 
         //return false;
     };
 
-    $scope.sendTestQuery = function () {
-
-        API.query().save({ query: queryObject }).$promise.then(function (response) { console.log(response); }).catch(function (error) { console.log(error); });
-
-    };
 
     //Show User Info
     $scope.showUserInfo = function (ev) {
@@ -384,99 +380,20 @@ analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'cur
     }
 
 }]);
-analysis.controller('DataSelection', ['$scope', 'appManager', 'componentViewFactory', '$mdDialog', function ($scope, appManager, componentViewFactory, $mdDialog) {
-
-    // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
-    var SC = appManager.state.SC;
-    $scope.DO = appManager.data.DO;
-    $scope.componentProperties = componentViewFactory.componentProperties;
-    $scope.componentList = componentViewFactory.componentList;
-
-    $scope.selectedLevel = $scope.componentProperties.editObject.selections[0];
-    $scope.selectionIndex = 0;
-
-    $scope.newSelection = new SC.DataSelection({name: "Custom Data Selection", type: "custom-data-selection"});
-
-
-    // ---- ---- ---- ---- Selection Settings ---- ---- ---- ---- //
-    $scope.selectionChange = function () {
-        if ($scope.newSelection.dataValue) {
-            $scope.newSelection.alias = $scope.newSelection.dataValue.COLUMN_NAME;
-        }      
-    };
-  
-    $scope.addOperation = function () {
-        $scope.newSelection.operations.push($scope.selectedOperation);
-        $scope.selectedOperation = null
-    }
-
-    $scope.removeOperation = function (index) {
-        $scope.newSelection.operations.splice(index, 1);
-    };
-
-    $scope.createSelection = function () {
-        if ($scope.dataSelectionForm.$valid) {
-
-            $scope.componentProperties.editObject.selections[$scope.selectionIndex].push(angular.copy($scope.newSelection));
-            $scope.clearSelection();
-        }
-    };
-
-    $scope.clearSelection = function () {
-        $scope.newSelection = new SC.DataSelection();
-
-        $scope.dataSelectionForm.$setPristine();
-        $scope.dataSelectionForm.$setUntouched();
-    };
-
-
-    // ---- ---- ---- ---- Selection Level Navigation ---- ---- ---- ---- //
-    $scope.addSelectionLevel = function () {
-        $scope.componentProperties.editObject.selections.splice($scope.selectionIndex + 1, 0, []);
-        $scope.componentProperties.editObject.filters.splice($scope.selectionIndex + 1, 0, []);
-
-        $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex + 1];
-        $scope.selectionIndex = $scope.selectionIndex + 1;
-    };
-
-    $scope.deleteSelectionLevel = function () {
-        $scope.componentProperties.editObject.selections.splice($scope.selectionIndex, 1);
-        $scope.componentProperties.editObject.filters.splice($scope.selectionIndex, 1);
-
-        $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex];
-        
-        if ($scope.selectionIndex >= $scope.componentProperties.editObject.selections.length) {
-            $scope.selectedLevel = $scope.componentProperties.editObject.selections[$scope.selectionIndex - 1];
-            $scope.selectionIndex = $scope.selectionIndex - 1;
-        }
-    }
-
-    $scope.changeSelectionLevel = function () {
-        $scope.selectionIndex = $scope.componentProperties.editObject.selections.indexOf($scope.selectedLevel);
-    }
-
-
-    // ---- ---- ---- ---- Selection Levels ---- ---- ---- ---- //
-    $scope.moveSelectionUp = function (source, target, targetIndex) {
-        if (targetIndex > 0) {
-            var desitationIndex = targetIndex - 1;
-            var oldSelection = source[desitationIndex];
-            source[desitationIndex] = target;
-            source[targetIndex] = oldSelection;
-        }
-    };
-
-    $scope.deleteSelection = function (index) {
-        $scope.componentProperties.editObject.selections[$scope.selectionIndex].splice(index, 1);
-    };
-
-
-    // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
-    $scope.closeDialog = function () {
-        $mdDialog.hide();
-    }
-
-}]);
+	MfîŒKtÀ6;cSÕV‡ uÇ‚Âèç”@C bCBàyûAÌc»‹aŒnSÛ€Æë%ø.Áf0²A
+=Ö2è×]r‹½Ò¿]ë5r±r_
+˜ÀŸ¯(²(,*¾9Òñ ëg'eˆiS`ìN®ˆûT2Ö¾„Ê˜ ÓØí“Ã­Çº¤œ6”ÂçåĞ®c}|Uª)¾|…ü%ëLÅ6X‰hŸëà…©e)€@öØˆŸ4 ók$¥úng‘a¹u?1§M¡ï«§ ƒâ°è¸®_µÄŞşèüÂ]¥/t¤ ÚˆJ€¢¯¼™ŸâfâäQ"Øğkä_ï§pö|Ú–]ºU3}Œ<¹Ö{yÜ®¼Ü`z³ÎiÇ\²Ó>¦‰ê2ÀÈx§zÌ¸%"ıÿğ47÷ñ½çªÃîCÏ[ë'îª²™<l«?Õ-ƒó)Ğß´ˆtF…îqH{sÕ0ó¶0!šÚfNyÅ‹z “±à|Ó÷#ó@¨¹I”Ê½ç¬r¹’IùøñvÊ÷õ$¨»VëúFŸuU2ìˆ|ÉªlâıøÃ3İÅ§Ó˜êÂ4‡vSaˆ°Fİ,«P/GÃ™œ Ì®¯G¹r)úv©¿#©Älî0·O®MxØW±¸şIåP¾Í¿`ªÍø„K&,O‰iq`ºK%oáQ}_Â‰å@†Ï«†x÷Å‚ıü¯d}Ô›ÅDË¸à]Åû/Ïš]Ÿ
+Ês¤‡9œ³P?ÛğuØşQ%BB_˜•	,ÄñxÉğ‹Ç:±-˜ë6[“štˆÚû¦XEÕ(ñ¸×FÑGğÑÇ”›œ…Éõ.ı7AÕŞÃóI<
+—ÅòŞ‹`_§;DÄ0J?­Wxõ®J·P¸«¨£Ş¢­9˜åz.^)V¾$k,ÁHëFd6ÇyÉÊäÒ-újKìÈİQuÄ’Ájq—¢X‚ß
+;¼À×¬ˆOÍ‰~˜¨”†›T?=µğÏİ˜Œ\ëÚº¿Ÿ#3dI¡ù¤ÛÎ5wÎ"
+C>=ÀÛƒ•LÁid3É|jDçm¡åÛ~D34øÁ¸ÎH?¡¬&K2ÔWT¡Js”BkØ7ıwË(ÑMõ:Rí¶0VGaË_)ËL%ªâ{¯=¨ïUë´"MÊÑ‘u/|qá¿÷q²¼-FÜ<ØW:jçq£iO*ğC+[€Ä³!À.^ÜQÕÌLØ´Ñxb B-†~1ÍLQˆjş¾ 9*$´á}}§Ø€H¾¸×ı¿+C‚.7Q·+å¦ñøø|a8ûOf1Š Øv&9]£_¤İ®M%¢™E·ï›5jÇj¨ª²N®A:NùŠ/Öğ­£È¦}ÒŸ¯V ¸+(c²¿µbPhì×°oWòVøCQæDq—ù-J¨REÄ­2¾ÉF@.[Áo±üô)Ş¤fõ‹tpº8®µã='{Eöx¹ÊÍÕSUv	 Å8ƒ£àTLßLú_.²¹#(w¯B![ğ,J‚óVM¦ Ù/Ç+ªkÛ—aàúû8=—ôiÚVDè{ÑîÎùytÙ	4É‹ÚAÓpíïàõ4\cKğİe3·„Bºx*ÌtDoŞvaSè!mK~UÑkÈDİÇáCšDÑ©/ŒyÊwO æséÚÎkÀrËkËËZâÜ¨%ˆ]Œâ6ƒFCkP	i‚Z7ºï¨±£rpÿ="ö=Š lÊóÑj@hÖ‹óêêÆYå³_G`e¢£Êt£^xä¹Â‰R4áÄC‡fLÕ¥€ğí‚O­”ë0Mh ÓáÎ{lóÕZ8ÓÇ£ÃÌ²@’İımìue4áMp?S¹Âœÿ< ,Ür“À ©'eh¡tpÖ“d¨ÜDôŞ™Åå]\Äg¡Õ²©ÁMähûì_‹Ñî)éß½¡™3]>U›±oPÓr1œóÏÇ¢–¦mösB6IË^nyq†äßøP¾ºVğÓú[gHë+)}®n‘Ck…sÖŸ†ı¬5LŠx:ZÜcÊsî’'ıÚ£²–†s’ˆ©CêIOÿ~€ÚÑ`÷-9Q3–,?S è ïá
+ãŒÎ‹§9äÎyB½ëVó#Ÿ9ùPÜÌ³|†-¡ùLRnÀ_ÉOW1»2xH—°ÔyDluäıı‰î½ÊÿÉtéêûáNşIáøjZí&&j4sõ>»µÇïs™eÍä¬“X·kì½XÔ¾ÌªÖÿ<è#²N„¥LOªoPÕaØø!O6)É(„eÌœ9š[l;È¬)=ÎnI·£Bvúé_Îì‹KpÎy©x”f  ˆ©°îZÁbu¨`ì]_ÆQqT'‚îËP€/à`­˜Š0·Ç;<!«Ï¨¢ØÉîÄ¼6–,¼òGæ•=ü“íBëÙÈL®´¡"¼i$=Â±e!ØdQÀ¸[®]H ¢¥Û|}çk…z[¢P¬ÿuëD¡àßú«àx¨´Öùg¬6j&ı¬ı„G&Sv”şß.¼C¸¼vŸ'b\±¶çÒGSè7
+$I¤FuL>Ï4ÊOb?u–äm¡g3e2B„Ÿ,*Ù±¦ºäµÇÌúáu<Ö“©û…»¯°%ØIk»ÓCİÿ«\èæQŒ2qö´~%vÛ–óhd¹/$CÑ@G@®0+`ã_ğ‹hü¹›AMkĞ 	Ğ›
+{sR‡İ’g-;¼Cw„û YZ†usg4yµÖ˜ÍMÔéoïSñüCæ¦`ü`tsßíá¬Z<‚8$@³–œ¢z#Ü‚ZŠ!Ø(˜ò¨D#š$ƒ¬AI×$Èãû1j|3KW•îÜÙ¥ÛmÖŠƒÚCìÄÃ–!kåÌµ)êe¡İöwíñ]l+©êêeÜ×™ã|’v@3óC9Õ©†º¸ˆæÿR)ÃğfD2şŸÅ¸ãÛ^p¶ıY¢×¾“ƒãóÙ&;ø9?ƒò~ØÜ’š¨|Ã·CØS†£r7lå¨Qpı¡MğCÎy•`k¡Ä(É@Gœ¸}¨0ÉuLƒq©mÉˆ·Ekrw“Ü0~KŸ"lñò¼|‚EŞ\©´€¡úkw÷e
+Hg‰“‹õN¶€«Ğ­·òŒé	Šß|1û744‘`}gG0=ÔnÔÑ–9æÀ@ÆHz½4y~m/™ê:T¢Ğ¶çÏÓô>§|›J÷1†7‘-Õ-†Ò0 h‚°×7Ñæé’æ[Ì¹ØtiìE~´ş²_¹=j
+r§ú=~ùÓméaQcı,zü§”ŸÑ’:#îÍy#Üâ7ksº«	q¤Tø‚‹·d1È	N@¾úö"sÚDOÇî,Y(åW;Ô¿@ôı)³+%±úNÿaz–Ïé¡FÔ©0ÊVfıH®ãPV\®G<—*¿lY^cÊRE Ğs¤²€A¤}"YEI¡¶•Ñ°ŞQyb¯ùˆ=u«@ªÀ5İ1Ğ€1ƒÃ»Ñ”7ÓÜıùŒqòµ'y×VHÑ®ÿæ2…m†şóï(xÀ¶³œMcØ-8[“{?ˆúíŒşIü—ŞÑŞ¶‹Íß(?™±Ë)X³	¿î‚m}°}|œy 5Lx2ª<f•®«ĞyóOIf}·¡ªNAıYp"Î=$€"ZïÜqEÿA•aQ¤/¯«Æa!NàêÃ°ª»x$Ê"¶Û™ÃÈ ´~ O“à¶¦LXÌøó¬
+¸iÁÑ4<’£V7>nÒ 4#Õ_ğœ3Ô3şi¡CëÑ¯ÁrïÉÎQx‡øç<r}0;'®kYúøˆ0íRÖj‰j3Eşßè6LË# ŸÊéÎH6¿xnaWìÉÔt¬Ê\ {hW—Yb£´pÃ[F¦)µÖ( rN“¦í®ie…­• §Õ“HT@L›ËÏ‰Ë³x7dËøıÜî¢ĞĞng^SWy©ä!‚µVÜ8"…F£ıy(‚spÜ ødÕæÍh
+¤e<J0r-U£ç@EİhŞ¾Š æ?V'ñµ'ÔĞˆİ@ƒ-ª¶õ™aky¿öÙWûSŠVáËC+—r$+mïÛ4_½äÇ+¡æÍ¡ùû8Kä%FÿIGÒ¿eÄ{œé'Üº=å6Í)SirÀG~IaÔ³x}ÓTe»U?æÏ¥U2âŞù®a ÈuïxuŠBd[»¢°4§B¥F¥ÿw	€È¬[)Ûû0z %ãµhÍÁ£Í:—´}¸¨÷uVB‰ ‘dÎh¡dzúdÅ<å1ç¥"Écşõ¥òV'Œeºö\d:Òêä×¥'<e›òg9±é2õëÓìo)ã¥„ŒMã©`Á3u/²T)uƒb[˜àv]~I^ê¦¯3pâ€(>¢İµÄG[VÎÖoëä°åö~„3|ªÎ€ÓW>ì¿©jšäšçú0×ö,'ğ;(z¡®ÇìÔzmÖèæÒç	Eâ{@˜ÒRîki³™r¹!*5}X¦MŸFä1¡’Ã	?½B$=±£èXÜõâp ¨ ©Ó¤»İ0¤>Í–œ;ŠóÛK#úlok —ïjĞQUÛ¼L„îbùÓoÛ~[;=D©­òCXî,ÙnĞ¬:„Ô°zz¼Ùvwæ†ï§™„Kùä3òüJÇ<-K%ÿo%êDİìÊ€•7uù]¿I–Nà[ë •NÁ7ò)­â¶Êmç*yŸI „Ú­w®n%ü„ÆøÊ``9l(Y­†òbgÜ1IÍ‡¨ÀE×ä«¥Ú|Ğ¢eèu×Õ‡ıs¡¿°œ%YÆğDd'N°«%Ã¶ğ‹¡æy2V	ÇŒåOS™z9ƒ«‡%LY0‹V:Íº„rcûY0_1ŠÂ#'íKª@$nü9§Ô ±—¦Î”ËÛ}Òk/Ä¼ó[e*»Ñİlßv¢
 analysis.controller('DataSelectionSettings', ['$scope', '$mdDialog', 'selection', 'current', 'appManager', function ($scope, $mdDialog, selection, current, appManager) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
