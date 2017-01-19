@@ -4,7 +4,7 @@
     <div flex class="map-gray-3">
         <div layout="column" layout-fill>
 
-            <ng-include src="'core-components/analysis/templates/menuBar.html'"></ng-include>
+            <ng-include src="'core-components/analysis/templates/data.menu.html'"></ng-include>
 
             <div flex style="padding-top:10px; overflow-y: auto; min-width: 1000px;">
                 <!--MAIN CONTENT AREA HERE - GRIDSTER-->
@@ -55,7 +55,7 @@
                             </md-menu-content>
                         </md-menu>
                         <md-menu>
-                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} [ {{current.dataGroup.selections[current.selectionIndex][0].dataValue.COLUMN_NAME}} ]</strong></span></button>
+                            <button ng-click="$mdOpenMenu()">Data Selection Level: <span ng-show="current.selectionLevel"><strong>Level {{current.selectionIndex + 1}} <span ng-show="current.dataGroup.selections[current.selectionIndex][0]">[ {{current.dataGroup.selections[current.selectionIndex][0].dataValue.COLUMN_NAME}} ]</span></strong></span></button>
                             <md-menu-content>
                                 <md-menu-item ng-repeat="level in current.dataGroup.selections track by $index">
                                     <md-button ng-click="setSelectionLevel(level, $index, current)">

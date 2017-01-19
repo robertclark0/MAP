@@ -16,7 +16,7 @@
 
     $scope.currentReport = 'Summary Report';
     //$scope.reportList = [];
-
+     
     $scope.newState = function (state, stateObject) {
         $state.go(state, stateObject);
     };

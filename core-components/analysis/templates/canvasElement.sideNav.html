@@ -31,39 +31,39 @@
         </div>
     </md-toolbar>
 
-    <md-content class="map-gray-1">
+    <md-content class="map-gray-1" ng-show="current.canvasElement">
         <md-list class="mdo-listitem-padding" ng-show="current.canvasElement">
             <md-list-item>
                 <md-input-container flex style="height: 32px;">
                     <label>Element Name</label>
                     <input ng-model="current.canvasElement.name" />
                 </md-input-container>
-            </md-list-item>          
+            </md-list-item>
         </md-list>
 
         <div>
             <md-card ng-repeat="series in current.canvasElement.chart.series track by $index">
-                    <md-toolbar style="background-color: transparent;">
-                        <div class="md-toolbar-tools">
-                            <h5>{{series.selection}}</h5>
-                            <span flex></span>
-                            <md-menu>
-                                <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                                    <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
-                                </md-button>
-                                <md-menu-content width="4">
-                                    <md-menu-item>
-                                        <md-button ng-click="removeSeries(current.canvasElement.chart.series, series, $index)">
-                                            <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
-                                            Delete Series
-                                        </md-button>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-                        </div>
-                    </md-toolbar>
-                    <md-card-content style="padding: 0">
-                    </md-card-content>
+                <md-toolbar style="background-color: transparent;">
+                    <div class="md-toolbar-tools">
+                        <h5>{{series.selection}}</h5>
+                        <span flex></span>
+                        <md-menu>
+                            <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+                            </md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="removeSeries(current.canvasElement.chart.series, series, $index)">
+                                        <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
+                                        Delete Series
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+                </md-toolbar>
+                <md-card-content style="padding: 0">
+                </md-card-content>
             </md-card>
         </div>
 

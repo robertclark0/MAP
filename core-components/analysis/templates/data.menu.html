@@ -2,37 +2,26 @@
     <md-menu-bar class="map-gray-1">
         <md-menu>
             <button ng-click="$mdOpenMenu()">
-                Report
-            </button>
-            <md-menu-content>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.sampleAction('share', $event)">
-                        Open User Report
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-        <md-menu>
-            <button ng-click="$mdOpenMenu()">
-                Export
-            </button>
-            <md-menu-content>
-                <md-menu-item>
-                    <md-button ng-click="ctrl.sampleAction('share', $event)">
-                        CSV
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
-        <md-menu>
-            <button ng-click="$mdOpenMenu()">
                 View
             </button>
             <md-menu-content>
                 <md-menu-item>
-                    <md-button ng-click="ctrl.sampleAction('share', $event)">
-                        Control Panel
-                    </md-button>
+
+                    <md-menu>
+                        <md-button ng-click="$mdOpenMenu()">Control Panels</md-button>
+                        <md-menu-content>
+                            <md-menu-item>
+                                <md-button ng-click="toggleSideNav('panelFilters')">Filters</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="toggleSideNav('panelData')">Data</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="toggleSideNav('panelElement')">Canvas Element</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
                 </md-menu-item>
             </md-menu-content>
         </md-menu>

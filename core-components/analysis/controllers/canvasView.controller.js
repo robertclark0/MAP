@@ -22,6 +22,9 @@
 
     $scope.gridsterOpts = {
         columns: 36,
+        mobileBreakPoint: 1024,
+        defaultSizeX: 8, 
+        defaultSizeY: 6,
     };
 
     //Chart Globals

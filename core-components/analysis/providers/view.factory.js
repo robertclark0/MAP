@@ -27,20 +27,21 @@
     }
 
     factory.setDataGroup = function (dataGroup, current) {
-        console.log(dataGroup);
-        console.log(current);
 
         current.dataGroup = dataGroup;
-        factory.setSelectionLevel(dataGroup.selections[0], 0, current);
 
-        if (dataGroup.source.type === 'T') {
-            //REMOVE BEFORE FLIGHT
-            API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                //API.tableSchema().get().$promise.then(function (response) {
-                DO.tableSchema = response.result;
-            }).catch(function (error) {
-                logger.toast.error('Error Getting Table Schema', error);
-            });
+        if (dataGroup) {
+            factory.setSelectionLevel(dataGroup.selections[0], 0, current);
+
+            if (dataGroup.source.type === 'T') {
+                //REMOVE BEFORE FLIGHT
+                API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
+                    //API.tableSchema().get().$promise.then(function (response) {
+                    DO.tableSchema = response.result;
+                }).catch(function (error) {
+                    logger.toast.error('Error Getting Table Schema', error);
+                });
+            }
         }
     };
 
