@@ -1,0 +1,152 @@
+﻿#diagram {
+  position: relative;
+}
+
+.diagram {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  pointer-events: none;
+  position: absolute;
+}
+
+.innerw {
+  left: 6px;
+  top: 7px;
+  overflow: hidden;
+  position: absolute;
+  /* border: solid; */
+  z-index: 20;
+  /* transform: translateZ(10px); */
+  pointer-events: none;
+}
+
+.innerw2 {
+  margin-left: 0px;
+  top: 0px;
+  overflow: hidden;
+  position: static;
+  /* border: solid; */
+  /* z-index: 20; */
+  pointer-events: none;
+}
+
+.innerw3 {
+  margin-left: 113px;
+  top: 0px;
+  overflow: hidden;
+  position: static;
+  /* border: solid; */
+  /* z-index: 20; */
+  pointer-events: none;
+  border: 3px solid gray;
+  margin-top: -6px;
+}
+
+.inner {
+  margin-left: -61px;
+  margin-top: 100px;
+  background-color: rgb(240, 240, 240);
+  z-index: 20;
+  position: static;
+  pointer-events: auto;
+  border: 3px solid gray;
+}
+
+
+
+.mwrap {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mwrap2 {
+  position: static;
+  margin-left: 0px;
+  margin-top: 0px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mid {
+  position: static;
+  pointer-events: auto;
+  border: 3px solid gray;
+}
+
+#midaw1 {
+  left: 0px;
+  top: 0px;
+  border: 3px solid gray;
+}
+
+#mida {
+  margin-left: 116px;
+  margin-top: -2px;
+}
+
+#midbw1 {
+  left: 120px;
+  top: 0px;
+  border: 3px solid gray;
+}
+
+#midb {
+  margin-left: -64px;
+  margin-top: 101px;
+}
+
+#midcw1 {
+  left: 60px;
+  top: 104px;
+  border: 3px solid gray;
+}
+
+#midc {
+  margin-left: -60px;
+  margin-top: -104px;
+}
+
+.mid {
+  background-color: rgb(250, 250, 250);
+  z-index: 15;
+}
+
+
+
+#outer1 {
+  left: 0px;
+  top: 0px;
+}
+
+#outer2 {
+  left: 120px;
+  top: 0px;
+}
+
+#outer3 {
+  left: 60px;
+  top: 104px;
+}
+
+.outer {
+  background-color: rgb(253, 253, 253);
+  z-index: 1;
+  pointer-events: auto;
+  border: 3px solid gray;
+}
+
+
+.diagram-label {
+  z-index: 100;
+  position: absolute;
+  font-weight: 600;
+  color: gray;
+}
+
+.diagram-selected {
+  background-color: #2196F3;
+  color: white;
+}

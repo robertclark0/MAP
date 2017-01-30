@@ -1,0 +1,75 @@
+﻿<md-card>
+    <md-toolbar style="background-color: transparent;">
+        <div class="md-toolbar-tools">
+            <h5>Patient Cohorts</h5>
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="moveDataSelectionUp($index)">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
+                            Move Filter Up
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="moveDataSelectionDown($index)">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
+                            Move Filter Down
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <md-card-content style="height: 455px">
+
+        <md-checkbox aria-label="Poly" ng-model="poly" ng-change="change()">PolyPharm</md-checkbox>
+        <md-checkbox aria-label="High" ng-model="hu" ng-change="change()">High Util.</md-checkbox>
+        <md-checkbox aria-label="Pain" ng-model="pain" ng-change="change()">Pain</md-checkbox>
+
+        <div id="diagram" style="height: 365px; margin-top: 5px;">
+            <div class="diagram-label" style=" top: 80px; right: 40px;" ng-class="{'diagram-selected' : p}">Pain</div>
+            <div class="diagram-label" style="top: 80px; left: 20px;" ng-class="{'diagram-selected' : pp}">PolyPharm</div>
+            <div class="diagram-label" style="top: 300px; left: 140px;" ng-class="{'diagram-selected' : h}">High Utilizer</div>
+            <div class="diagram-label" style="top: 152px; left: 162px;" ng-class="{'diagram-selected' : chup}">CHUP</div>
+            <div id="outer1" class="outer diagram" ng-class="{'diagram-selected' : pp}">
+            </div>
+            <div id="outer2" class="outer diagram" ng-class="{'diagram-selected' : p}">
+            </div>
+            <div id="outer3" class="outer diagram" ng-class="{'diagram-selected' : h}">
+            </div>
+            <div id="midaw1" class="mwrap diagram">
+                <div id="midaw2" class="mwrap2 diagram">
+                    <div id="mida" class="content mid diagram" ng-class="{'diagram-selected' : ppp}"></div>
+                </div>
+            </div>
+            <div id="midbw1" class="mwrap diagram">
+                <div id="midbw2" class="mwrap2 diagram">
+                    <div id="midb" class="content mid diagram" ng-class="{'diagram-selected' : ph}"></div>
+                </div>
+            </div>
+            <div id="midcw1" class="mwrap diagram">
+                <div id="midcw2" class="mwrap2 diagram">
+                    <div id="midc" class="content mid diagram" ng-class="{'diagram-selected' : pph}"></div>
+                </div>
+            </div>
+            <div class="innerw diagram">
+                <div class="innerw2 diagram">
+                    <div class="innerw3 diagram">
+                        <div class="inner diagram" ng-class="{'diagram-selected' : chup}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <strong>Methodology: </strong>
+        <md-radio-group ng-model="method" ng-change="change()" layout="row" style="padding: 5px; margin-left: -6px; margin-top: 5px;">
+            <md-radio-button value="ex">Exclusive</md-radio-button>
+            <md-radio-button value="in">Inclusive</md-radio-button>
+        </md-radio-group>
+    </md-card-content>
+</md-card>
