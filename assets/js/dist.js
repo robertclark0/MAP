@@ -256,7 +256,7 @@ mapApp.directive('cohortDiagram', [function () {
             element: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-filters/cohort-selection/cohortDiagram.html',
+        templateUrl: 'shared-components/data-filters/cohort-diagram/cohortDiagram.html',
         link: link
     };
 
@@ -778,7 +778,8 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
             { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
-            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' }
+            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
+            { type: 'cohort-diagram', name: "Cohort Diagram", productLine: 'CHUP' }
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
     };

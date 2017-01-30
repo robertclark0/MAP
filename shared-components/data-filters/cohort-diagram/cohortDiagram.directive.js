@@ -5,7 +5,7 @@
             element: '='
         },
         replace: true,
-        templateUrl: 'shared-components/data-filters/cohort-selection/cohortDiagram.html',
+        templateUrl: 'shared-components/data-filters/cohort-diagram/cohortDiagram.html',
         link: link
     };
 

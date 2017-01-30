@@ -318,8 +318,8 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .innerw {
-  left: 6px;
-  top: 7px;
+  left: 0px;
+  top: 0px;
   overflow: hidden;
   position: absolute;
   /* border: solid; */
@@ -339,25 +339,22 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .innerw3 {
-  margin-left: 113px;
+  margin-left: 120px;
   top: 0px;
   overflow: hidden;
   position: static;
   /* border: solid; */
   /* z-index: 20; */
   pointer-events: none;
-  border: 3px solid gray;
-  margin-top: -6px;
 }
 
 .inner {
-  margin-left: -61px;
-  margin-top: 100px;
-  background-color: rgb(240, 240, 240);
+  margin-left: -60px;
+  margin-top: 104px;
+  background-color: rgb(200,200,200);
   z-index: 20;
   position: static;
   pointer-events: auto;
-  border: 3px solid gray;
 }
 
 
@@ -380,35 +377,31 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 .mid {
   position: static;
   pointer-events: auto;
-  border: 3px solid gray;
 }
 
 #midaw1 {
   left: 0px;
   top: 0px;
-  border: 3px solid gray;
 }
 
 #mida {
-  margin-left: 116px;
-  margin-top: -2px;
+  margin-left: 120px;
+  margin-top: 0px;
 }
 
 #midbw1 {
   left: 120px;
   top: 0px;
-  border: 3px solid gray;
 }
 
 #midb {
-  margin-left: -64px;
-  margin-top: 101px;
+  margin-left: -60px;
+  margin-top: 104px;
 }
 
 #midcw1 {
   left: 60px;
   top: 104px;
-  border: 3px solid gray;
 }
 
 #midc {
@@ -417,7 +410,7 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .mid {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(220,220,220);
   z-index: 15;
 }
 
@@ -439,10 +432,8 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .outer {
-  background-color: rgb(253, 253, 253);
+  background-color: rgb(240,240,240);
   z-index: 1;
-  pointer-events: auto;
-  border: 3px solid gray;
 }
 
 
