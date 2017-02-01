@@ -310,8 +310,8 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .diagram {
-  width: 240px;
-  height: 240px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   pointer-events: none;
   position: absolute;
@@ -339,7 +339,7 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .innerw3 {
-  margin-left: 120px;
+  margin-left: 100px;
   top: 0px;
   overflow: hidden;
   position: static;
@@ -349,8 +349,8 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 .inner {
-  margin-left: -60px;
-  margin-top: 104px;
+  margin-left: -50px;
+  margin-top: 87px;
   background-color: rgb(200,200,200);
   z-index: 20;
   position: static;
@@ -385,28 +385,28 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 #mida {
-  margin-left: 120px;
+  margin-left: 100px;
   margin-top: 0px;
 }
 
 #midbw1 {
-  left: 120px;
+  left: 100px;
   top: 0px;
 }
 
 #midb {
-  margin-left: -60px;
-  margin-top: 104px;
+  margin-left: -50px;
+  margin-top: 87px;
 }
 
 #midcw1 {
-  left: 60px;
-  top: 104px;
+  left: 50px;
+  top: 87px;
 }
 
 #midc {
-  margin-left: -60px;
-  margin-top: -104px;
+  margin-left: -50px;
+  margin-top: -87px;
 }
 
 .mid {
@@ -422,13 +422,13 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 }
 
 #outer2 {
-  left: 120px;
+  left: 100px;
   top: 0px;
 }
 
 #outer3 {
-  left: 60px;
-  top: 104px;
+  left: 50px;
+  top: 87px;
 }
 
 .outer {
@@ -440,7 +440,7 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
 .diagram-label {
   z-index: 100;
   position: absolute;
-  font-weight: 600;
+  font-weight: 500;
   color: gray;
 }
 

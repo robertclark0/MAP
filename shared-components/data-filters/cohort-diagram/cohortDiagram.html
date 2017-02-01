@@ -24,17 +24,17 @@
             </md-menu>
         </div>
     </md-toolbar>
-    <md-card-content style="height: 475px">
+    <md-card-content style="height: 415px">
 
         <md-checkbox aria-label="Poly" ng-model="poly" ng-change="change()">PolyPharm</md-checkbox>
         <md-checkbox aria-label="High" ng-model="hu" ng-change="change()">High Util.</md-checkbox>
         <md-checkbox aria-label="Pain" ng-model="pain" ng-change="change()">Pain</md-checkbox>
 
-        <div id="diagram" style="height: 350px; margin-top: 5px;">
-            <div class="diagram-label" style=" top: 80px; right: 40px;" ng-class="{'diagram-selected' : p}">Pain</div>
-            <div class="diagram-label" style="top: 80px; left: 20px;" ng-class="{'diagram-selected' : pp}">PolyPharm</div>
-            <div class="diagram-label" style="top: 300px; left: 135px;" ng-class="{'diagram-selected' : h}">High Utilizer</div>
-            <div class="diagram-label" style="top: 145px; left: 158px;" ng-class="{'diagram-selected' : chup}">CHUP</div>
+        <div id="diagram" style="height: 290px; margin-top: 5px; margin-left: 6%">
+            <div class="diagram-label" style=" top: 70px; left: 235px;" ng-class="{'diagram-selected' : p}">Pain</div>
+            <div class="diagram-label" style="top: 70px; left: 14px;" ng-class="{'diagram-selected' : pp}">PolyPharm</div>
+            <div class="diagram-label" style="top: 235px; left: 105px;" ng-class="{'diagram-selected' : h}">High Utilizer</div>
+            <div class="diagram-label" style="top: 118px; left: 128px;" ng-class="{'diagram-selected' : chup}">CHUP</div>
             <div id="outer1" class="outer diagram" ng-class="{'diagram-selected' : pp}">
             </div>
             <div id="outer2" class="outer diagram" ng-class="{'diagram-selected' : p}">

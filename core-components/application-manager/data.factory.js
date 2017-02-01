@@ -1,7 +1,7 @@
 ﻿applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appStateManager', function ($rootScope, $resource, appStateManager) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
-    //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
+    //var apiEndpoint = 'https://pasbadevweb/MAP/api/';
     //var apiEndpoint = 'http://localhost:3000/';
 
     //    DATA OBJECT
@@ -99,8 +99,6 @@
     var schemaAPI = apiEndpoint + 'schema';
     apiResource.schema = function () { return $resource(schemaAPI); };
 
-    //==================
-
     var queryAPI = apiEndpoint + 'query';
     apiResource.query = function () { return $resource(queryAPI); };
 
@@ -111,19 +109,8 @@
     apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
 
     var getReportAPI = apiEndpoint + 'report';
-    apiResource.getReport = function () { return $resource(getReportAPI); };
+    apiResource.report = function () { return $resource(getReportAPI); };
 
-    var updateReportAPI = apiEndpoint + 'report/update';
-    apiResource.updateReport = function () { return $resource(updateReportAPI); };
-
-    var createReportAPI = apiEndpoint + 'report/create';
-    apiResource.createReport = function () { return $resource(createReportAPI); };
-
-    var deleteReportAPI = apiEndpoint + 'deport/delete';
-    apiResource.deleteReport = function () { return $resource(deleteReportAPI); };
-
-    var getReportListAPI = apiEndpoint + 'report/list';
-    apiResource.getReportList = function () { return $resource(getReportListAPI); };
 
 
     //    STRUCTURE

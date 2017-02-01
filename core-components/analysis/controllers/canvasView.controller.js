@@ -35,9 +35,24 @@
     });
 
 
-    //MENU FUNCTIONS
+    // ---- ---- ---- ---- Menu Functions ---- ---- ---- ---- //
+    //CANVAS
     $scope.addCanvasElement = function (name, type) {
         $scope.current.canvas.canvasElements.push(new SC.CanvasElement(name, type));
+    };
+
+    //REPORT
+    $scope.showSaveReport = function (ev) {
+        $mdDialog.show({
+            templateUrl: 'core-components/analysis/templates/saveReport.dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: false,
+            controller: 'SaveReport',
+            locals: {
+                current: $scope.current
+            }
+        });
     };
 
 

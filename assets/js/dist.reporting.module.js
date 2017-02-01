@@ -31,7 +31,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
     };
 
     //GET REPORT LIST
-    API.getReportList().save(logger.postObject({ entityCode: SO.product.Code })).$promise.then(function (response) {
+    API.report().save(logger.postObject({ entityCode: SO.product.Code, type: 'list' })).$promise.then(function (response) {
         if (response.result.length > 0) {
             //$scope.reportList = response.result;
         }

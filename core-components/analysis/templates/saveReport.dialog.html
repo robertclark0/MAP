@@ -1,0 +1,77 @@
+﻿<md-dialog aria-label="dialog" style="width: 750px;">
+    <form name="saveReportForm">
+        <md-toolbar md-scroll-shrink>
+            <div class="md-toolbar-tools">Publish Report</div>
+        </md-toolbar>
+        <md-dialog-content style="max-height: 600px; ">
+            <md-tabs md-dynamic-height md-selected="selectedTabIndex">
+                <md-tab label="Report Settings">
+                    <md-content class="md-padding" style="background-color: transparent;">
+                        <div layout="row">
+                            <md-input-container class="md-block md-accent" flex="75">
+                                <label>Report Name</label>
+                                <input value=" " ng-model="current.canvas.name" required>
+                            </md-input-container>
+                            <md-input-container class="md-block md-accent" flex>
+                                <label>Report Role</label>
+                                <md-select ng-model="current.canvas.roleType" class="md-accent" required>
+                                    <md-option value="user">User</md-option>
+                                    <md-option value="admin">Admin</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <md-input-container class="md-block md-accent" flex="75">
+                                <label>Report Categroy</label>
+                                <input value=" " ng-model="current.canvas.category" required>
+                            </md-input-container>
+                            <md-input-container class="md-block md-accent" flex>
+                                <label>Report Position</label>
+                                <input value=" " ng-model="current.canvas.position" required>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <md-input-container class="md-block md-accent" flex="75">
+                                <label>GUID</label>
+                                <input ng-model="current.canvas.GUID" disabled>
+                            </md-input-container>
+                            <md-input-container class="md-block md-accent" flex>
+                                <label>From Cloud</label>
+                                <input ng-model="current.canvas.fromDB" disabled>
+                            </md-input-container>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Filter Settings" ng-disabled="!saveReportForm.$valid">
+                    <md-content class="md-padding" style="background-color: transparent;">
+                        <div ng-repeat="dataGroup in current.canvas.dataGroups">
+                            <md-list ng-repeat="filterLevel in dataGroup.filters track by $index">
+                                <md-subheader class="md-accent" style="background-color: transparent">{{dataGroup.name}} | Filter Level {{$index + 1}} [ {{current.dataGroup.selections[$index][0].dataValue.COLUMN_NAME}} ]</md-subheader>
+                                <md-list-item ng-repeat="filter in filterLevel">
+                                    <p>{{filter.alias}}</p>
+                                    <md-checkbox class="md-secondary" ng-model="filter.visibleInReport"></md-checkbox>  
+                                </md-list-item>
+                            </md-list>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+
+            <span flex></span>
+            <md-button ng-click="closeDialog()">
+                Cancel
+            </md-button>
+            <md-button ng-hide="selectedTabIndex === 1" ng-disabled="!saveReportForm.$valid" ng-click="selectedTabIndex = 1">
+                Next
+            </md-button>
+            <md-button class="md-raised md-accent" ng-disabled="!saveReportForm.$valid" ng-show="selectedTabIndex === 1" ng-click="saveReport()">
+                Publish Report
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

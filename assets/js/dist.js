@@ -438,7 +438,7 @@ mapApp.directive('customDataSelection', ['appManager', '$mdDialog', function (ap
 applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appStateManager', function ($rootScope, $resource, appStateManager) {
 
     var apiEndpoint = 'http://localhost:51880/api/';
-    //var apiEndpoint = 'https://pasbadevweb/MAP/lily/api/';
+    //var apiEndpoint = 'https://pasbadevweb/MAP/api/';
     //var apiEndpoint = 'http://localhost:3000/';
 
     //    DATA OBJECT
@@ -536,8 +536,6 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
     var schemaAPI = apiEndpoint + 'schema';
     apiResource.schema = function () { return $resource(schemaAPI); };
 
-    //==================
-
     var queryAPI = apiEndpoint + 'query';
     apiResource.query = function () { return $resource(queryAPI); };
 
@@ -548,19 +546,8 @@ applicationManager.factory('appDataManager', ['$rootScope', '$resource', 'appSta
     apiResource.downloadUpdate = function () { return $resource(downloadUpdateAPI); };
 
     var getReportAPI = apiEndpoint + 'report';
-    apiResource.getReport = function () { return $resource(getReportAPI); };
+    apiResource.report = function () { return $resource(getReportAPI); };
 
-    var updateReportAPI = apiEndpoint + 'report/update';
-    apiResource.updateReport = function () { return $resource(updateReportAPI); };
-
-    var createReportAPI = apiEndpoint + 'report/create';
-    apiResource.createReport = function () { return $resource(createReportAPI); };
-
-    var deleteReportAPI = apiEndpoint + 'deport/delete';
-    apiResource.deleteReport = function () { return $resource(deleteReportAPI); };
-
-    var getReportListAPI = apiEndpoint + 'report/list';
-    apiResource.getReportList = function () { return $resource(getReportListAPI); };
 
 
     //    STRUCTURE
@@ -639,12 +626,12 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
             controlPanels: [
                 {
                     side: 'left', // left, right | this sets the default value
-                    lock: false,
+                    lock: true,
                     templateUrl: 'core-components/analysis/templates/dataFilter.sideNav.html'
                 },
                 {
-                    side: 'left',
-                    lock: false,
+                    side: 'right',
+                    lock: true,
                     templateUrl: 'core-components/analysis/templates/dataSelection.sideNav.html'
                 },
                 {
@@ -664,6 +651,9 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.dataGroups = [];
         this.canvasElements = [];
         this.availableFilters = [];
+        this.category = null;
+        this.position = null;
+        this.fromDB = false;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

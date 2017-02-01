@@ -12,12 +12,12 @@
             controlPanels: [
                 {
                     side: 'left', // left, right | this sets the default value
-                    lock: false,
+                    lock: true,
                     templateUrl: 'core-components/analysis/templates/dataFilter.sideNav.html'
                 },
                 {
-                    side: 'left',
-                    lock: false,
+                    side: 'right',
+                    lock: true,
                     templateUrl: 'core-components/analysis/templates/dataSelection.sideNav.html'
                 },
                 {
@@ -37,6 +37,9 @@
         this.dataGroups = [];
         this.canvasElements = [];
         this.availableFilters = [];
+        this.category = null;
+        this.position = null;
+        this.fromDB = false;
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
