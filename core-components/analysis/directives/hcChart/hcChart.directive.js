@@ -216,7 +216,6 @@
                     chart.update({ xAxis: { categories: axis } });
                     updateSeries(scope.canvasElement.chart.series);
                 }
-                console.log("data changed");
             }, true);
 
             // ---- ---- ---- ---- Load & Register ---- ---- ---- ---- //
@@ -225,8 +224,6 @@
 
             // register chart and DOM element in data manager to create expose to other parts of app.
             appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element, chart: chart });
-            console.log(appManager.data.DO);
-            console.log("Registered");
 
         }
     };

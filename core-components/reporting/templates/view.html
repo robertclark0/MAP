@@ -7,14 +7,17 @@
         <md-list style="padding:0">
             <md-list-item class="md-2-line" ng-click="showReport($event)">
                 <div class="md-list-item-text" style="padding-top: 4px;">
-                    <span class="md-headline">Dashboard</span>
-                    <p class="md-primary">Summary Reports</p>
+                    <span class="md-headline">{{current.report.Report_Name}}</span>
+                    <p class="md-primary">{{current.report.Category}}</p>
                 </div>
             </md-list-item>
         </md-list>
         <md-subheader class="md-primary">Data Filters</md-subheader>
         <md-content class="map-gray-1">
-            <cohort-diagram></cohort-diagram>
+            <!--<cohort-diagram></cohort-diagram>-->
+            <div ng-repeat="filter in current.dataGroup.filters[current.selectionIndex]">
+                <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter', current: '$parent.current'}"></directive-generator>
+            </div>
         </md-content>
     </md-sidenav>
 

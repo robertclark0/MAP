@@ -1,3 +1,6 @@
-﻿<md-list>
-    
+﻿<md-list class="md-dense" style="padding: 0" ng-repeat="reportList in reports">
+    <md-subheader class="md-accent" style="background-color: transparent;">{{reportList[0].Category}}</md-subheader>
+    <md-list-item ng-repeat="report in reportList" ng-click="selectReport(report)">
+        <p>{{report.Report_Name}}<p>
+    </md-list-item>
 </md-list>

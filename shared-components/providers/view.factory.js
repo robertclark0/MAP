@@ -1,4 +1,4 @@
-﻿analysis.factory('viewFactory', ['appManager', function (appManager) {
+﻿mapApp.factory('viewFactory', ['appManager', function (appManager) {
 
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
@@ -10,7 +10,7 @@
     var factory = {};
 
     // ---- ---- ---- ---- Query Functions ---- ---- ---- ---- //
-    factory.buildQueryObject = function(dataGroup, selectionIndex) {
+    factory.buildQueryObject = function (dataGroup, selectionIndex) {
         return {
             source: dataGroup.source,
             pagination: dataGroup.pagination,
@@ -21,7 +21,7 @@
     };
 
     // ---- ---- ---- ---- Current Objects and Control Functions ---- ---- ---- ---- //
-    factory.setSelectionLevel = function(selectionLevel, index, current) {
+    factory.setSelectionLevel = function (selectionLevel, index, current) {
         current.selectionLevel = selectionLevel;
         current.selectionIndex = index;
     }

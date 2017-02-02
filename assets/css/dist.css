@@ -441,10 +441,10 @@ md-list.mdo-listitem-padding md-list-item div:first-child {
   z-index: 100;
   position: absolute;
   font-weight: 500;
-  color: gray;
+  color: rgb(75,75,75);
 }
 
 .diagram-selected {
-  background-color: #2196F3;
+  background-color: rgba(92, 153, 255, 1);
   color: white;
 }
