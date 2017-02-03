@@ -177,8 +177,10 @@ mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
 
         scope.filterDataObject = appManager.data.DF.getFilter(scope.filter.GUID);
 
-        scope.$watch('filterDataObject', function (nv) {
-            scope.filterDataObject.dataValues = nv.dataValues;
+        scope.$watch('filterDataObject', function (nv, ov) {
+            if (nv !== ov) {
+                scope.filterDataObject.dataValues = nv.dataValues;
+            }
         }, true);
 
 
@@ -355,7 +357,7 @@ mapApp.directive('cohortSelection', [function () {
 
     };
 }]);
-mapApp.directive('customDataFilter', ['appManager', '$mdDialog', function (appManager, $mdDialog) {
+mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFactory', function (appManager, $mdDialog, dataFilterFactory) {
     return {
         restrict: 'E',
         scope: {
@@ -368,7 +370,13 @@ mapApp.directive('customDataFilter', ['appManager', '$mdDialog', function (appMa
     };
 
     function link(scope, elem, attr) {
+        var DO = appManager.data.DO;
         scope.SF = appManager.state.SF;
+        
+        //check to see if filter values exist, if not, get them.
+        if (DO.filters.map(function (obj) { return obj.GUID }).indexOf(scope.filter.GUID) < 0) {
+            dataFilterFactory.populateFilterData(scope.filter, scope.current.dataGroup);
+        }
 
         scope.showOperations = function (ev) {
             $mdDialog.show({
@@ -611,6 +619,76 @@ applicationManager.factory('appLogger', ['$mdToast', 'appStateManager', 'appData
             post: object,            log: logger.serverLog()
         };
     };    return logger;
+}]);
+mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
+
+    var SC = appManager.state.SC;
+    var SF = appManager.state.SF;
+    var DO = appManager.data.DO;
+    var DF = appManager.data.DF;
+    var SO = appManager.state.SO;
+    var API = appManager.data.API;
+    var factory = {};
+
+    // ---- ---- ---- ---- side Nav Functions ---- ---- ---- ---- //
+    factory.filterResults = function (query) {
+        if (query) {
+            var results = DO.tableSchema.filter(function (tableValue) {
+                return angular.lowercase(tableValue.COLUMN_NAME).indexOf(angular.lowercase(query)) >= 0;
+            });
+            return results ? results : [];
+        }
+        else { return DO.tableSchema; }
+    };
+
+    factory.quickAddFilter = function (dataValue, dataGroup, selectionIndex, tempCards) {
+        if (dataValue) {
+
+            var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
+            newFilter.alias = dataValue.COLUMN_NAME;
+            newFilter.operations.push({ operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] });
+
+            var tempGUID = SF.generateGUID();
+            createTempCard(dataValue, tempGUID, tempCards);
+
+            var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
+
+            API.schema().save(postObject).$promise.then(function (response) {
+                response.result.forEach(function (obj) {
+                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                });
+                DO.filters.push(newFilterDataObject);
+                deleteTempCard(tempGUID, tempCards);
+                dataGroup.filters[selectionIndex].push(newFilter);
+            });
+        }
+    };
+
+    function createTempCard(dataValue, GUID, tempCards) {
+        tempCards.push({ alias: dataValue.COLUMN_NAME, GUID: GUID });
+    }
+    function deleteTempCard(GUID, tempCards) {
+        var index = tempCards.map(function (obj) { return obj.GUID }).indexOf(GUID);
+        if (index >= 0) {
+            tempCards.splice(index, 1);
+        }
+    }
+
+    factory.populateFilterData = function (filter, dataGroup) {
+
+        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+        DO.filters.push(newFilterDataObject);
+
+        var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } };
+
+        API.schema().save(postObject).$promise.then(function (response) {
+            response.result.forEach(function (obj) {
+                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
+        });
+    };
+
+    return factory;
 }]);
 mapApp.factory('viewFactory', ['appManager', function (appManager) {
 

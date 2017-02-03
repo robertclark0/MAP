@@ -13,7 +13,7 @@
 
     $scope.propertyPanel = DSO.dashboard.propertyPanel;
 
-    DF.populateAppData();
+    //DF.populateAppData();
     //
 
     $scope.toggleSideNav = function (navID) {

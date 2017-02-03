@@ -1,4 +1,4 @@
-﻿analysis.factory('dataFilterFactory', ['appManager', function (appManager) {
+﻿mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
 
     var SC = appManager.state.SC;
     var SF = appManager.state.SF;
@@ -19,14 +19,12 @@
         else { return DO.tableSchema; }
     };
 
-    factory.quickAddFilter = function(dataValue, dataGroup, selectionIndex, tempCards) {
+    factory.quickAddFilter = function (dataValue, dataGroup, selectionIndex, tempCards) {
         if (dataValue) {
 
             var newFilter = new SC.DataFilter(SF.availableDataFilters()[0], dataValue);
             newFilter.alias = dataValue.COLUMN_NAME;
             newFilter.operations.push({ operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] });
-
-            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
 
             var tempGUID = SF.generateGUID();
             createTempCard(dataValue, tempGUID, tempCards);
@@ -53,6 +51,20 @@
             tempCards.splice(index, 1);
         }
     }
+
+    factory.populateFilterData = function (filter, dataGroup) {
+
+        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
+        DO.filters.push(newFilterDataObject);
+
+        var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } };
+
+        API.schema().save(postObject).$promise.then(function (response) {
+            response.result.forEach(function (obj) {
+                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
+        });
+    };
 
     return factory;
 }]);

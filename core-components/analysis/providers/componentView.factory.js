@@ -212,7 +212,7 @@
             }
             closeEdit();
         }
-        DF.populateAppData();
+        //DF.populateAppData();
     }
     function closeEdit() {
         factory.componentProperties.editObject = null;
