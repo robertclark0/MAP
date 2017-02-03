@@ -1,4 +1,4 @@
-﻿reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', '$mdPanel', function ($scope, appManager, $state, $mdDialog, $mdPanel) {
+﻿reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog', '$mdPanel', 'viewFactory', function ($scope, appManager, $state, $mdDialog, $mdPanel, viewFactory) {
 
     //    Controller and Scope variables
     var DSO = appManager.state.DSO;
@@ -75,10 +75,18 @@
 
     //GET REPORT LIST
     API.report().save(logger.postObject({ entityCode: SO.product.Code, type: 'list' })).$promise.then(function (response) {
+
         if (response.result.length > 0) {
             $scope.reports = catAndOrderReports(response.result);
             console.log(catAndOrderReports(response.result));
         }
+        return API.report().save(logger.postObject({ report: { GUID: $scope.reports[0][0].GUID }, type: 'get' })).$promise;
+
+    }).then(function (response) {
+        console.log(response.result);
+        $scope.current.report = $scope.reports[0][0];
+        var canvas = JSON.parse(response.result.JSON);
+        viewFactory.setCanvas(canvas, $scope.current);
     });
 
 
