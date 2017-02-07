@@ -18,7 +18,8 @@
             var defaultchartOptions = {
                 chart: {
                     backgroundColor: 'transparent',
-                    animation: true
+                    animation: true,
+                    type: 'bar'
                 },
                 credits: {
                     enabled: false

@@ -63,7 +63,22 @@
 
         API.schema().save(postObject).$promise.then(function (response) {
             response.result.forEach(function (obj) {
-                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+
+                filter.operations.forEach(function (operation) {
+                    if (operation.type === 'dfo-checklist') {
+                        operation.selectedValues.forEach(function (selectedValue) {
+                            if (obj === selectedValue) {
+                                newFilterDataObject.dataValues.push({ value: obj, isChecked: true });
+                            } else {
+                                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                            }
+                        });
+                    } else {
+                        newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                    }
+                });
+
+
             });
         });
     };

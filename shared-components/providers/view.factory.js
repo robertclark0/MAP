@@ -35,8 +35,13 @@
 
 
             if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
-                DO.dataGroups.push({ GUID: dataGroup.GUID, result: null, drillDown: [] });
-                //dataGroup.query.execute();
+                var newDataObject = { GUID: dataGroup.GUID, result: null, drillDown: [] };
+                DO.dataGroups.push(newDataObject);
+
+                var queryObject = factory.buildQueryObject(dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    newDataObject.result = response.result;
+                });
             }
 
             if (dataGroup.source.type === 'T') {

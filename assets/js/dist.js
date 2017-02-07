@@ -183,7 +183,6 @@ mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
             }
         }, true);
 
-
         scope.checkChanged = function () {
             scope.operation.selectedValues = scope.filterDataObject.dataValues.filter(function (obj) {
                 return obj.isChecked;
@@ -615,7 +614,8 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
             var defaultchartOptions = {
                 chart: {
                     backgroundColor: 'transparent',
-                    animation: true
+                    animation: true,
+                    type: 'bar'
                 },
                 credits: {
                     enabled: false
@@ -920,7 +920,22 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
 
         API.schema().save(postObject).$promise.then(function (response) {
             response.result.forEach(function (obj) {
-                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+
+                filter.operations.forEach(function (operation) {
+                    if (operation.type === 'dfo-checklist') {
+                        operation.selectedValues.forEach(function (selectedValue) {
+                            if (obj === selectedValue) {
+                                newFilterDataObject.dataValues.push({ value: obj, isChecked: true });
+                            } else {
+                                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                            }
+                        });
+                    } else {
+                        newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                    }
+                });
+
+
             });
         });
     };
@@ -964,8 +979,13 @@ mapApp.factory('viewFactory', ['appManager', function (appManager) {
 
 
             if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
-                DO.dataGroups.push({ GUID: dataGroup.GUID, result: null, drillDown: [] });
-                //dataGroup.query.execute();
+                var newDataObject = { GUID: dataGroup.GUID, result: null, drillDown: [] };
+                DO.dataGroups.push(newDataObject);
+
+                var queryObject = factory.buildQueryObject(dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    newDataObject.result = response.result;
+                });
             }
 
             if (dataGroup.source.type === 'T') {

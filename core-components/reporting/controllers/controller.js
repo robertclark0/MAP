@@ -105,11 +105,6 @@
         viewFactory.setCanvas(canvas, $scope.current);
 
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
-        return API.query().save({ query: queryObject }).$promise;
-
-    }).then(function (response) {
-        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
-        dataGroupDataObject.result = response.result;
 
     }).catch(function (error) {
         console.log(error);

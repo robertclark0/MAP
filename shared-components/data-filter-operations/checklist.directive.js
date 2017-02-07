@@ -20,7 +20,6 @@
             }
         }, true);
 
-
         scope.checkChanged = function () {
             scope.operation.selectedValues = scope.filterDataObject.dataValues.filter(function (obj) {
                 return obj.isChecked;
