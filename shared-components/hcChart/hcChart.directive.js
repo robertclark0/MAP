@@ -1,4 +1,4 @@
-﻿analysis.directive('hcChart', ['appManager', function (appManager) {
+﻿mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $timeout) {
     return {
         restrict: 'E',
         template: '<div></div>',
@@ -38,13 +38,18 @@
                 chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
 
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
+
+                $timeout(function () {
+                    populateSeries(scope.canvasElement.chart.series);
+                }, 1);
+                
             };
 
             // takes the series array and updates the values with new data object results.
             function updateSeries(seriesArray) {
 
                 seriesArray.forEach(function (series, seriesIndex) {
-                    
+
                     var seriesData = createSeriesData(series, false);
 
                     if (seriesData) {
@@ -91,7 +96,7 @@
                                 point.update(seriesData[pointIndex]);
                             });
                         }
-                    }                    
+                    }
                 });
             };
 
