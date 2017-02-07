@@ -648,6 +648,8 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
             newFilter.alias = dataValue.COLUMN_NAME;
             newFilter.operations.push({ operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] });
 
+            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
+
             var tempGUID = SF.generateGUID();
             createTempCard(dataValue, tempGUID, tempCards);
 
@@ -725,10 +727,15 @@ mapApp.factory('viewFactory', ['appManager', function (appManager) {
         if (dataGroup) {
             factory.setSelectionLevel(dataGroup.selections[0], 0, current);
 
+
+            if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
+                DO.dataGroups.push({ GUID: dataGroup.GUID, result: null, drillDown: [] });
+                //dataGroup.query.execute();
+            }
+
             if (dataGroup.source.type === 'T') {
                 //REMOVE BEFORE FLIGHT
                 API.schema().save(logger.postObject({ type: "table", alias: dataGroup.source.alias })).$promise.then(function (response) {
-                    //API.tableSchema().get().$promise.then(function (response) {
                     DO.tableSchema = response.result;
                 }).catch(function (error) {
                     logger.toast.error('Error Getting Table Schema', error);

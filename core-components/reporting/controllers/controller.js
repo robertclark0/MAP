@@ -5,6 +5,7 @@
     var API = appManager.data.API;
     var SO = appManager.state.SO;
     var logger = appManager.logger;
+    var DF = appManager.data.DF;
 
     $scope.name = DSO.name;
     $scope.user = SO.user;
@@ -73,6 +74,21 @@
 
     //==========================
 
+
+    $scope.gridsterOpts = {
+        columns: 36,
+        mobileBreakPoint: 1024,
+        resizable: { enabled: false },
+        draggable: { enabled: false }
+    };
+
+    //Chart Globals
+    Highcharts.setOptions({
+        lang: {
+            thousandsSep: ','
+        }
+    });
+
     //GET REPORT LIST
     API.report().save(logger.postObject({ entityCode: SO.product.Code, type: 'list' })).$promise.then(function (response) {
 
@@ -87,9 +103,24 @@
         $scope.current.report = $scope.reports[0][0];
         var canvas = JSON.parse(response.result.JSON);
         viewFactory.setCanvas(canvas, $scope.current);
+
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        return API.query().save({ query: queryObject }).$promise;
+
+    }).then(function (response) {
+        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+        dataGroupDataObject.result = response.result;
+
+    }).catch(function (error) {
+        console.log(error);
     });
 
 
+
+
+
+
+    // ---- ---- ---- ---- Categorize and Order Reports ---- ---- ---- ---- //
     function catAndOrderReports(reports) {
 
         var orderedReports = [];
@@ -116,6 +147,18 @@
         });
 
         return orderedReports;
+    };
+
+    // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
+   function build() {
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+
+        API.query().save({ query: queryObject }).$promise.then(function (response) {
+            console.log(response);
+            dataGroupDataObject.result = response.result;
+        }).catch(function (error) { console.log(error); });
+
     };
 
 }]);

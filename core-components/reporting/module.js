@@ -1,1 +1,1 @@
-﻿var reporting = angular.module('reporting', []);
+﻿var reporting = angular.module('reporting', ['gridster']);

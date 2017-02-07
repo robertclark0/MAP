@@ -26,6 +26,8 @@
             newFilter.alias = dataValue.COLUMN_NAME;
             newFilter.operations.push({ operation: "in", name: "Range", type: 'dfo-checklist', selectedValues: [] });
 
+            var newFilterDataObject = { GUID: newFilter.GUID, dataValues: [] };
+
             var tempGUID = SF.generateGUID();
             createTempCard(dataValue, tempGUID, tempCards);
 
