@@ -156,7 +156,7 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
         }).catch(function (error) { console.log(error); });
 
     };
-
+   $scope.build = build;
 }]);
 reporting.controller('ReportMenu', ['$scope', 'appManager', 'reports', 'current', 'mdPanelRef', 'viewFactory', function ($scope, appManager, reports, current, mdPanelRef, viewFactory) {
 
