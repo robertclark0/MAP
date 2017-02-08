@@ -18,8 +18,7 @@
             var defaultchartOptions = {
                 chart: {
                     backgroundColor: 'transparent',
-                    animation: true,
-                    type: 'bar'
+                    animation: true
                 },
                 credits: {
                     enabled: false
@@ -48,9 +47,7 @@
 
             // takes the series array and updates the values with new data object results.
             function updateSeries(seriesArray) {
-
                 seriesArray.forEach(function (series, seriesIndex) {
-
                     var seriesData = createSeriesData(series, false);
 
                     if (seriesData) {
@@ -60,16 +57,16 @@
                         if (newLength > existingLength) {
 
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Change existing points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
 
                             //Add new points
                             for (var i = existingLength; i < newLength; i++) {
-                                chart.series[seriesIndex].addPoint(seriesData[i]);
+                                chart.series[seriesIndex].addPoint(seriesData[i], false);
                             }
 
                         } else if (existingLength > newLength) {
@@ -77,47 +74,49 @@
 
                             //Remove Points
                             for (var i = existingLength - 1; i > existingLength - 1 - diff; i--) {
-                                chart.series[seriesIndex].data[i].remove();
+                                chart.series[seriesIndex].data[i].remove(false);
                             }
 
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Update Points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
 
                         } else {
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Update Points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
                         }
                     }
                 });
+                chart.redraw();
             };
 
             // takes the array of element series and adds them or updates them in the chart.
             function populateSeries(seriesArray) {
                 scope.chartDataObjects.length = 0;
                 seriesArray.forEach(function (series) {
-
                     var seriesData = createSeriesData(series, true);
                     var existingSeries = chart.series.map(function (obj) { return obj.name; });
                     var index = existingSeries.indexOf(series.selection);
 
                     if (index >= 0) {
-                        chart.series[index].setData(seriesData);
+                        chart.series[index].setData(seriesData, false);
                     }
                     else {
-                        chart.addSeries({ name: series.selection, data: seriesData });
+                        chart.addSeries({ name: series.selection, data: seriesData }, false);
                     }
 
                 });
+
+                chart.redraw();
             };
 
             // takes a single series, populates and formats the data from the data manager.
@@ -144,7 +143,6 @@
                                     y: row[index],
                                     x: axis.indexOf(row[titleIndex])
                                 };
-                                console.log(point);
                                 seriesData.push(point);
                             }
                         });
@@ -175,7 +173,6 @@
                         }
                     }
                 });
-                console.log(unique(axisValues));
                 return unique(axisValues);
             };
 
@@ -210,16 +207,17 @@
                 if (nv !== ov) {
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
-                    chart.update({ xAxis: { categories: axis } });
+                    chart.update({ xAxis: { categories: axis } }, false);
                     populateSeries(scope.canvasElement.chart.series);
                 }
             }, true);
 
             scope.$watch('chartDataObjects', function (nv, ov) {
                 if (nv !== ov) {
+                    console.log('fired2');
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
-                    chart.update({ xAxis: { categories: axis } });
+                    chart.update({ xAxis: { categories: axis } }, false);
                     updateSeries(scope.canvasElement.chart.series);
                 }
             }, true);

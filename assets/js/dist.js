@@ -254,7 +254,8 @@ mapApp.directive('cohortDiagram', [function () {
     return {
         restrict: 'E',
         scope: {
-            element: '='
+            filter: '=',
+            current: '='
         },
         replace: true,
         templateUrl: 'shared-components/data-filters/cohort-diagram/cohortDiagram.html',
@@ -284,53 +285,81 @@ mapApp.directive('cohortDiagram', [function () {
             scope.pph = false;
             scope.ph = false;
             scope.chup = false;
+            
+            scope.filter.operations = [];
         };
 
         scope.change = function () {
             reset();
             if (scope.method === 'ex') {
+				
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
+				
                 if (scope.poly && scope.hu && scope.pain) {
-                    scope.chup = true;
+                    scope.chup = true;							
                 } else if (scope.poly && scope.hu) {
                     scope.pph = true;
+					scope.filter.operations[1].selectedValues[0] = 0;					
                 } else if (scope.poly && scope.pain) {
                     scope.ppp = true;
+					scope.filter.operations[2].selectedValues[0] = 0;
                 } else if (scope.pain && scope.hu) {
                     scope.ph = true;
+					scope.filter.operations[0].selectedValues[0] = 0;
                 } else if (scope.pain) {
                     scope.p = true;
+					scope.filter.operations[0].selectedValues[0] = 0;
+					scope.filter.operations[2].selectedValues[0] = 0;
                 } else if (scope.poly) {
                     scope.pp = true;
+					scope.filter.operations[1].selectedValues[0] = 0;
+					scope.filter.operations[2].selectedValues[0] = 0;
                 } else if (scope.hu) {
                     scope.h = true;
+					scope.filter.operations[0].selectedValues[0] = 0;
+					scope.filter.operations[1].selectedValues[0] = 0;
                 }
             } else if (scope.method === 'in') {
                 if (scope.poly && scope.hu && scope.pain) {
                     scope.chup = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 } else if (scope.poly && scope.hu) {
                     scope.pph = true;
                     scope.chup = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });	
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 } else if (scope.poly && scope.pain) {
                     scope.ppp = true;
                     scope.chup = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
                 } else if (scope.pain && scope.hu) {
                     scope.ph = true;
                     scope.chup = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 } else if (scope.pain) {
                     scope.chup = true;
                     scope.ppp = true;
                     scope.ph = true;
                     scope.p = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
                 } else if (scope.poly) {
                     scope.chup = true;
                     scope.pp = true;
                     scope.ppp = true;
                     scope.pph = true;
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 } else if (scope.hu) {
                     scope.chup = true;
                     scope.h = true;
                     scope.ph = true;
-                    scope.pph = true;
+                    scope.pph = true;		
+					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 }
             }
         };
@@ -614,8 +643,7 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
             var defaultchartOptions = {
                 chart: {
                     backgroundColor: 'transparent',
-                    animation: true,
-                    type: 'bar'
+                    animation: true
                 },
                 credits: {
                     enabled: false
@@ -644,9 +672,7 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
 
             // takes the series array and updates the values with new data object results.
             function updateSeries(seriesArray) {
-
                 seriesArray.forEach(function (series, seriesIndex) {
-
                     var seriesData = createSeriesData(series, false);
 
                     if (seriesData) {
@@ -656,16 +682,16 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                         if (newLength > existingLength) {
 
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Change existing points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
 
                             //Add new points
                             for (var i = existingLength; i < newLength; i++) {
-                                chart.series[seriesIndex].addPoint(seriesData[i]);
+                                chart.series[seriesIndex].addPoint(seriesData[i], false);
                             }
 
                         } else if (existingLength > newLength) {
@@ -673,47 +699,49 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
 
                             //Remove Points
                             for (var i = existingLength - 1; i > existingLength - 1 - diff; i--) {
-                                chart.series[seriesIndex].data[i].remove();
+                                chart.series[seriesIndex].data[i].remove(false);
                             }
 
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Update Points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
 
                         } else {
                             //inject Axis
-                            chart.xAxis[0].setCategories(axis);
+                            chart.xAxis[0].setCategories(axis, false);
 
                             //Update Points
                             chart.series[seriesIndex].data.forEach(function (point, pointIndex) {
-                                point.update(seriesData[pointIndex]);
+                                point.update(seriesData[pointIndex], false);
                             });
                         }
                     }
                 });
+                chart.redraw();
             };
 
             // takes the array of element series and adds them or updates them in the chart.
             function populateSeries(seriesArray) {
                 scope.chartDataObjects.length = 0;
                 seriesArray.forEach(function (series) {
-
                     var seriesData = createSeriesData(series, true);
                     var existingSeries = chart.series.map(function (obj) { return obj.name; });
                     var index = existingSeries.indexOf(series.selection);
 
                     if (index >= 0) {
-                        chart.series[index].setData(seriesData);
+                        chart.series[index].setData(seriesData, false);
                     }
                     else {
-                        chart.addSeries({ name: series.selection, data: seriesData });
+                        chart.addSeries({ name: series.selection, data: seriesData }, false);
                     }
 
                 });
+
+                chart.redraw();
             };
 
             // takes a single series, populates and formats the data from the data manager.
@@ -740,7 +768,6 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                                     y: row[index],
                                     x: axis.indexOf(row[titleIndex])
                                 };
-                                console.log(point);
                                 seriesData.push(point);
                             }
                         });
@@ -771,7 +798,6 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                         }
                     }
                 });
-                console.log(unique(axisValues));
                 return unique(axisValues);
             };
 
@@ -806,16 +832,17 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                 if (nv !== ov) {
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
-                    chart.update({ xAxis: { categories: axis } });
+                    chart.update({ xAxis: { categories: axis } }, false);
                     populateSeries(scope.canvasElement.chart.series);
                 }
             }, true);
 
             scope.$watch('chartDataObjects', function (nv, ov) {
                 if (nv !== ov) {
+                    console.log('fired2');
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
-                    chart.update({ xAxis: { categories: axis } });
+                    chart.update({ xAxis: { categories: axis } }, false);
                     updateSeries(scope.canvasElement.chart.series);
                 }
             }, true);
