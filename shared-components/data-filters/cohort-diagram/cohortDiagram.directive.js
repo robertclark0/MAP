@@ -39,7 +39,7 @@
 
         scope.change = function () {
             reset();
-            if (scope.method === 'ex') {
+            if (scope.method === 'ex' && (scope.poly || scope.hu || scope.pain)) {
 				
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			

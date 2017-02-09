@@ -153,6 +153,9 @@ reporting.controller('Reporting', ['$scope', 'appManager', '$state', '$mdDialog'
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             console.log(response);
             dataGroupDataObject.result = response.result;
+            if (response.result.length === 0) {
+                logger.toast.warning('The query produced no results.');
+            }
         }).catch(function (error) { console.log(error); });
 
     };

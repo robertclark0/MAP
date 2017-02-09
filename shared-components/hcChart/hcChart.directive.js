@@ -129,7 +129,7 @@
                     addDataReference(data);
                 }
 
-                if (data && data.result) {
+                if (data && data.result && data.result[0]) {
                     var index = data.result[0].indexOf(series.selection);
                     var titleIndex = 0;
                     if (data.result[0][0] === 'RowNum') {
@@ -156,7 +156,7 @@
                 var axisValues = [];
                 GUIDArray.forEach(function (GUID) {
                     var data = appManager.data.DF.getDataGroup(GUID);
-                    if (data && data.result) {
+                    if (data && data.result && data.result[0]) {
                         if (data.result[0][0] === 'RowNum') {
                             data.result.forEach(function (row, rowIndex) {
                                 if (rowIndex > 0) {

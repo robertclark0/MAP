@@ -291,7 +291,7 @@ mapApp.directive('cohortDiagram', [function () {
 
         scope.change = function () {
             reset();
-            if (scope.method === 'ex') {
+            if (scope.method === 'ex' && (scope.poly || scope.hu || scope.pain)) {
 				
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PainFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });			
@@ -754,7 +754,7 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                     addDataReference(data);
                 }
 
-                if (data && data.result) {
+                if (data && data.result && data.result[0]) {
                     var index = data.result[0].indexOf(series.selection);
                     var titleIndex = 0;
                     if (data.result[0][0] === 'RowNum') {
@@ -781,7 +781,7 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                 var axisValues = [];
                 GUIDArray.forEach(function (GUID) {
                     var data = appManager.data.DF.getDataGroup(GUID);
-                    if (data && data.result) {
+                    if (data && data.result && data.result[0]) {
                         if (data.result[0][0] === 'RowNum') {
                             data.result.forEach(function (row, rowIndex) {
                                 if (rowIndex > 0) {
