@@ -7,9 +7,10 @@
         <md-list style="padding:0">
             <md-list-item class="md-2-line" ng-click="showReport($event)">
                 <div class="md-list-item-text" style="padding-top: 4px;">
-                    <span class="md-headline">{{current.report.Report_Name}}</span>
+                    <span class="md-headline" style="font-weight: bold;">{{current.report.Report_Name}}</span>
                     <p class="md-primary">{{current.report.Category}}</p>
                 </div>
+                <md-icon md-svg-src="assets/icons/md-chevron-right.svg" class="breadcrumb-arrow" style="position: absolute; top: 25px; right: 5px;"></md-icon>
             </md-list-item>
         </md-list>
         <md-subheader class="md-primary">Data Filters</md-subheader>
