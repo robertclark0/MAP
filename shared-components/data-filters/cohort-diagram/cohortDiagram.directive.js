@@ -25,6 +25,21 @@
         scope.ph = false;
         scope.chup = false;
 
+        var onload = function () {
+            var flags = scope.filter.operations.map(function (operation) { return operation.dataValue.COLUMN_NAME; });
+            
+            if (scope.filter.operations[flags.indexOf('PolyFlag')].selectedValues[0] = 1) {
+                scope.poly = true;
+            }
+            if (scope.filter.operations[flags.indexOf('PainFlag')].selectedValues[0] = 1) {
+                scope.pain = true;
+            }
+            if (scope.filter.operations[flags.indexOf('HUFlag')].selectedValues[0] = 1) {
+                scope.hu = true;
+            }
+
+        }();
+
         function reset() {
             scope.pp = false;
             scope.p = false;
@@ -37,8 +52,10 @@
             scope.filter.operations = [];
         };
 
-        scope.change = function () {
-            reset();
+        scope.change = function (reset) {
+            if (reset !== false) {
+                reset();
+            }
             if (scope.method === 'ex' && (scope.poly || scope.hu || scope.pain)) {
 				
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'PolyFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
