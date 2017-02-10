@@ -1,0 +1,31 @@
+﻿<md-card>
+    <md-toolbar style="background-color: transparent;">
+        <div class="md-toolbar-tools">
+            <h5>Combination</h5>
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <md-icon md-svg-icon="assets/icons/md-menu.svg"></md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="moveDataSelectionUp($index)">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
+                            Move Filter Up
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="moveDataSelectionDown($index)">
+                            <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
+                            Move Filter Down
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <md-card-content>
+
+
+    </md-card-content>
+</md-card>

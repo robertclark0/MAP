@@ -400,6 +400,32 @@ mapApp.directive('cohortSelection', [function () {
 
     };
 }]);
+mapApp.directive('combination-filter', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            current: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-filters/combination-filter/combinationFilter.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+
+
+
+
+        var onLoad = function () {
+
+        }();
+    };
+}]);
+
+
+
 mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFactory', function (appManager, $mdDialog, dataFilterFactory) {
     return {
         restrict: 'E',
@@ -437,6 +463,32 @@ mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFact
 
     };
 }]);
+mapApp.directive('progressive-filter', [function () {
+    return {
+        restrict: 'E',
+        scope: {
+            filter: '=',
+            current: '='
+        },
+        replace: true,
+        templateUrl: 'shared-components/data-filters/progressive-filter/progressiveFilter.html',
+        link: link
+    };
+
+    function link(scope, elem, attr) {
+
+
+
+
+
+        var onLoad = function () {
+          
+        }();
+    };
+}]);
+
+
+
 mapApp.directive('dsoCheck', ['appManager', function (appManager) {
     return {
         restrict: 'E',
@@ -1204,8 +1256,10 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
     stateFunctions.availableDataFilters = function () {
         var availableFilters = [
             { type: 'custom-data-filter', name: 'Custom Filter', productLine: null },
-            { type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
-            { type: 'cohort-diagram', name: "Cohort Diagram", productLine: 'CHUP' }
+            //{ type: 'cohort-selection', name: "Cohort Selection", productLine: 'CHUP' },
+            { type: 'cohort-diagram', name: "Cohort Diagram", productLine: 'CHUP' },
+            { type: 'progressive-filter', name: "Progressive Filter", productLine: null },
+            { type: 'combination-filter', name: "Combination Filter", productLine: null }
         ];
         return availableFilters; //.filter(function (obj) { return obj.productLine === null || obj.productLine === session.StateObject.product.Code });
     };
