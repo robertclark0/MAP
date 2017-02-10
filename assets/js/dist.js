@@ -400,7 +400,7 @@ mapApp.directive('cohortSelection', [function () {
 
     };
 }]);
-mapApp.directive('combination-filter', [function () {
+mapApp.directive('combinationFilter', [function () {
     return {
         restrict: 'E',
         scope: {
@@ -463,7 +463,7 @@ mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFact
 
     };
 }]);
-mapApp.directive('progressive-filter', [function () {
+mapApp.directive('progressiveFilter', [function () {
     return {
         restrict: 'E',
         scope: {
@@ -476,7 +476,7 @@ mapApp.directive('progressive-filter', [function () {
     };
 
     function link(scope, elem, attr) {
-
+        
 
 
 
@@ -982,11 +982,11 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
             var tempGUID = SF.generateGUID();
             createTempCard(dataValue, tempGUID, tempCards);
 
-            var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: newFilter.dataValue.COLUMN_NAME, order: newFilter.dataValueOrder } };
+            var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: [newFilter.dataValue.COLUMN_NAME], order: newFilter.orderValue } };
 
             API.schema().save(postObject).$promise.then(function (response) {
                 response.result.forEach(function (obj) {
-                    newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                    newFilterDataObject.dataValues.push({ value: obj[0], isChecked: false });
                 });
                 DO.filters.push(newFilterDataObject);
                 deleteTempCard(tempGUID, tempCards);
@@ -1007,25 +1007,36 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
 
     factory.populateFilterData = function (filter, dataGroup) {
 
-        var newFilterDataObject = { GUID: filter.GUID, dataValues: [] };
-        DO.filters.push(newFilterDataObject);
+        var filterDataObject;
 
-        var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.dataValueOrder } };
+        if (DF.getFilter(filter.GUID) !== null) {
+            filterDataObject = DF.getFilter(filter.GUID)
+        }
+        else {
+            filterDataObject = { GUID: filter.GUID, dataValues: [] };
+            DO.filters.push(filterDataObject);
+        }
+        
+
+        var postObject = { post: { type: "column", alias: dataGroup.source.alias, columnName: [filter.dataValue.COLUMN_NAME], order: filter.orderValue } };
 
         API.schema().save(postObject).$promise.then(function (response) {
-            response.result.forEach(function (obj) {
+            filterDataObject.dataValues.length = 0;
+            console.log(JSON.stringify(filterDataObject.dataValues));
 
+            response.result.forEach(function (obj) {
+                
                 filter.operations.forEach(function (operation) {
                     if (operation.type === 'dfo-checklist') {
-                        operation.selectedValues.forEach(function (selectedValue) {
-                            if (obj === selectedValue) {
-                                newFilterDataObject.dataValues.push({ value: obj, isChecked: true });
-                            } else {
-                                newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
-                            }
-                        });
-                    } else {
-                        newFilterDataObject.dataValues.push({ value: obj, isChecked: false });
+                        if (operation.selectedValues.indexOf(obj[0]) > -1) {
+                            filterDataObject.dataValues.push({ value: obj[0], isChecked: true });
+                        }
+                        else {
+                            filterDataObject.dataValues.push({ value: obj[0], isChecked: false });
+                        }                             
+                    }
+                    else {
+                        filterDataObject.dataValues.push({ value: obj[0], isChecked: false });
                     }
                 });
 
@@ -1182,7 +1193,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.model = model || null;
         this.dataValue = dataValue || null;
         this.alias = null;
-        this.orderValue = null;
+        this.orderValue = 'asc';
         this.operations = [];
         this.GUID = null;
         this.visibleInReport = false;

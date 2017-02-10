@@ -21,7 +21,7 @@
         canvasElement: null
     };
     $scope.$watch('current', function (nv) {
-        console.log( nv, 'fired');
+        console.log(nv, 'fired');
         $scope.currentReport = nv;
     }, true);
     $scope.reports = null;
@@ -145,7 +145,7 @@
     };
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
-   function build() {
+    function build() {
         var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
         var dataGroupDataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 
@@ -158,5 +158,5 @@
         }).catch(function (error) { console.log(error); });
 
     };
-   $scope.build = build;
+    $scope.build = build;
 }]);

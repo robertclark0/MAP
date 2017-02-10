@@ -80,7 +80,7 @@
         this.model = model || null;
         this.dataValue = dataValue || null;
         this.alias = null;
-        this.orderValue = null;
+        this.orderValue = 'asc';
         this.operations = [];
         this.GUID = null;
         this.visibleInReport = false;

@@ -1,4 +1,4 @@
-﻿mapApp.directive('progressive-filter', [function () {
+﻿mapApp.directive('progressiveFilter', [function () {
     return {
         restrict: 'E',
         scope: {
@@ -11,7 +11,7 @@
     };
 
     function link(scope, elem, attr) {
-
+        
 
 
 

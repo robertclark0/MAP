@@ -1,4 +1,4 @@
-﻿mapApp.directive('combination-filter', [function () {
+﻿mapApp.directive('combinationFilter', [function () {
     return {
         restrict: 'E',
         scope: {

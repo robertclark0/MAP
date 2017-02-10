@@ -14,10 +14,10 @@
     $scope.newFilter = new SC.DataFilter($scope.filters[0]);
 
     $scope.operations = SF.availableDataFilterOperations();
-    $scope.selectedOperation = null
+    $scope.selectedOperation = { value: null };
 
 
-    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Filter Settings - custom ---- ---- ---- ---- //
     $scope.selectionChange = function () {
         if ($scope.newFilter.dataValue) {
             $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
@@ -25,8 +25,8 @@
     };
 
     $scope.addOperation = function () {
-        $scope.newFilter.operations.push($scope.selectedOperation);
-        $scope.selectedOperation = null
+        $scope.newFilter.operations.push($scope.selectedOperation.value);
+        $scope.selectedOperation.value = null
     }
 
     $scope.removeOperation = function (index) {
@@ -49,6 +49,24 @@
 
         $scope.dataFilterForm.$setPristine();
         $scope.dataFilterForm.$setUntouched();
+    };
+
+
+    // ---- ---- ---- ---- Filter Settings - combination\progressive ---- ---- ---- ---- //
+
+    $scope.customOperation = {
+        dataValue: null
+    };
+    $scope.addCustomOperation = function () {
+        $scope.newFilter.operations.push(
+            {   
+                dataValue: $scope.customOperation.dataValue,
+                operation: "euqal",
+                name: "Equal",
+                type: "dfo-select",
+                selectedValues: []
+            });
+        $scope.customOperation.dataValue = null;
     };
 
 

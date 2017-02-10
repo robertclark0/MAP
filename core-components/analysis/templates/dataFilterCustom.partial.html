@@ -1,0 +1,33 @@
+﻿<div layout="column">
+    <md-input-container>
+        <label>Data Value</label>
+        <md-select md-on-close="selectionChange()" ng-model="newFilter.dataValue" ng-required="newFilter.model === filters[0]">
+            <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container style="height: 32px;">
+        <label>Alias</label>
+        <input type="text" ng-model="newFilter.alias" />
+    </md-input-container>
+    <p ng-show="newFilter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+    <md-content style="max-height: 200px; background-color: transparent;">
+        <md-list>
+            <md-list-item ng-repeat="operation in newFilter.operations track by $index">
+                {{operation.name}}
+                <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
+                    <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                    <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </md-content>
+    <div layout="row">
+        <md-input-container flex="85">
+            <label>Operation</label>
+            <md-select md-on-close="" ng-model="selectedOperation.value">
+                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-button ng-disabled="!selectedOperation || !newFilter.dataValue" ng-click="addOperation()">Add</md-button>
+    </div>
+</div>

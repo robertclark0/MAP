@@ -290,10 +290,10 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     $scope.newFilter = new SC.DataFilter($scope.filters[0]);
 
     $scope.operations = SF.availableDataFilterOperations();
-    $scope.selectedOperation = null
+    $scope.selectedOperation = { value: null };
 
 
-    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Filter Settings - custom ---- ---- ---- ---- //
     $scope.selectionChange = function () {
         if ($scope.newFilter.dataValue) {
             $scope.newFilter.alias = $scope.newFilter.dataValue.COLUMN_NAME;
@@ -301,8 +301,8 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     };
 
     $scope.addOperation = function () {
-        $scope.newFilter.operations.push($scope.selectedOperation);
-        $scope.selectedOperation = null
+        $scope.newFilter.operations.push($scope.selectedOperation.value);
+        $scope.selectedOperation.value = null
     }
 
     $scope.removeOperation = function (index) {
@@ -325,6 +325,24 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
 
         $scope.dataFilterForm.$setPristine();
         $scope.dataFilterForm.$setUntouched();
+    };
+
+
+    // ---- ---- ---- ---- Filter Settings - combination\progressive ---- ---- ---- ---- //
+
+    $scope.customOperation = {
+        dataValue: null
+    };
+    $scope.addCustomOperation = function () {
+        $scope.newFilter.operations.push(
+            {   
+                dataValue: $scope.customOperation.dataValue,
+                operation: "euqal",
+                name: "Equal",
+                type: "dfo-select",
+                selectedValues: []
+            });
+        $scope.customOperation.dataValue = null;
     };
 
 
@@ -356,7 +374,7 @@ analysis.controller('DataFilter', ['$scope', 'appManager', 'componentViewFactory
     }
 
 }]);
-analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', function ($scope, $mdDialog, filter, current, appManager) {
+analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', 'dataFilterFactory', function ($scope, $mdDialog, filter, current, appManager, dataFilterFactory) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     $scope.filter = filter;
@@ -369,15 +387,19 @@ analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'cur
     $scope.selectedOperation = null
 
     $scope.orderChange = function () {
-        var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: filter.dataValue.COLUMN_NAME, order: filter.orderValue } };
-        var filterDataObject = DF.getFilter(filter.GUID);
 
-        API.schema().save(postObject).$promise.then(function (response) {
-            filterDataObject.dataValues.length = 0;
-            response.result.forEach(function (obj) {
-                filterDataObject.dataValues.push({ value: obj, isChecked: false });
-            });
-        });
+        dataFilterFactory.populateFilterData(filter, current.dataGroup);
+
+
+        //var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: [filter.dataValue.COLUMN_NAME], order: filter.orderValue } };
+        //var filterDataObject = DF.getFilter(filter.GUID);
+
+        //API.schema().save(postObject).$promise.then(function (response) {
+        //    filterDataObject.dataValues.length = 0;
+        //    response.result.forEach(function (obj) {
+        //        filterDataObject.dataValues.push({ value: obj, isChecked: false });
+        //    });
+        //});
     };
 
     
@@ -519,7 +541,7 @@ analysis.controller('DataSelectionSettings', ['$scope', '$mdDialog', 'selection'
         if (selection.pivot && selection.dataValue && !$scope.pivotValues) {
 
             $scope.pivotProgress = true;
-            var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: selection.dataValue.COLUMN_NAME, order: 'asc' } };
+            var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: [selection.dataValue.COLUMN_NAME], order: 'asc' } };
 
             API.schema().save(postObject).$promise.then(function (response) {
                 $scope.pivotProgress = false;

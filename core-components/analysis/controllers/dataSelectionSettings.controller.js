@@ -26,7 +26,7 @@
         if (selection.pivot && selection.dataValue && !$scope.pivotValues) {
 
             $scope.pivotProgress = true;
-            var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: selection.dataValue.COLUMN_NAME, order: 'asc' } };
+            var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: [selection.dataValue.COLUMN_NAME], order: 'asc' } };
 
             API.schema().save(postObject).$promise.then(function (response) {
                 $scope.pivotProgress = false;
