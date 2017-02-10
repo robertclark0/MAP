@@ -1,8 +1,29 @@
 ﻿<div layout="column">
 
-    <md-input-container style="height: 32px;">
-        <label>Test Prog</label>
-        <input type="text" ng-model="Funny" />
-    </md-input-container>
+
+    <md-content style="max-height: 200px; background-color: transparent;">
+        <md-list>
+            <md-list-item ng-repeat="operation in newFilter.operations track by $index">
+                {{operation.dataValue.COLUMN_NAME}}
+                <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
+                    <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                    <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </md-content>
+    <div layout="row">
+        <md-input-container flex="45">
+            <label>Data Value</label>
+            <md-select ng-model="customOperation.dataValue">
+                <md-option ng-repeat="column in DO.tableSchema" ng-value="column">{{column.COLUMN_NAME}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container flex="40">
+            <label>Alias</label>
+            <input type="text" ng-model="funny" />
+        </md-input-container>
+        <md-button ng-disabled="!customOperation.dataValue" ng-click="addCustomOperation()">Add</md-button>
+    </div>
 
 </div>

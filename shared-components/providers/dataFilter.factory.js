@@ -71,7 +71,6 @@
 
         API.schema().save(postObject).$promise.then(function (response) {
             filterDataObject.dataValues.length = 0;
-            console.log(JSON.stringify(filterDataObject.dataValues));
 
             response.result.forEach(function (obj) {
                 

@@ -1,5 +1,9 @@
 ﻿<div layout="column">
 
+    <md-input-container style="height: 32px;">
+        <label>Alias</label>
+        <input type="text" ng-model="newFilter.alias" />
+    </md-input-container>
     <md-content style="max-height: 200px; background-color: transparent;">
         <md-list>
             <md-list-item ng-repeat="operation in newFilter.operations track by $index">

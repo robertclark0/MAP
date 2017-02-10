@@ -1,7 +1,7 @@
 ﻿<md-card>
     <md-toolbar style="background-color: transparent;">
         <div class="md-toolbar-tools">
-            <h5>Combination</h5>
+            <h5>{{filter.alias}}</h5>
             <span flex></span>
             <md-menu>
                 <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -25,7 +25,9 @@
         </div>
     </md-toolbar>
     <md-card-content>
-
-
+        <md-input-container flex ng-click="showSelect($event)" style="margin-bottom: 0;">
+            <label>Equal</label>
+            <input type="text" ng-model="funny" />
+        </md-input-container>
     </md-card-content>
 </md-card>

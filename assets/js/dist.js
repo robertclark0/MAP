@@ -400,7 +400,7 @@ mapApp.directive('cohortSelection', [function () {
 
     };
 }]);
-mapApp.directive('combinationFilter', [function () {
+mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', function (appManager, dataFilterFactory, $mdPanel) {
     return {
         restrict: 'E',
         scope: {
@@ -413,19 +413,158 @@ mapApp.directive('combinationFilter', [function () {
     };
 
     function link(scope, elem, attr) {
+        var DO = appManager.data.DO;
+        var DF = appManager.data.DF;
+        var API = appManager.data.API;
 
+        var filterDataObject = null;
 
+        checkData();
 
+        scope.filterDataObject = filterDataObject;
+        
 
+        scope.showSelect = function (ev) {
+            var position = $mdPanel.newPanelPosition()
+            .relativeTo(ev.target)
+            .addPanelPosition('align-start', 'center');
 
-        var onLoad = function () {
+            var config = {
+                attachTo: angular.element(document.body),
+                controller: 'CombinationSelectPanel',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item)}}</md-list-item></md-virtual-repeat-container></md-card>',
+                //panelClass: 'popout-menu',
+                locals: {
+                    filter: scope.filter,
+                    operation: scope.operation
+                },
+                position: position,
+                openFrom: ev,
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                focusOnOpen: true,
+                zIndex: 1001
+            };
 
-        }();
+            $mdPanel.open(config);
+        };
+
+        function checkData() {
+
+            if (DF.getFilter(scope.filter.GUID) !== null) {
+                filterDataObject = DF.getFilter(scope.filter.GUID)
+            }
+            else {
+                //check to see if filter values exist, if not, get them.
+
+                filterDataObject = { GUID: scope.filter.GUID, dataValues: [] };
+                DO.filters.push(filterDataObject);
+
+                var postObject = { post: { type: "column", alias: scope.current.dataGroup.source.alias, columnName: scope.filter.operations.map(function (operation) { return operation.dataValue.COLUMN_NAME; }), order: scope.filter.orderValue } };
+
+                API.schema().save(postObject).$promise.then(function (response) {
+                    filterDataObject.dataValues.length = 0;
+                    response.result.forEach(function (obj) {
+                        filterDataObject.dataValues.push({ value: obj, isChecked: false });
+                    });
+                });
+
+                console.log(filterDataObject);
+                console.log(scope.filter);
+            }
+        };
+
     };
 }]);
 
 
 
+mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', function (mdPanelRef, $scope, filter, operation, appManager) {
+
+    $scope.filter = filter;
+
+    $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
+
+    $scope.$watch('filterDataObject', function () {
+        $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
+    }, true);
+
+    $scope.selected = function (item) {
+        operation.selectedValues[0] = item;
+        mdPanelRef.close();
+    }
+
+    $scope.format = function(item){
+        return item.value[0] + ", " + intToMonth(item.value[1]);
+    }
+
+    function intToMonth(int, useShort) {
+        int = parseInt(int);
+        switch (int) {
+            case 1:
+                if (useShort) {
+                    return "Jan";
+                }
+                return "January";
+            case 2:
+                if (useShort) {
+                    return "Feb";
+                }
+                return "February";
+            case 3:
+                if (useShort) {
+                    return "Mar";
+                }
+                return "March";
+            case 4:
+                if (useShort) {
+                    return "Apr";
+                }
+                return "April";
+            case 5:
+                if (useShort) {
+                    return "May";
+                }
+                return "May";
+            case 6:
+                if (useShort) {
+                    return "Jun";
+                }
+                return "June";
+            case 7:
+                if (useShort) {
+                    return "Jul";
+                }
+                return "July";
+            case 8:
+                if (useShort) {
+                    return "Aug";
+                }
+                return "August";
+            case 9:
+                if (useShort) {
+                    return "Sep";
+                }
+                return "September";
+            case 10:
+                if (useShort) {
+                    return "Oct";
+                }
+                return "October";
+            case 11:
+                if (useShort) {
+                    return "Nov";
+                }
+                return "November";
+            case 12:
+                if (useShort) {
+                    return "Dec";
+                }
+                return "December";
+        }
+    }
+
+}]);
 mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFactory', function (appManager, $mdDialog, dataFilterFactory) {
     return {
         restrict: 'E',
@@ -1022,7 +1161,6 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
 
         API.schema().save(postObject).$promise.then(function (response) {
             filterDataObject.dataValues.length = 0;
-            console.log(JSON.stringify(filterDataObject.dataValues));
 
             response.result.forEach(function (obj) {
                 
