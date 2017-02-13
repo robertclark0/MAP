@@ -61,7 +61,7 @@
         $scope.newFilter.operations.push(
             {   
                 dataValue: $scope.customOperation.dataValue,
-                operation: "euqal",
+                operation: "equal",
                 name: "Equal",
                 type: "dfo-select",
                 selectedValues: []

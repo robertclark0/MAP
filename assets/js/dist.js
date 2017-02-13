@@ -453,8 +453,7 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
                 template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
-                    filter: scope.filter,
-                    operation: scope.operation
+                    filter: scope.filter
                 },
                 position: position,
                 openFrom: ev,
@@ -497,7 +496,7 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
 
 
 
-mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, operation, appManager, dataFilterFactory) {
+mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, appManager, dataFilterFactory) {
 
     $scope.filter = filter;
 
@@ -508,10 +507,13 @@ mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', '
     }, true);
 
     $scope.selected = function (item) {
-        console.log(item);
-        console.log($scope.format(item.value));
+        item.value.forEach(function (value, index) {
+            $scope.filter.operations[index].selectedValues[0] = value;
+        });
+        $scope.filter.formatedModel = $scope.format(item.value)
         mdPanelRef.close();
     }
+
 
     $scope.format = function (values) {
         if ($scope.filter.advanced.date.convertToMonth) {

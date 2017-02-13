@@ -1,4 +1,4 @@
-﻿mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, operation, appManager, dataFilterFactory) {
+﻿mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, appManager, dataFilterFactory) {
 
     $scope.filter = filter;
 
@@ -9,10 +9,13 @@
     }, true);
 
     $scope.selected = function (item) {
-        console.log(item);
-        console.log($scope.format(item.value));
+        item.value.forEach(function (value, index) {
+            $scope.filter.operations[index].selectedValues[0] = value;
+        });
+        $scope.filter.formatedModel = $scope.format(item.value)
         mdPanelRef.close();
     }
+
 
     $scope.format = function (values) {
         if ($scope.filter.advanced.date.convertToMonth) {

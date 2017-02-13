@@ -46,8 +46,7 @@
                 template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
-                    filter: scope.filter,
-                    operation: scope.operation
+                    filter: scope.filter
                 },
                 position: position,
                 openFrom: ev,
