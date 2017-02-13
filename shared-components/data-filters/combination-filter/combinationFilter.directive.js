@@ -1,4 +1,4 @@
-﻿mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', function (appManager, dataFilterFactory, $mdPanel) {
+﻿mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', '$mdDialog', function (appManager, dataFilterFactory, $mdPanel, $mdDialog) {
     return {
         restrict: 'E',
         scope: {
@@ -21,6 +21,19 @@
 
         scope.filterDataObject = filterDataObject;
         
+        scope.showOperations = function (ev) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/dataFilterSettings.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataFilterSettingsCombination',
+                locals: {
+                    filter: scope.filter,
+                    current: scope.current
+                }
+            });
+        };
 
         scope.showSelect = function (ev) {
             var position = $mdPanel.newPanelPosition()
@@ -30,7 +43,7 @@
             var config = {
                 attachTo: angular.element(document.body),
                 controller: 'CombinationSelectPanel',
-                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item)}}</md-list-item></md-virtual-repeat-container></md-card>',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
                     filter: scope.filter,

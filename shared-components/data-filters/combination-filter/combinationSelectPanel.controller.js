@@ -9,12 +9,22 @@
     }, true);
 
     $scope.selected = function (item) {
-        operation.selectedValues[0] = item;
+        console.log(item);
+        console.log($scope.format(item.value));
         mdPanelRef.close();
     }
 
-    $scope.format = function(item){
-        return item.value[0] + ", " + dataFilterFactory.intToMonth(item.value[1]);
+    $scope.format = function (values) {
+        if ($scope.filter.advanced.date.convertToMonth) {
+            var formatedValue = [];
+            values.forEach(function (value) {
+                formatedValue.push(dataFilterFactory.intToMonth(value));
+            });
+            return formatedValue.join(', ');
+        }
+        else {
+            return values.join(', ');
+        }
     }
 
     

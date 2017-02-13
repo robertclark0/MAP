@@ -1,4 +1,4 @@
-﻿analysis.controller('DataFilterSettings', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', 'dataFilterFactory', function ($scope, $mdDialog, filter, current, appManager, dataFilterFactory) {
+﻿analysis.controller('DataFilterSettingsCombination', ['$scope', '$mdDialog', 'filter', 'current', 'appManager', 'dataFilterFactory', function ($scope, $mdDialog, filter, current, appManager, dataFilterFactory) {
 
     // ---- ---- ---- ---- Controller and Scope variables ---- ---- ---- ---- //
     $scope.filter = filter;
@@ -12,7 +12,18 @@
 
     $scope.orderChange = function () {
 
-        dataFilterFactory.populateFilterData(filter, current.dataGroup);
+        //dataFilterFactory.populateFilterData(filter, current.dataGroup);
+
+        filterDataObject = DF.getFilter($scope.filter.GUID)
+
+        var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: $scope.filter.operations.map(function (operation) { return operation.dataValue.COLUMN_NAME; }), order: $scope.filter.orderValue } };
+
+        API.schema().save(postObject).$promise.then(function (response) {
+            filterDataObject.dataValues.length = 0;
+            response.result.forEach(function (obj) {
+                filterDataObject.dataValues.push({ value: obj, isChecked: false });
+            });
+        });
 
 
         //var postObject = { post: { type: "column", alias: current.dataGroup.source.alias, columnName: [filter.dataValue.COLUMN_NAME], order: filter.orderValue } };
@@ -25,18 +36,6 @@
         //    });
         //});
     };
-
-    
-    // ---- ---- ---- ---- Filter Settings ---- ---- ---- ---- //
-    $scope.addOperation = function () {
-        $scope.filter.operations.push($scope.selectedOperation.value);
-        $scope.selectedOperation.value = null
-    }
-
-    $scope.removeOperation = function (index) {
-        $scope.filter.operations.splice(index, 1);
-    };
-
 
     // ---- ---- ---- ---- Dialog ---- ---- ---- ---- //
     $scope.closeDialog = function () {

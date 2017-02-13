@@ -9,15 +9,29 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button ng-click="moveDataSelectionUp($index)">
+                        <md-button ng-click="SF.moveUp(current.dataGroup.filters[current.selectionIndex], filter)">
                             <md-icon md-svg-icon="assets/icons/md-arrow-up.svg"></md-icon>
-                            Move Filter Up
+                            Move Data Filter Up
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-click="moveDataSelectionDown($index)">
+                        <md-button ng-click="SF.moveDown(current.dataGroup.filters[current.selectionIndex], filter)">
                             <md-icon md-svg-icon="assets/icons/md-arrow-down.svg"></md-icon>
-                            Move Filter Down
+                            Move Data Filter Down
+                        </md-button>
+                    </md-menu-item>
+                    <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-button ng-click="showOperations($event)">
+                            <md-icon md-svg-icon="assets/icons/md-settings.svg"></md-icon>
+                            Data Filter Settings
+                        </md-button>
+                    </md-menu-item>
+                    <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-button ng-click="SF.deleteElement(current.dataGroup.filters[current.selectionIndex], filter)">
+                            <md-icon md-svg-icon="assets/icons/md-delete.svg"></md-icon>
+                            Delete Data Filter
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>

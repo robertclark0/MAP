@@ -405,7 +405,7 @@ mapApp.directive('cohortDiagram', [function () {
 
 
 
-mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', function (appManager, dataFilterFactory, $mdPanel) {
+mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', '$mdDialog', function (appManager, dataFilterFactory, $mdPanel, $mdDialog) {
     return {
         restrict: 'E',
         scope: {
@@ -428,6 +428,19 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
 
         scope.filterDataObject = filterDataObject;
         
+        scope.showOperations = function (ev) {
+            $mdDialog.show({
+                templateUrl: 'core-components/analysis/templates/dataFilterSettings.dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: 'DataFilterSettingsCombination',
+                locals: {
+                    filter: scope.filter,
+                    current: scope.current
+                }
+            });
+        };
 
         scope.showSelect = function (ev) {
             var position = $mdPanel.newPanelPosition()
@@ -437,7 +450,7 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
             var config = {
                 attachTo: angular.element(document.body),
                 controller: 'CombinationSelectPanel',
-                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item)}}</md-list-item></md-virtual-repeat-container></md-card>',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
                     filter: scope.filter,
@@ -495,12 +508,22 @@ mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', '
     }, true);
 
     $scope.selected = function (item) {
-        operation.selectedValues[0] = item;
+        console.log(item);
+        console.log($scope.format(item.value));
         mdPanelRef.close();
     }
 
-    $scope.format = function(item){
-        return item.value[0] + ", " + dataFilterFactory.intToMonth(item.value[1]);
+    $scope.format = function (values) {
+        if ($scope.filter.advanced.date.convertToMonth) {
+            var formatedValue = [];
+            values.forEach(function (value) {
+                formatedValue.push(dataFilterFactory.intToMonth(value));
+            });
+            return formatedValue.join(', ');
+        }
+        else {
+            return values.join(', ');
+        }
     }
 
     
@@ -1124,9 +1147,9 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
         });
     };
 
-    factory.intToMonth = function(int, useShort) {
-        int = parseInt(int);
-        switch (int) {
+    factory.intToMonth = function(value, useShort) {
+        tempInt = parseInt(value);
+        switch (tempInt) {
             case 1:
                 if (useShort) {
                     return "Jan";
@@ -1187,6 +1210,8 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
                     return "Dec";
                 }
                 return "December";
+            default:
+                return value;
         }
     };
 

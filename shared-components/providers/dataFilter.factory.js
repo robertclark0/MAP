@@ -93,9 +93,9 @@
         });
     };
 
-    factory.intToMonth = function(int, useShort) {
-        int = parseInt(int);
-        switch (int) {
+    factory.intToMonth = function(value, useShort) {
+        tempInt = parseInt(value);
+        switch (tempInt) {
             case 1:
                 if (useShort) {
                     return "Jan";
@@ -156,6 +156,8 @@
                     return "Dec";
                 }
                 return "December";
+            default:
+                return value;
         }
     };
 
