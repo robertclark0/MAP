@@ -1,4 +1,4 @@
-﻿mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
+﻿mapApp.directive('dfoChecklist', ['appManager', 'dataFilterFactory', function (appManager, dataFilterFactory) {
     return {
         restrict: 'E',
         scope: {
@@ -27,6 +27,15 @@
                 return obj.value;
             });
         };
+
+        scope.format = function (item) {
+            if (scope.filter.advanced.date.convertToMonth) {
+                return dataFilterFactory.intToMonth(item);
+            }
+            else {
+                return item;
+            }         
+        }
         
     };
 }]);

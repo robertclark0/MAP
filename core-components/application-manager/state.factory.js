@@ -84,6 +84,12 @@
         this.operations = [];
         this.GUID = null;
         this.visibleInReport = false;
+        this.advanced = {
+            date: {
+                convertToMonth: false,
+                useShortMonth: false //long | short
+            }
+        };
 
         var _constructor = function (obj) {
             if (GUID) {
@@ -105,7 +111,7 @@
         this.chart = {
             series: [],  //{ GUID: , selection: , options: {}}
             options: undefined
-        }; 
+        };
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

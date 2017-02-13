@@ -1,66 +1,82 @@
 ﻿<md-dialog aria-label="List dialog" style="width: 500px;">
+    <form name="dataFilterForm">
 
-    <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">Filter [ {{filter.alias}} ]</div>
-    </md-toolbar>
-    <md-dialog-content>
+        <md-toolbar md-scroll-shrink>
+            <div class="md-toolbar-tools">Filter [ {{filter.alias}} ]</div>
+        </md-toolbar>
 
-        <div layout="column" style="min-height: 350px; padding-left: 15px;">
-            <form name="dataFilterForm">
-                <md-subheader class="md-primary" style="background-color: transparent; margin-left: -15px;">Settings</md-subheader>
-
-                <div layout="column">
-                    <md-input-container style="height: 32px;">
-                        <label>Data Value</label>
-                        <input type="text" ng-model="filter.dataValue.COLUMN_NAME" disabled/>
-                    </md-input-container>
-                    <md-input-container style="height: 32px;">
-                        <label>Alias</label>
-                        <input type="text" ng-model="filter.alias" />
-                    </md-input-container>
-                    <md-input-container>
-                        <label>Filter Value Order</label>
-                        <md-select md-on-close="orderChange()" ng-model="filter.orderValue">
-                            <md-option value="null">Default</md-option>
-                            <md-option value="asc">Ascending</md-option>
-                            <md-option value="desc">Descending</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <p ng-show="filter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
-                    <md-content style="max-height: 200px; background-color: transparent;">
-                        <md-list>
-                            <md-list-item ng-repeat="operation in filter.operations track by $index">
-                                {{operation.name}}
-                                <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
-                                    <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
-                                    <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
-                                </md-button>
-                            </md-list-item>
-                        </md-list>
+        <md-dialog-content style="max-height: 600px; ">
+            <md-tabs md-dynamic-height>
+                <md-tab label="Settings">
+                    <md-content class="md-padding" style="background-color: transparent;">
+                        <div layout="column">
+                            <md-input-container style="height: 32px;">
+                                <label>Data Value</label>
+                                <input type="text" ng-model="filter.dataValue.COLUMN_NAME" disabled />
+                            </md-input-container>
+                            <md-input-container style="height: 32px;">
+                                <label>Alias</label>
+                                <input type="text" ng-model="filter.alias" />
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Filter Value Order</label>
+                                <md-select md-on-close="orderChange()" ng-model="filter.orderValue">
+                                    <md-option value="null">Default</md-option>
+                                    <md-option value="asc">Ascending</md-option>
+                                    <md-option value="desc">Descending</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <p ng-show="filter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
+                            <md-content style="max-height: 200px; background-color: transparent;">
+                                <md-list>
+                                    <md-list-item ng-repeat="operation in filter.operations track by $index">
+                                        {{operation.name}}
+                                        <md-button class="md-secondary md-icon-button" ng-click="removeOperation($index)">
+                                            <md-tooltip md-direction="clear">Clear Selection</md-tooltip>
+                                            <md-icon md-svg-src="assets/icons/md-clear.svg" aria-label="action"></md-icon>
+                                        </md-button>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
+                            <div layout="row">
+                                <md-input-container flex="85">
+                                    <label>Operation</label>
+                                    <md-select md-on-close="" ng-model="selectedOperation">
+                                        <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
+                            </div>
+                        </div>
                     </md-content>
-                    <div layout="row">
-                        <md-input-container flex="85">
-                            <label>Operation</label>
-                            <md-select md-on-close="" ng-model="selectedOperation">
-                                <md-option ng-repeat="operation in operations" ng-value="operation">{{operation.name}}</md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-button ng-disabled="!selectedOperation" ng-click="addOperation()">Add</md-button>
-                    </div>
+                </md-tab>
+                <md-tab label="Advanced">
+                    <md-content class="md-padding" style="background-color: transparent;">
+                        <div layout="column">
+                            <md-list class="md-dense">
+                                <md-list-item>
+                                    <p>Convert Value to Month Name</p>
+                                    <md-checkbox class="md-secondary" ng-model="filter.advanced.date.convertToMonth"></md-checkbox>
+                                </md-list-item>
+                                <!--<md-list-item ng-show="filter.advanced.date.convertToMonth">
+                                    <md-radio-group ng-model="filter.advanced.date.useShortMonth" layout="row">
+                                        <md-radio-button value="false">Long Name</md-radio-button>
+                                        <md-radio-button value="true">Short Name</md-radio-button>
+                                    </md-radio-group>
+                                </md-list-item>-->
+                            </md-list>                        
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
 
-                </div>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="closeDialog()">
+                Close
+            </md-button>
+        </md-dialog-actions>
 
-            </form>
-        </div>
-
-
-    </md-dialog-content>
-
-    <md-dialog-actions layout="row">
-
-        <span flex></span>
-        <md-button ng-click="closeDialog()">
-            Close
-        </md-button>
-    </md-dialog-actions>
+    </form>
 </md-dialog>

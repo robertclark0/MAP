@@ -161,7 +161,7 @@ mapApp.directive('selectionControl', [function () {
         }
     };
 }]);
-mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
+mapApp.directive('dfoChecklist', ['appManager', 'dataFilterFactory', function (appManager, dataFilterFactory) {
     return {
         restrict: 'E',
         scope: {
@@ -190,6 +190,15 @@ mapApp.directive('dfoChecklist', ['appManager', function (appManager) {
                 return obj.value;
             });
         };
+
+        scope.format = function (item) {
+            if (scope.filter.advanced.date.convertToMonth) {
+                return dataFilterFactory.intToMonth(item);
+            }
+            else {
+                return item;
+            }         
+        }
         
     };
 }]);
@@ -215,7 +224,7 @@ mapApp.directive('dfoSelect', ['appManager', '$mdPanel', function (appManager, $
             var config = {
                 attachTo: angular.element(document.body),
                 controller: 'SelectPanel',
-                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 250px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item.value)">{{item.value}}</md-list-item></md-virtual-repeat-container></md-card>',
+                template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 250px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item.value)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
                     filter: scope.filter,
@@ -232,9 +241,11 @@ mapApp.directive('dfoSelect', ['appManager', '$mdPanel', function (appManager, $
             $mdPanel.open(config);
         };
 
+
+
     };
 }]);
-mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', function (mdPanelRef, $scope, filter, operation, appManager) {
+mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, operation, appManager, dataFilterFactory) {
 
     $scope.filter = filter;
 
@@ -246,7 +257,17 @@ mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation',
 
     $scope.selected = function (item) {
         operation.selectedValues[0] = item;
+        operation.formatedModel = $scope.format(item);
         mdPanelRef.close();
+    }
+
+    $scope.format = function (item) {
+        if ($scope.filter.advanced.date.convertToMonth) {
+            return dataFilterFactory.intToMonth(item);
+        }
+        else {
+            return item;
+        }
     }
 
 }]);
@@ -384,22 +405,6 @@ mapApp.directive('cohortDiagram', [function () {
 
 
 
-mapApp.directive('cohortSelection', [function () {
-    return {
-        restrict: 'E',
-        scope: {
-            element: '='
-        },
-        replace: true,
-        templateUrl: 'shared-components/data-filters/cohort-selection/cohortSelection.html',
-        link: link
-    };
-
-    function link(scope, elem, attr) {
-
-
-    };
-}]);
 mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPanel', function (appManager, dataFilterFactory, $mdPanel) {
     return {
         restrict: 'E',
@@ -479,7 +484,7 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
 
 
 
-mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', function (mdPanelRef, $scope, filter, operation, appManager) {
+mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, operation, appManager, dataFilterFactory) {
 
     $scope.filter = filter;
 
@@ -495,74 +500,10 @@ mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', '
     }
 
     $scope.format = function(item){
-        return item.value[0] + ", " + intToMonth(item.value[1]);
+        return item.value[0] + ", " + dataFilterFactory.intToMonth(item.value[1]);
     }
 
-    function intToMonth(int, useShort) {
-        int = parseInt(int);
-        switch (int) {
-            case 1:
-                if (useShort) {
-                    return "Jan";
-                }
-                return "January";
-            case 2:
-                if (useShort) {
-                    return "Feb";
-                }
-                return "February";
-            case 3:
-                if (useShort) {
-                    return "Mar";
-                }
-                return "March";
-            case 4:
-                if (useShort) {
-                    return "Apr";
-                }
-                return "April";
-            case 5:
-                if (useShort) {
-                    return "May";
-                }
-                return "May";
-            case 6:
-                if (useShort) {
-                    return "Jun";
-                }
-                return "June";
-            case 7:
-                if (useShort) {
-                    return "Jul";
-                }
-                return "July";
-            case 8:
-                if (useShort) {
-                    return "Aug";
-                }
-                return "August";
-            case 9:
-                if (useShort) {
-                    return "Sep";
-                }
-                return "September";
-            case 10:
-                if (useShort) {
-                    return "Oct";
-                }
-                return "October";
-            case 11:
-                if (useShort) {
-                    return "Nov";
-                }
-                return "November";
-            case 12:
-                if (useShort) {
-                    return "Dec";
-                }
-                return "December";
-        }
-    }
+    
 
 }]);
 mapApp.directive('customDataFilter', ['appManager', '$mdDialog', 'dataFilterFactory', function (appManager, $mdDialog, dataFilterFactory) {
@@ -1183,6 +1124,72 @@ mapApp.factory('dataFilterFactory', ['appManager', function (appManager) {
         });
     };
 
+    factory.intToMonth = function(int, useShort) {
+        int = parseInt(int);
+        switch (int) {
+            case 1:
+                if (useShort) {
+                    return "Jan";
+                }
+                return "January";
+            case 2:
+                if (useShort) {
+                    return "Feb";
+                }
+                return "February";
+            case 3:
+                if (useShort) {
+                    return "Mar";
+                }
+                return "March";
+            case 4:
+                if (useShort) {
+                    return "Apr";
+                }
+                return "April";
+            case 5:
+                if (useShort) {
+                    return "May";
+                }
+                return "May";
+            case 6:
+                if (useShort) {
+                    return "Jun";
+                }
+                return "June";
+            case 7:
+                if (useShort) {
+                    return "Jul";
+                }
+                return "July";
+            case 8:
+                if (useShort) {
+                    return "Aug";
+                }
+                return "August";
+            case 9:
+                if (useShort) {
+                    return "Sep";
+                }
+                return "September";
+            case 10:
+                if (useShort) {
+                    return "Oct";
+                }
+                return "October";
+            case 11:
+                if (useShort) {
+                    return "Nov";
+                }
+                return "November";
+            case 12:
+                if (useShort) {
+                    return "Dec";
+                }
+                return "December";
+        }
+    };
+
     return factory;
 }]);
 mapApp.factory('viewFactory', ['appManager', function (appManager) {
@@ -1335,6 +1342,12 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.operations = [];
         this.GUID = null;
         this.visibleInReport = false;
+        this.advanced = {
+            date: {
+                convertToMonth: false,
+                useShortMonth: false //long | short
+            }
+        };
 
         var _constructor = function (obj) {
             if (GUID) {
@@ -1356,7 +1369,7 @@ applicationManager.factory('appStateManager', ['$rootScope', '$sessionStorage', 
         this.chart = {
             series: [],  //{ GUID: , selection: , options: {}}
             options: undefined
-        }; 
+        };
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };
