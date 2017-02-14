@@ -102,7 +102,7 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
 
     // ---- ---- ---- ---- Canvas Element Side Nav Functions ---- ---- ---- ---- //
     $scope.addSeries = function (GUID, selection) {
-        $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: {} });
+        $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: null });
     };
     $scope.removeSeries = function (seriesArray, series, index) {
 
@@ -167,7 +167,6 @@ analysis.controller('CanvasView', ['$scope', 'appManager', '$mdSidenav', '$mdDia
             
             delete seriesOptions.data;
             $scope.current.canvasElement.chart.series[index].options = seriesOptions
-            console.log(seriesOptions);
         }
         catch (e) {
             logger.toast.error("Invalid options object.", e);

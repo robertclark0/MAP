@@ -110,9 +110,15 @@
 
                     if (index >= 0) {
                         chart.series[index].setData(seriesData, false);
+                        
                     }
                     else {
                         chart.addSeries({ name: series.selection, data: seriesData }, false);
+                        index = chart.series.length - 1;
+                    }
+
+                    if (series.options) {
+                        chart.series[index].update(series.options, false);
                     }
 
 
