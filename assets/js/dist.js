@@ -826,6 +826,7 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                     },
                 }
             };
+            console.log(JSON.stringify(scope.canvasElement.chart.options));
             scope.canvasElement.chart.options = (typeof scope.canvasElement.chart.options === 'undefined') ? defaultchartOptions : scope.canvasElement.chart.options;
 
 
@@ -910,6 +911,8 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
                     else {
                         chart.addSeries({ name: series.selection, data: seriesData }, false);
                     }
+
+
 
                 });
 
@@ -1024,8 +1027,11 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
             loadChart();
 
             // register chart and DOM element in data manager to create expose to other parts of app.
+            var index = appManager.data.DO.canvasElements.map(function (obj) { return obj.GUID }).indexOf(scope.canvasElement.GUID);
+            if (index >= 0) {
+                appManager.data.DO.canvasElements.splice(index, 1);
+            } 
             appManager.data.DO.canvasElements.push({ GUID: scope.canvasElement.GUID, ChartDOM: element, chart: chart });
-
         }
     };
 }])

@@ -45,7 +45,10 @@
             <md-card ng-repeat="series in current.canvasElement.chart.series track by $index">
                 <md-toolbar style="background-color: transparent;">
                     <div class="md-toolbar-tools">
-                        <h5>{{series.selection}}</h5>
+                        <div ng-click="showSeriesOptions = !showSeriesOptions">
+                            <h5>{{series.selection}}</h5>
+                        </div>
+                        
                         <span flex></span>
                         <md-menu>
                             <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -62,12 +65,19 @@
                         </md-menu>
                     </div>
                 </md-toolbar>
-                <md-card-content style="padding: 0">
+                <md-card-content style="padding: 10px">
+                    <div ng-show="showSeriesOptions">
+                        <div ng-jsoneditor="onLoad" ng-model="tempChart.options" options="editorOptions" style="width: 100%; height: 100px;"></div>
+                        <div layout="row">
+                            <div flex></div>
+                            <md-button ng-click="updateSeries($index)">Update</md-button>
+                        </div>
+                    </div>
                 </md-card-content>
             </md-card>
         </div>
 
-        <md-input-container flex>
+        <md-input-container style="width: 100%; padding: 10px;">
             <label>Add Series</label>
             <md-select ng-model="funny2">
                 <div ng-repeat="dataGroup in current.canvas.dataGroups">
@@ -77,8 +87,21 @@
             </md-select>
         </md-input-container>
 
-        <div ng-jsoneditor="onLoad" ng-model="tempChart.options" options="{}" style="width: 100%; height: 300px;"></div>
-        <md-button ng-click="updateChart()">Update</md-button>
+        <div ng-click="showAdvanced = !showAdvanced" style="padding-left: 10px;">
+            <h5 style="margin-bottom: 5px;">Advanced</h5>
+        </div>
+        <div ng-show="showAdvanced" style="padding: 10px">
+            <md-radio-group ng-model="editorOptions.mode" layout="row" style="padding-bottom: 10px">
+                <md-radio-button value="code">Code</md-radio-button>
+                <md-radio-button value="tree"> Tree </md-radio-button>
+            </md-radio-group>
+            <div ng-jsoneditor="onLoad" ng-model="tempChart.options" options="editorOptions" style="width: 100%; height: 300px;"></div>
+            <div layout="row">
+                <md-button ng-click="outputChartOptions(0)">Output</md-button>
+                <div flex></div>
+                <md-button ng-click="updateChart()">Update</md-button>
+            </div>
+        </div>
 
     </md-content>
 </md-sidenav>

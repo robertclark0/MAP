@@ -119,30 +119,61 @@
     };
 
 
-    $scope.tempChart = {options: null};
+    $scope.tempChart = { options: {}};
     $scope.currentChart = null;
     $scope.$watch('current.canvasElement', function (element) {
         if (element && element.type === 'hc-Chart') {
-            var element = DF.getCanvasElement(element.GUID);
-            if (element.chart) {
-                $scope.currentChart = element.chart;
+
+            var elementObject = DF.getCanvasElement(element.GUID);
+            console.log(elementObject.chart);
+            if (elementObject.chart) {
+                $scope.currentChart = elementObject.chart;
                 $scope.tempChart.options = element.chart.userOptions;
             }
         }
         else {
-            $scope.tempChart = { options: null };
+            $scope.tempChart = { options: {} };
             $scope.currentChart = null;
         }
     }, true);
 
     $scope.updateChart = function () {
-        try{
+        try {
+            var elementObject = DF.getCanvasElement($scope.current.canvasElement.GUID);
+            if (elementObject.chart) {
+                $scope.currentChart = elementObject.chart;
+            }
+
             $scope.currentChart.update($scope.tempChart.options);
+            $scope.tempChart = { options: {} };
+            $scope.current.canvasElement.chart.options = angular.copy($scope.currentChart.options);
         }
         catch (e) {
             logger.toast.error("Invalid options object.", e);
         }
     };
+    $scope.updateSeries = function (index) {
+        try {
+            var elementObject = DF.getCanvasElement($scope.current.canvasElement.GUID);
+            if (elementObject.chart) {
+                $scope.currentChart = elementObject.chart;
+            }
+
+            $scope.currentChart.series[index].update($scope.tempChart.options);
+            $scope.tempChart = { options: {} };
+            
+            var seriesOptions = angular.copy($scope.currentChart.series[index].options);
+            
+            delete seriesOptions.data;
+            $scope.current.canvasElement.chart.series[index].options = seriesOptions
+            console.log(seriesOptions);
+        }
+        catch (e) {
+            logger.toast.error("Invalid options object.", e);
+        }
+    };
+
+    $scope.editorOptions = { mode: 'code' };
 
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
