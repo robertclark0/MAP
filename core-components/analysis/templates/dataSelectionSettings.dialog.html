@@ -49,7 +49,7 @@
                             </div>
                             <label ng-show="pivotValues">Pivot Value</label>
                             <md-select ng-show="pivotValues" md-on-close="pivotSelected()" ng-model="pivotOperation.selectedValues[0]">
-                                <md-option ng-repeat="value in pivotValues" ng-value="value">{{value}}</md-option>
+                                <md-option ng-repeat="value in pivotValues" ng-value="value[0]">{{value[0]}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-button ng-show="selection.pivot" ng-disabled="!pivotOperation.selectedValues" ng-click="addOperation()" flex>
