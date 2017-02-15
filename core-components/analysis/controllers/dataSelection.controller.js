@@ -37,7 +37,7 @@
     };
 
     $scope.clearSelection = function () {
-        $scope.newSelection = new SC.DataSelection();
+        $scope.newSelection = new SC.DataSelection({ name: "Custom Data Selection", type: "custom-data-selection" });
 
         $scope.dataSelectionForm.$setPristine();
         $scope.dataSelectionForm.$setUntouched();
