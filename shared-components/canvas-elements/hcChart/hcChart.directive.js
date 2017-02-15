@@ -27,9 +27,18 @@
                     labels: {
                         format: '{value:,.0f}'
                     },
+                },
+                plotOptions: {
+                    series: {
+                        cursor: 'pointer',
+                        events: {
+                            click: function (event) {
+                                console.log(event);
+                            }
+                        }
+                    }
                 }
             };
-            console.log(JSON.stringify(scope.canvasElement.chart.options));
             scope.canvasElement.chart.options = (typeof scope.canvasElement.chart.options === 'undefined') ? defaultchartOptions : scope.canvasElement.chart.options;
 
 
@@ -223,7 +232,6 @@
 
             scope.$watch('chartDataObjects', function (nv, ov) {
                 if (nv !== ov) {
-                    console.log('fired2');
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
                     chart.update({ xAxis: { categories: axis } }, false);
