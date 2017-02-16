@@ -99,7 +99,7 @@
     };
 
 
-    // ---- ---- ---- ---- Canvas Element Side Nav Functions ---- ---- ---- ---- //
+    // ---- ---- ---- ---- Canvas Element Side Nav Functions : CHARTS---- ---- ---- ---- //
     $scope.addSeries = function (GUID, selection) {
         $scope.current.canvasElement.chart.series.push({ GUID: GUID, selection: selection, options: null });
     };
@@ -174,6 +174,16 @@
 
     $scope.editorOptions = { mode: 'code' };
 
+
+    // ---- ---- ---- ---- Canvas Element Side Nav Functions : SELECTION CONTROL ---- ---- ---- ---- //
+
+    $scope.addChart = function (GUID) {
+        if ($scope.current.canvasElement.selectionControl.chartElementGUIDs.indexOf(GUID) < 0) {
+            $scope.current.canvasElement.selectionControl.chartElementGUIDs.push(GUID);
+        }
+
+
+    };
 
     // ---- ---- ---- ---- Build Query ---- ---- ---- ---- //
     $scope.build = function () {

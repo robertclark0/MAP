@@ -112,6 +112,10 @@
             series: [],  //{ GUID: , selection: , options: {}}
             options: undefined
         };
+        this.selectionControl = {
+            chartElementGUIDs: [],
+            selections: []
+        };
 
         var _constructor = function (obj) { obj.GUID = stateFunctions.generateGUID(); }(this);
     };

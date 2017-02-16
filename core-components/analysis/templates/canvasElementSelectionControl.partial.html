@@ -1,0 +1,6 @@
+﻿<md-input-container style="width: 100%; padding: 10px;">
+    <label>Add Chart</label>
+    <md-select ng-model="funny3">
+        <md-option ng-repeat="canvasElement in current.canvas.canvasElements | filter: { type: 'hc-Chart' }" ng-click="addChart(canvasElement.GUID)">{{canvasElement.name}}</md-option>
+    </md-select>
+</md-input-container>
