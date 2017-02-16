@@ -6,6 +6,7 @@
     var SO = appManager.state.SO;
     var logger = appManager.logger;
     var DF = appManager.data.DF;
+    var DO = appManager.data.DO;
 
     $scope.name = DSO.name;
     $scope.user = SO.user;
@@ -102,9 +103,26 @@
         console.log(response.result);
         $scope.current.report = $scope.reports[0][0];
         var canvas = JSON.parse(response.result.JSON);
-        viewFactory.setCanvas(canvas, $scope.current);
+        
 
-        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+        //var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selectionIndex);
+
+        //canvas.dataGroups.forEach(function (dataGroup) {
+            
+        //    if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
+        //        var newDataObject = { GUID: dataGroup.GUID, result: null, drillDown: [] };
+        //        DO.dataGroups.push(newDataObject);
+
+        //        var queryObject = viewFactory.buildQueryObject(dataGroup, 0);
+        //        API.query().save({ query: queryObject }).$promise.then(function (response) {
+        //            newDataObject.result = response.result;
+        //        });
+        //    }
+
+        //});
+
+        viewFactory.setCanvas(canvas, $scope.current);
+            
 
     }).catch(function (error) {
         console.log(error);

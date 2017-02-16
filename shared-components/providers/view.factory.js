@@ -57,6 +57,18 @@
 
     factory.setCanvas = function (canvas, current) {
         current.canvas = canvas;
+
+        canvas.dataGroups.forEach(function (dataGroup) {
+            if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
+                var newDataObject = { GUID: dataGroup.GUID, result: null, drillDown: [] };
+                DO.dataGroups.push(newDataObject);
+
+                var queryObject = factory.buildQueryObject(dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    newDataObject.result = response.result;
+                });
+            }
+        });
         factory.setDataGroup(canvas.dataGroups[0], current);
     };
 

@@ -357,7 +357,6 @@ mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $ti
 
             scope.$watch('chartDataObjects', function (nv, ov) {
                 if (nv !== ov) {
-                    console.log('fired2');
                     uniqueGUIDs = unique(scope.canvasElement.chart.series.map(function (obj) { return obj.GUID; }));
                     axis = buildAxis(uniqueGUIDs);
                     chart.update({ xAxis: { categories: axis } }, false);
@@ -391,6 +390,9 @@ mapApp.directive('selectionControl', [function () {
     function link(scope, elem, attr) {
 
 
+
+
+        
         //scope.$watch('element.dataGroup', function () {
         //    if (scope.element.dataGroup) {
         //        scope.drillDown = scope.element.dataGroup.drillDown;
@@ -1300,6 +1302,18 @@ mapApp.factory('viewFactory', ['appManager', function (appManager) {
 
     factory.setCanvas = function (canvas, current) {
         current.canvas = canvas;
+
+        canvas.dataGroups.forEach(function (dataGroup) {
+            if (DO.dataGroups.map(function (obj) { return obj.GUID; }).indexOf(dataGroup.GUID) < 0) {
+                var newDataObject = { GUID: dataGroup.GUID, result: null, drillDown: [] };
+                DO.dataGroups.push(newDataObject);
+
+                var queryObject = factory.buildQueryObject(dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    newDataObject.result = response.result;
+                });
+            }
+        });
         factory.setDataGroup(canvas.dataGroups[0], current);
     };
 
