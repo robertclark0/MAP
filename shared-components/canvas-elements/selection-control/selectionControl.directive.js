@@ -22,12 +22,13 @@
 
             var canvasElementGUIDs = scope.current.canvas.canvasElements.map(function (element) { return element.GUID; });
             
-            var uniqueDataGroupGUIDs;
+            var uniqueDataGroupGUIDs = [];
+            var dataGroupGUIDs;
 
             chartElementGUIDs.forEach(function (GUID) {
                 var index = canvasElementGUIDs.indexOf(GUID);
                 var chartSeries = scope.current.canvas.canvasElements[index].chart.series;
-                var dataGroupGUIDs = chartSeries.map(function (series) { return series.GUID; });
+                dataGroupGUIDs = chartSeries.map(function (series) { return series.GUID; });
                 dataGroupGUIDs.forEach(function (GUID) {
                     uniqueDataGroupGUIDs.push(GUID);
                 });
@@ -65,7 +66,11 @@
             //initiate or ignore
             scope.$on('selectionControl', function(event, message){
                 console.log("I have recieved the message!");
-                console.log(message);
+
+                if(scope.element.selectionControl.chartElementGUIDs.indexOf(message.GUID) >= 0){
+                    console.log("This pertains to me!");
+                    console.log(message);
+                }               
             })
 
         // Query all DataGroups with availalbe parameters

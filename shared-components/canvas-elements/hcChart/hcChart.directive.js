@@ -27,8 +27,17 @@
                     labels: {
                         format: '{value:,.0f}'
                     },
-                },
-                plotOptions: {
+                }
+            };
+            scope.canvasElement.chart.options = (typeof scope.canvasElement.chart.options === 'undefined') ? defaultchartOptions : scope.canvasElement.chart.options;
+
+
+            // ---- ---- ---- ---- Functions ---- ---- ---- ---- //
+
+            function loadChart() {
+                console.log('options',scope.canvasElement.chart.options);
+                chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
+                chart.update({plotOptions: {
                     series: {
                         cursor: 'pointer',
                         events: {
@@ -38,15 +47,7 @@
                             }
                         }
                     }
-                }
-            };
-            scope.canvasElement.chart.options = (typeof scope.canvasElement.chart.options === 'undefined') ? defaultchartOptions : scope.canvasElement.chart.options;
-
-
-            // ---- ---- ---- ---- Functions ---- ---- ---- ---- //
-
-            function loadChart() {
-                chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
+                }});
 
                 chart.setSize(element[0].parentNode.clientWidth, element[0].parentNode.clientHeight);
 
