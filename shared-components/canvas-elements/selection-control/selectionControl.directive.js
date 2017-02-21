@@ -11,16 +11,13 @@
 
     function link(scope, elem, attr) {
 
+        // Array of DataGroups controlled by this selection control
+        var dataGroups = [];
 
-        scope.$watch('element.selectionControl.chartElementGUIDs', function (nv, ov) {
-            if (nv !== ov) {
-                console.log(scope.element.selectionControl.chartElementGUIDs);
+        // Array of selected drill down values by this selection control
+        var selections = [];
 
-                getDataGroups(nv);
-            }
-        }, true);
-
-
+        // Aquisition of DataGroups based on chart element GUIDS provided.
         function getDataGroups(chartElementGUIDs) {
 
             var canvasElementGUIDs = scope.current.canvas.canvasElements.map(function (element) { return element.GUID; });
@@ -40,6 +37,17 @@
             uniqueDataGroupGUIDs = unique(dataGroupGUIDs);
         }
 
+        // Initiation of DataGroup aquisition when charts are added or removed.
+        scope.$watch('element.selectionControl.chartElementGUIDs', function (nv, ov) {
+            if (nv !== ov) {
+                console.log(scope.element.selectionControl.chartElementGUIDs);
+
+                getDataGroups(nv);
+            }
+        }, true);
+
+        
+        // Support Functions
         // takes and array, returns array with only unique values.
         function unique(array) {
             function onlyUnique(value, index, self) {
@@ -48,6 +56,15 @@
             return array.filter(onlyUnique);
         };
 
+
+        //----> TO DO
+        
+        // Change or selection is made
+            //list for broadcast even
+            //check to see if broadcasting chart-directive parent element is an element we are watching 
+            //initiate or ignore
+
+        // Query all DataGroups with availalbe parameters
 
     };
 }]);
