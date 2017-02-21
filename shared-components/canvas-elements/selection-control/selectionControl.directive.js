@@ -63,6 +63,10 @@
             //list for broadcast even
             //check to see if broadcasting chart-directive parent element is an element we are watching 
             //initiate or ignore
+            scope.$on('selectionControl', function(event, message){
+                console.log("I have recieved the message!");
+                console.log(message);
+            })
 
         // Query all DataGroups with availalbe parameters
 

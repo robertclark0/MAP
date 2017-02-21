@@ -1,4 +1,4 @@
-﻿mapApp.directive('hcChart', ['appManager', '$timeout', function (appManager, $timeout) {
+﻿mapApp.directive('hcChart', ['appManager', '$timeout', '$rootScope', function (appManager, $timeout, $rootScope) {
     return {
         restrict: 'E',
         template: '<div></div>',
@@ -34,6 +34,7 @@
                         events: {
                             click: function (event) {
                                 console.log(event);
+                                $rootScope.$broadcast('selectionControl', {GUID: scope.canvasElement.GUID });
                             }
                         }
                     }
