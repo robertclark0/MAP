@@ -160,7 +160,6 @@ mapApp.directive('hcChart', ['appManager', '$timeout', '$rootScope', function (a
             // ---- ---- ---- ---- Functions ---- ---- ---- ---- //
 
             function loadChart() {
-                console.log('options',scope.canvasElement.chart.options);
                 chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
                 chart.update({plotOptions: {
                     series: {
@@ -446,8 +445,6 @@ mapApp.directive('selectionControl', [function () {
             //check to see if broadcasting chart-directive parent element is an element we are watching 
             //initiate or ignore
             scope.$on('selectionControl', function(event, message){
-                console.log("I have recieved the message!");
-
                 if(scope.element.selectionControl.chartElementGUIDs.indexOf(message.GUID) >= 0){
                     console.log("This pertains to me!");
                     console.log(message);
@@ -914,7 +911,8 @@ mapApp.directive('customDataSelection', ['appManager', '$mdDialog', function (ap
         restrict: 'E',
         scope: {
             selection: '=',
-            current: '='
+            current: '=',
+            index: '='
         },
         replace: true,
         templateUrl: 'shared-components/data-selections/custom-selection/customSelection.html',
@@ -922,6 +920,7 @@ mapApp.directive('customDataSelection', ['appManager', '$mdDialog', function (ap
     };
 
     function link(scope, elem, attr) {
+        console.log(scope.index);
         scope.SF = appManager.state.SF;
 
         scope.showOperations = function (ev) {

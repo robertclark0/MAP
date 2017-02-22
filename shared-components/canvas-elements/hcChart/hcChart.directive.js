@@ -35,7 +35,6 @@
             // ---- ---- ---- ---- Functions ---- ---- ---- ---- //
 
             function loadChart() {
-                console.log('options',scope.canvasElement.chart.options);
                 chart = Highcharts.chart(element[0], scope.canvasElement.chart.options);
                 chart.update({plotOptions: {
                     series: {

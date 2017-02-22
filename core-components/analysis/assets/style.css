@@ -4,3 +4,6 @@
 .md-seconday-icon-override{
     min-width: 40px !important;
 }
+.grouping-border{
+    border: 2px solid rgba(92, 153, 255, 1);
+}

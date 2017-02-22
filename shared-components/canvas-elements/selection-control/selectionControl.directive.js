@@ -65,8 +65,6 @@
             //check to see if broadcasting chart-directive parent element is an element we are watching 
             //initiate or ignore
             scope.$on('selectionControl', function(event, message){
-                console.log("I have recieved the message!");
-
                 if(scope.element.selectionControl.chartElementGUIDs.indexOf(message.GUID) >= 0){
                     console.log("This pertains to me!");
                     console.log(message);

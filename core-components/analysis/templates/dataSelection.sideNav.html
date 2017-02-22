@@ -65,8 +65,9 @@
             </md-list-item>
         </md-list>
 
-        <div ng-repeat="selection in current.dataGroup.selections[current.selectionIndex]">
-            <directive-generator name="{{selection.model.type}}" attributes="{ selection: '$parent.selection', current: '$parent.current'}"></directive-generator>
+        <p style="margin: 0 0 -5px 15px; font-size: 12px; color: rgba(92, 153, 255, 1); font-weight: 700;" ng-show="current.dataGroup.aggregation.enabled">Grouping</p>
+        <div ng-repeat="selection in current.dataGroup.selections[current.selectionIndex] track by $index">
+            <directive-generator name="{{selection.model.type}}" attributes="{ selection: '$parent.selection', current: '$parent.current', index: '$parent.$index'}"></directive-generator>
         </div>
 
         

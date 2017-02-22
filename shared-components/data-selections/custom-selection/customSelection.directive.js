@@ -3,7 +3,8 @@
         restrict: 'E',
         scope: {
             selection: '=',
-            current: '='
+            current: '=',
+            index: '='
         },
         replace: true,
         templateUrl: 'shared-components/data-selections/custom-selection/customSelection.html',
@@ -11,6 +12,7 @@
     };
 
     function link(scope, elem, attr) {
+        console.log(scope.index);
         scope.SF = appManager.state.SF;
 
         scope.showOperations = function (ev) {
