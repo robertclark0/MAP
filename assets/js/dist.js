@@ -565,7 +565,7 @@ mapApp.controller('SelectPanel', ['mdPanelRef', '$scope', 'filter', 'operation',
     }
 
 }]);
-mapApp.directive('cohortDiagram', [function () {
+mapApp.directive('cohortDiagram', ['viewFactory', 'appManager', function (viewFactory, appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -578,6 +578,9 @@ mapApp.directive('cohortDiagram', [function () {
     };
 
     function link(scope, elem, attr) {
+
+        var DF = appManager.data.DF;
+        var API = appManager.data.API;
 
         scope.poly = false;
         scope.hu = false;
@@ -604,7 +607,7 @@ mapApp.directive('cohortDiagram', [function () {
             scope.filter.operations = [];
         };
 
-        scope.change = function () {
+        scope.change = function (init) {
             reset();
             if (scope.method === 'ex' && (scope.poly || scope.hu || scope.pain)) {
 				
@@ -677,6 +680,16 @@ mapApp.directive('cohortDiagram', [function () {
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 }
             }
+
+            //RELOAD DATA HERE
+            if (!init) {
+                var dataObject = DF.getDataGroup(scope.current.dataGroup.GUID);
+
+                var queryObject = viewFactory.buildQueryObject(scope.current.dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    dataObject.result = response.result;
+                });
+            }
         };
 
         var onLoad = function () {
@@ -691,7 +704,7 @@ mapApp.directive('cohortDiagram', [function () {
             if (scope.filter.operations[flags.indexOf('HUFlag')].selectedValues[0] === 1) {
                 scope.hu = true;
             }
-            scope.change();
+            scope.change(true);
         }();
 
     };
@@ -747,7 +760,8 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
                 template: '<md-card><md-virtual-repeat-container style="height: 200px; width: 278px;"><md-list-item md-virtual-repeat="item in filterDataObject" ng-click="selected(item)">{{format(item.value)}}</md-list-item></md-virtual-repeat-container></md-card>',
                 //panelClass: 'popout-menu',
                 locals: {
-                    filter: scope.filter
+                    filter: scope.filter,
+                    current: scope.current
                 },
                 position: position,
                 openFrom: ev,
@@ -759,6 +773,7 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
 
             $mdPanel.open(config);
         };
+
 
         function checkData() {
 
@@ -790,9 +805,13 @@ mapApp.directive('combinationFilter', ['appManager', 'dataFilterFactory', '$mdPa
 
 
 
-mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'appManager', 'dataFilterFactory', function (mdPanelRef, $scope, filter, appManager, dataFilterFactory) {
+mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', 'current', 'appManager', 'dataFilterFactory', 'viewFactory', function (mdPanelRef, $scope, filter, current, appManager, dataFilterFactory, viewFactory) {
+
+    var DF = appManager.data.DF;
+    var API = appManager.data.API;
 
     $scope.filter = filter;
+    $scope.current = current;
 
     $scope.filterDataObject = appManager.data.DF.getFilter(filter.GUID).dataValues;
 
@@ -801,10 +820,19 @@ mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', '
     }, true);
 
     $scope.selected = function (item) {
+        
         item.value.forEach(function (value, index) {
             $scope.filter.operations[index].selectedValues[0] = value;
         });
         $scope.filter.formatedModel = $scope.format(item.value)
+
+        var dataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
+
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, 0);
+        API.query().save({ query: queryObject }).$promise.then(function (response) {
+            dataObject.result = response.result;
+        });
+
         mdPanelRef.close();
     }
 

@@ -1,4 +1,4 @@
-﻿mapApp.directive('cohortDiagram', [function () {
+﻿mapApp.directive('cohortDiagram', ['viewFactory', 'appManager', function (viewFactory, appManager) {
     return {
         restrict: 'E',
         scope: {
@@ -11,6 +11,9 @@
     };
 
     function link(scope, elem, attr) {
+
+        var DF = appManager.data.DF;
+        var API = appManager.data.API;
 
         scope.poly = false;
         scope.hu = false;
@@ -37,7 +40,7 @@
             scope.filter.operations = [];
         };
 
-        scope.change = function () {
+        scope.change = function (init) {
             reset();
             if (scope.method === 'ex' && (scope.poly || scope.hu || scope.pain)) {
 				
@@ -110,6 +113,16 @@
 					scope.filter.operations.push({ dataValue: { COLUMN_NAME: 'HUFlag', DATA_TYPE: 'int' }, operation: "equal", name: "Equal", type: 'dfo-select', selectedValues: [1] });
                 }
             }
+
+            //RELOAD DATA HERE
+            if (!init) {
+                var dataObject = DF.getDataGroup(scope.current.dataGroup.GUID);
+
+                var queryObject = viewFactory.buildQueryObject(scope.current.dataGroup, 0);
+                API.query().save({ query: queryObject }).$promise.then(function (response) {
+                    dataObject.result = response.result;
+                });
+            }
         };
 
         var onLoad = function () {
@@ -124,7 +137,7 @@
             if (scope.filter.operations[flags.indexOf('HUFlag')].selectedValues[0] === 1) {
                 scope.hu = true;
             }
-            scope.change();
+            scope.change(true);
         }();
 
     };
