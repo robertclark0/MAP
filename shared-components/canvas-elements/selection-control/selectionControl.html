@@ -1,12 +1,13 @@
-﻿<md-chips ng-model="drillDown.selection" md-max-chips="{{drillDown.level.length}}" md-autocomplete-snap md-require-match="true">
-
-    <md-autocomplete md-items="item in querySearch(search.txt)" placeholder="{{drillDown.level[drillDown.selection.length]}}..." md-search-text="search.txt" ng-hide="drillDown.selection.length === drillDown.level.length">
-        <span md-highlight-text="search.txt">{{item}}</span>
-    </md-autocomplete>
-
+﻿<md-chips readonly="true" md-removable="false" ng-model="selections">
 
     <md-chip-template>
-        <em>{{drillDown.level[$index]}}: </em>
-        <strong>{{$chip}}</strong>
+        <span style="position: relative; top: -3px;">
+            <em>{{$chip.alias}}</em>
+            <strong>{{$chip.value}}</strong>
+        </span>
+        <md-button style="position: relative; top: -4px;" class="md-icon-button" ng-click="drillUp($index)">
+            <md-icon md-svg-src="assets/icons/md-clear.svg"></md-icon>
+        </md-button>
     </md-chip-template>
+
 </md-chips>

@@ -10,13 +10,39 @@
     var factory = {};
 
     // ---- ---- ---- ---- Query Functions ---- ---- ---- ---- //
-    factory.buildQueryObject = function (dataGroup, selectionIndex) {
+    factory.buildQueryObject = function (dataGroup, selectionIndex, optionalFilterArray) {
+
+        var SC = appManager.state.SC;
+        var SF = appManager.state.SF;
+        var filters;
+
+        if (optionalFilterArray) {
+            var tempFilters = angular.copy(dataGroup.filters[selectionIndex]);
+            optionalFilterArray.forEach(function (optionalFilter) {
+                var tempFilter = new SC.DataFilter(SF.availableDataFilters()[0], optionalFilter.selection);
+                tempFilter.alias = optionalFilter.aias;
+                tempFilter.operations.push({
+                    dataValue: optionalFilter.selection,
+                    operation: "equal",
+                    name: "Equal",
+                    type: "dfo-select",
+                    selectedValues: [optionalFilter.value]
+                });
+                tempFilters.push(tempFilter);
+            });
+
+            filters = tempFilters;
+        }
+        else {
+            filters = dataGroup.filters[selectionIndex]
+        }
+
         return {
             source: dataGroup.source,
             pagination: dataGroup.pagination,
             aggregation: dataGroup.aggregation,
             selections: dataGroup.selections[selectionIndex],
-            filters: dataGroup.filters[selectionIndex]
+            filters: filters
         }
     };
 

@@ -41,8 +41,7 @@
                         cursor: 'pointer',
                         events: {
                             click: function (event) {
-                                console.log(event);
-                                $rootScope.$broadcast('selectionControl', {GUID: scope.canvasElement.GUID });
+                                $rootScope.$broadcast('selectionControl', {GUID: scope.canvasElement.GUID, event: event });
                             }
                         }
                     }
