@@ -58,6 +58,20 @@
                 }]
             }
         })
+        // CHUP
+        .state("chup-reporting", {
+            url: "/chup-reporting",
+            templateUrl: "core-components/CHUP/templates/view.html",
+            controller: "CHUPController",
+            resolve: {
+                log: ['appManager', function (appManager) {
+                    appManager.logger.clientLog("route", "reporting");
+                }],
+                module: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load('assets/js/dist.reporting.module.js');
+                }]
+            }
+        })
 
 
         //  Module
@@ -82,7 +96,7 @@
                 viewName: null
             },
             templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
-            controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
+            controllerProvider: function ($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
             css: "assets/css/dist.analysis.css",
             resolve: {
                 log: ['appManager', function (appManager) {

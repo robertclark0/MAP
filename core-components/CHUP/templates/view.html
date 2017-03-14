@@ -1,0 +1,81 @@
+﻿<section layout="row">
+    <md-toolbar class="site-content-toolbar">
+        <div class="md-toolbar-tools">
+            <md-button href="#/platform-home/product-lines">
+                <img src="assets/images/M.svg" style="width:100px;" />
+            </md-button>
+            <span class="md-toolbar-item md-breadcrumb md-headline">CHUP</span>
+
+            <md-icon md-svg-src="assets/icons/md-chevron-right.svg" class="breadcrumb-arrow"></md-icon>
+
+            <md-menu>
+                <span class="md-toolbar-item md-breadcrumb md-headline">Reporting</span>
+                <md-menu-content>
+                </md-menu-content>
+            </md-menu>
+
+
+            <span flex></span>
+
+            <md-button ng-click="showUserInfo()">{{user.fName}} <span style="color: gray"><em> [{{user.akoUserID}}]</em></span></md-button>
+        </div>
+    </md-toolbar>
+</section>
+
+<section layout="row" style="height: calc(100vh - 60px);">
+
+    <md-sidenav md-component-id="panelFilters" class="map-gray-1 md-sidenav-left" md-whiteframe="4" md-is-locked-open="true" flex>
+        <md-subheader class="md-primary">Report</md-subheader>
+        <md-list style="padding:0">
+            <md-list-item class="md-2-line" ng-click="showReport($event)">
+                <div class="md-list-item-text" style="padding-top: 4px;">
+                    <span class="md-headline" style="font-weight: bold;">{{current.report.Report_Name}}</span>
+                    <p class="md-primary">{{current.report.Category}}</p>
+                </div>
+                <md-icon md-svg-src="assets/icons/md-chevron-right.svg" class="breadcrumb-arrow" style="position: absolute; top: 25px; right: 5px;"></md-icon>
+            </md-list-item>
+        </md-list>
+        <md-subheader class="md-primary">Data Filters</md-subheader>
+        <md-content class="map-gray-1">
+            <!--<cohort-diagram></cohort-diagram>-->
+            <div ng-repeat="filter in current.dataGroup.filters[current.selectionIndex]">
+                <directive-generator name="{{filter.model.type}}" attributes="{ filter: '$parent.filter', current: '$parent.current'}"></directive-generator>
+            </div>
+        </md-content>
+    </md-sidenav>
+
+    <div flex style="background-color: white">
+        <div layout="column" layout-fill>
+
+            <div style="height:41px; border-top: 1px solid rgb(225,225,225);">
+                <md-menu-bar class="map-gray-1">
+                    <md-menu>
+                        <button ng-click="$mdOpenMenu()">
+                            Export
+                        </button>
+                        <md-menu-content>
+                            <md-menu-item>
+                                <md-button ng-click="ctrl.sampleAction('share', $event)">
+                                    CSV
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-bar>
+            </div>
+
+            <div flex style="padding-top:10px; overflow-y: auto;">
+                <!--MAIN CONTENT AREA HERE - GRIDSTER-->
+                <div gridster="gridsterOpts">
+                    <ul>
+                        <li gridster-item="element" ng-repeat="element in current.canvas.canvasElements" style="background-color: #ffffff;">
+                            <directive-generator name="{{$parent.element.type}}" attributes="{ element: '$parent.element', current: '$parent.current'}"></directive-generator>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>

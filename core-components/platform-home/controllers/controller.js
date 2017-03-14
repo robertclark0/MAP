@@ -52,6 +52,11 @@
         }
     };
 
+    $scope.goCHUP = function () {
+
+        $state.go("chup-reporting");
+    };
+
 
     //Show User Info
     $scope.showUserInfo = function (ev) {

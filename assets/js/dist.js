@@ -71,6 +71,20 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
                 }]
             }
         })
+        // CHUP
+        .state("chup-reporting", {
+            url: "/chup-reporting",
+            templateUrl: "core-components/CHUP/templates/view.html",
+            controller: "CHUPController",
+            resolve: {
+                log: ['appManager', function (appManager) {
+                    appManager.logger.clientLog("route", "reporting");
+                }],
+                module: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load('assets/js/dist.reporting.module.js');
+                }]
+            }
+        })
 
 
         //  Module
@@ -95,7 +109,7 @@ mapApp.config(function ($stateProvider, $urlRouterProvider) {
                 viewName: null
             },
             templateUrl: function ($stateParams) { return "core-components/analysis/templates/" + $stateParams.viewName + ".view.html"; },
-            controllerProvider: function($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
+            controllerProvider: function ($stateParams) { return $stateParams.viewName.charAt(0).toUpperCase() + $stateParams.viewName.slice(1) + "View"; },
             css: "assets/css/dist.analysis.css",
             resolve: {
                 log: ['appManager', function (appManager) {
@@ -930,7 +944,7 @@ mapApp.controller('CombinationSelectPanel', ['mdPanelRef', '$scope', 'filter', '
 
         var dataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 
-        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, 0);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selecetionIndex);
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             dataObject.result = response.result;
         });
