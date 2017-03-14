@@ -11,6 +11,7 @@
     };
 
     function link(scope, elem, attr) {
+        scope.filter.persist = true;
 
         var DF = appManager.data.DF;
         var API = appManager.data.API;
@@ -118,7 +119,7 @@
             if (!init) {
                 var dataObject = DF.getDataGroup(scope.current.dataGroup.GUID);
 
-                var queryObject = viewFactory.buildQueryObject(scope.current.dataGroup, 0);
+                var queryObject = viewFactory.buildQueryObject(scope.current.dataGroup, scope.current.selectionIndex);
                 API.query().save({ query: queryObject }).$promise.then(function (response) {
                     dataObject.result = response.result;
                 });

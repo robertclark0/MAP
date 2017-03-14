@@ -83,6 +83,7 @@
         this.orderValue = 'asc';
         this.operations = [];
         this.GUID = null;
+        this.persist = false;
         this.visibleInReport = false;
         this.advanced = {
             date: {

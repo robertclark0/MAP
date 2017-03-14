@@ -20,6 +20,15 @@
         // Array of selected drill down values by this selection control
         scope.selections = [];
 
+        // Initiation of DataGroup aquisition when charts are added or removed.
+        scope.$watch('element.selectionControl.chartElementGUIDs', function (nv, ov) {
+            if (nv !== ov) {
+                console.log(scope.element.selectionControl.chartElementGUIDs);
+
+                getDataGroups(nv);
+            }
+        }, true);
+
         // Aquisition of DataGroups based on chart element GUIDS provided.
         function getDataGroups(chartElementGUIDs) {
 
@@ -38,8 +47,8 @@
                 
             });
 
-            if (dataGroupGUIDs && dataGroupGUIDs.length > 0) {
-                uniqueDataGroupGUIDs = unique(dataGroupGUIDs);
+            if (uniqueDataGroupGUIDs.length > 0) {
+                uniqueDataGroupGUIDs = unique(uniqueDataGroupGUIDs);
                 dataGroups.length = 0;
 
                 uniqueDataGroupGUIDs.forEach(function (GUID) {
@@ -51,14 +60,7 @@
 
         }
 
-        // Initiation of DataGroup aquisition when charts are added or removed.
-        scope.$watch('element.selectionControl.chartElementGUIDs', function (nv, ov) {
-            if (nv !== ov) {
-                console.log(scope.element.selectionControl.chartElementGUIDs);
 
-                getDataGroups(nv);
-            }
-        }, true);
 
         //Drill Up
         scope.drillUp = function (index) {
@@ -77,17 +79,8 @@
                     });
                 }
             });
-        };
+        };    
 
-        
-        // Support Functions
-        // takes and array, returns array with only unique values.
-        function unique(array) {
-            function onlyUnique(value, index, self) {
-                return self.indexOf(value) === index;
-            }
-            return array.filter(onlyUnique);
-        };
 
         
         // Change or selection is made
@@ -100,14 +93,35 @@
                 var drillDownValue = createDrillDownValues(event, message);
                 scope.selections.push(drillDownValue);
 
-                scope.current.selectionIndex = scope.selections.length;
+                var newIndex = scope.selections.length;
+                
 
                 // Query all DataGroups with availalbe parameters
                 dataGroups.forEach(function (dataGroup) {
+
+                    if (newIndex > 0) {
+                        var previousIndex = newIndex - 1;
+
+                        var persistedFilterIndex = dataGroup.filters[previousIndex].map(function (filter) { return filter.persist; });
+
+                        persistedFilterIndex.forEach(function (persistBool, index) {
+                            if (persistBool) {
+                                var persistGUID = dataGroup.filters[previousIndex][index].GUID;
+
+                                var newSelectionLevelGUIDs = dataGroup.filters[newIndex].map(function (filter) { return filter.GUID; });
+                                if (newSelectionLevelGUIDs.indexOf(persistGUID) >= 0) {
+                                    dataGroup.filters[newIndex].splice(newSelectionLevelGUIDs.indexOf(persistGUID), 1);
+                                }
+                                dataGroup.filters[newIndex].push(dataGroup.filters[previousIndex][index]);
+                            }
+                        });
+                    }
+                    scope.current.selectionIndex = scope.selections.length;
+
                     if (dataGroup.selections.length >= scope.selections.length) {
                         var dataObject = DF.getDataGroup(dataGroup.GUID);
 
-                        var queryObject = viewFactory.buildQueryObject(scope.current.dataGroup, scope.current.selectionIndex, scope.selections);
+                        var queryObject = viewFactory.buildQueryObject(dataGroup, scope.current.selectionIndex, scope.selections);
                         API.query().save({ query: queryObject }).$promise.then(function (response) {
                             dataObject.result = response.result;
                         });
@@ -145,6 +159,16 @@
 
             console.log(drillDown);
             return drillDown;
+        };
+
+
+        // Support Functions
+        // takes and array, returns array with only unique values.
+        function unique(array) {
+            function onlyUnique(value, index, self) {
+                return self.indexOf(value) === index;
+            }
+            return array.filter(onlyUnique);
         };
 
 

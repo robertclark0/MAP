@@ -21,7 +21,7 @@
 
         var dataObject = DF.getDataGroup($scope.current.dataGroup.GUID);
 
-        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, 0);
+        var queryObject = viewFactory.buildQueryObject($scope.current.dataGroup, $scope.current.selecetionIndex);
         API.query().save({ query: queryObject }).$promise.then(function (response) {
             dataObject.result = response.result;
         });

@@ -4,6 +4,12 @@
         <label>Alias</label>
         <input type="text" ng-model="newFilter.alias" />
     </md-input-container>
+    <md-list class="md-dense">
+        <md-list-item>
+            <p>Persist Filter</p>
+            <md-checkbox class="md-secondary" ng-model="newFilter.persist"></md-checkbox>
+        </md-list-item>
+    </md-list>
     <md-content style="max-height: 200px; background-color: transparent;">
         <md-list>
             <md-list-item ng-repeat="operation in newFilter.operations track by $index">

@@ -32,7 +32,7 @@
                 <div gridster="gridsterOpts">
                     <ul>
                         <li gridster-item="element" ng-repeat="element in current.canvas.canvasElements" style="background-color: #ffffff;">
-                            <directive-generator name="{{$parent.element.type}}" attributes="{ element: '$parent.element'}"></directive-generator>
+                            <directive-generator name="{{$parent.element.type}}" attributes="{ element: '$parent.element', current: '$parent.current'}"></directive-generator>
                         </li>
                     </ul>
                 </div>

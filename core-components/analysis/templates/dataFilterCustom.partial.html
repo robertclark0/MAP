@@ -9,6 +9,12 @@
         <label>Alias</label>
         <input type="text" ng-model="newFilter.alias" />
     </md-input-container>
+    <md-list class="md-dense">
+        <md-list-item>
+            <p>Persist Filter</p>
+            <md-checkbox class="md-secondary" ng-model="newFilter.persist"></md-checkbox>
+        </md-list-item>
+    </md-list>
     <p ng-show="newFilter.operations.length > 0" style="font-size: 12px; padding-left: 2px; color: gray;">Operations</p>
     <md-content style="max-height: 200px; background-color: transparent;">
         <md-list>
